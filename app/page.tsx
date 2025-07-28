@@ -23,6 +23,254 @@ import {
   X,
 } from "lucide-react"
 
+// Matrix Background Component
+function MatrixBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resizeCanvas()
+
+    const chars = '0123456789ABCDEF'
+    const charArray = chars.split('')
+    const fontSize = 16
+    const columns = Math.floor(canvas.width / fontSize)
+    const drops: number[] = Array(columns).fill(1)
+
+    function draw() {
+      if (!ctx || !canvas) return
+
+      // Fade effect
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.1)'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      ctx.font = `${fontSize}px monospace`
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = charArray[Math.floor(Math.random() * charArray.length)]
+
+        // Color gradient - blue theme
+        const alpha = Math.random() * 0.8 + 0.2
+        ctx.fillStyle = `rgba(59, 130, 246, ${alpha})`
+
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize)
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0
+        }
+        drops[i]++
+      }
+    }
+
+    const interval = setInterval(draw, 100)
+    window.addEventListener('resize', resizeCanvas)
+
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener('resize', resizeCanvas)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-0"
+      style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 100%)'
+      }}
+    />
+  )
+}
+
+// Terminal Loading Component
+function TerminalLoader({ onComplete }: { onComplete: () => void }) {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [isTyping, setIsTyping] = useState(false)
+  const [displayText, setDisplayText] = useState('')
+  const [showCursor, setShowCursor] = useState(true)
+
+  const steps = [
+    { text: 'INITIALIZING BITORA PROTOCOL', delay: 8 },
+    { text: 'LOADING QUANTUM ENCRYPTION', delay: 7 },
+    { text: 'CONNECTING TO VALIDATOR NETWORK', delay: 10 },
+    { text: 'SYNCING BLOCKCHAIN STATE', delay: 10 },
+    { text: 'ACTIVATING CONSENSUS LAYER', delay: 8 },
+    { text: 'LOADING 3D INTERFACE', delay: 10 },
+    { text: 'PARSING SMART CONTRACTS', delay: 7 },
+    { text: 'FINALIZING INITIALIZATION', delay: 10 },
+    { text: 'BITORA PROTOCOL READY 🚀', delay: 12 },
+  ]
+
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>(
+    new Array(steps.length).fill(false)
+  )
+
+  // Cursor blinking effect
+  useEffect(() => {
+    const cursorInterval = setInterval(() => {
+      setShowCursor(prev => !prev)
+    }, 500)
+    return () => clearInterval(cursorInterval)
+  }, [])
+
+  // Main typing effect
+  useEffect(() => {
+    if (currentStep >= steps.length) return
+
+    setIsTyping(true)
+    setDisplayText('')
+
+    const currentText = steps[currentStep].text
+    const typingDelay = steps[currentStep].delay
+
+    let charIndex = 0
+    const typeInterval = setInterval(() => {
+      if (charIndex < currentText.length) {
+        setDisplayText(currentText.slice(0, charIndex + 1))
+        charIndex++
+      } else {
+        clearInterval(typeInterval)
+        setIsTyping(false)
+
+        // Mark step as completed
+        setCompletedSteps(prev => {
+          const newSteps = [...prev]
+          newSteps[currentStep] = true
+          return newSteps
+        })
+
+        // Move to next step after a pause
+        setTimeout(() => {
+          if (currentStep + 1 >= steps.length) {
+            // All steps completed, wait a bit then call onComplete
+            setTimeout(() => {
+              onComplete()
+            }, 80) // Short wait time
+          } else {
+            setCurrentStep(prev => prev + 1)
+          }
+        }, 30) // Short transition between steps
+      }
+    }, typingDelay)
+
+    return () => clearInterval(typeInterval)
+  }, [currentStep])
+
+  const progress = ((currentStep) / steps.length) * 100
+
+  return (
+    <div className="relative z-10 w-full max-w-4xl mx-auto px-4">
+      {/* Terminal Window */}
+      <div className="bg-slate-900/95 backdrop-blur-lg border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
+        {/* Terminal Header */}
+        <div className="bg-slate-800/90 px-6 py-4 border-b border-blue-500/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              </div>
+              <span className="text-blue-400 font-mono text-sm font-semibold">
+                BITORA_PROTOCOL_v2.1.0.exe
+              </span>
+            </div>
+            <div className="text-xs text-slate-400 font-mono">
+              {Math.round(progress)}%
+            </div>
+          </div>
+        </div>
+
+        {/* Terminal Body */}
+        <div className="p-8 min-h-[500px] font-mono">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="text-blue-400 text-sm mb-2">
+              ╔══════════════════════════════════════════════════════════╗
+            </div>
+            <div className="text-blue-400 text-sm mb-2">
+              ║               BITORA PROTOCOL INITIALIZATION            ║
+            </div>
+            <div className="text-blue-400 text-sm mb-4">
+              ╚══════════════════════════════════════════════════════════╝
+            </div>
+          </div>
+
+          {/* Steps */}
+          <div className="space-y-3 mb-8">
+            {steps.map((step, index) => (
+              <div key={index} className="flex items-center space-x-3">
+                <div className="w-6 text-center">
+                  {completedSteps[index] ? (
+                    <span className="text-green-400">✓</span>
+                  ) : index === currentStep ? (
+                    <span className="text-blue-400 animate-pulse">●</span>
+                  ) : (
+                    <span className="text-slate-600">○</span>
+                  )}
+                </div>
+                <div className="flex-1">
+                  {index < currentStep ? (
+                    <span className="text-green-400">{step.text}</span>
+                  ) : index === currentStep ? (
+                    <span className="text-blue-300">
+                      {displayText}
+                      {isTyping && showCursor && (
+                        <span className="bg-blue-400 text-blue-900 ml-1">█</span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-slate-500">{step.text}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* System Info */}
+          <div className="border-t border-slate-700 pt-6 text-xs text-slate-400 space-y-1">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div>NETWORK: Cosmos SDK</div>
+                <div>CONSENSUS: Tendermint BFT</div>
+              </div>
+              <div>
+                <div>TOKEN: $BTO</div>
+                <div>STATUS: {currentStep >= steps.length ? 'READY' : 'INITIALIZING'}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-6">
+            <div className="flex justify-between text-xs text-blue-400 mb-2">
+              <span>INITIALIZATION PROGRESS</span>
+              <span>{Math.round(progress)}%</span>
+            </div>
+            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <motion.div
+                className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 h-full rounded-full"
+                initial={{ width: "0%" }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // Custom Line Component - Simplified Version
 function Line({ points, color = "#ffffff", transparent = false, opacity = 1 }: {
   points: [number, number, number][]
@@ -191,6 +439,12 @@ function Scene({ activeNode, setActiveNode }: any) {
 
   return (
     <>
+      {/* Background sphere */}
+      <mesh>
+        <sphereGeometry args={[100]} />
+        <meshBasicMaterial color="#0f172a" side={2} />
+      </mesh>
+      
       <ambientLight intensity={0.4} />
       <pointLight position={[10, 10, 10]} intensity={0.8} color="#3b82f6" />
       <pointLight position={[-10, 10, -10]} intensity={0.8} color="#1e40af" />
@@ -247,11 +501,15 @@ export default function BitoraLanding() {
     countries: 14,
   })
 
-  // Loading sequence
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000)
-    return () => clearTimeout(timer)
-  }, [])
+  // Loading sequence - remove the timer, let terminal control it
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setIsLoading(false), 6000)
+  //   return () => clearTimeout(timer)
+  // }, [])
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false)
+  }
 
   // Animate stats
   useEffect(() => {
@@ -354,22 +612,10 @@ export default function BitoraLanding() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-900 relative overflow-hidden flex items-center justify-center">
+        <MatrixBackground />
         <div className="text-center space-y-6 px-4">
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="text-blue-400">
-            <Database className="h-16 w-16 mx-auto mb-4" />
-            <div className="text-2xl font-bold mb-2">Initializing Bitora Protocol</div>
-            <div className="text-slate-400">Loading 3D blockchain interface...</div>
-          </motion.div>
-
-          <div className="relative w-64 h-2 bg-slate-700 rounded overflow-hidden mx-auto">
-            <motion.div
-              className="absolute inset-y-0 left-0 bg-blue-500"
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            />
-          </div>
+          <TerminalLoader onComplete={handleLoadingComplete} />
         </div>
       </div>
     )
@@ -437,7 +683,7 @@ export default function BitoraLanding() {
 
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
         {/* 3D Scene */}
-        <div className="lg:w-1/2 h-64 sm:h-80 lg:h-auto relative bg-slate-800">
+        <div className="lg:w-1/2 h-64 sm:h-80 lg:h-auto relative bg-slate-900">
           <Canvas>
             <Suspense fallback={null}>
               <Scene activeNode={activeNode} setActiveNode={setActiveNode} />
