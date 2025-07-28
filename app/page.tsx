@@ -335,52 +335,159 @@ function FloatingParticles() {
   )
 }
 
-// Circuit Board Component
-function CircuitBoard() {
+// Quantum Neural Network Component
+function QuantumNeuralNetwork({ activeNode }: { activeNode: number | null }) {
   const groupRef = useRef<THREE.Group>(null!)
+  const [time, setTime] = useState(0)
 
   useFrame((state) => {
+    setTime(state.clock.elapsedTime)
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.05
+      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.05) * 0.02
     }
   })
 
+  // Generate flowing energy paths
+  const generateFlowingPath = (start: [number, number, number], end: [number, number, number], complexity: number = 5) => {
+    const path: [number, number, number][] = [start]
+    const steps = 12
+    
+    for (let i = 1; i < steps; i++) {
+      const t = i / steps
+      const smoothT = t * t * (3 - 2 * t) // Smooth interpolation
+      
+      // Create organic flowing curves
+      const x = start[0] + (end[0] - start[0]) * smoothT + Math.sin(t * Math.PI * complexity + time) * 0.8
+      const y = start[1] + (end[1] - start[1]) * smoothT + Math.cos(t * Math.PI * complexity * 1.5 + time * 0.7) * 0.5
+      const z = start[2] + (end[2] - start[2]) * smoothT + Math.sin(t * Math.PI * complexity * 0.8 + time * 0.5) * 0.6
+      
+      path.push([x, y, z] as [number, number, number])
+    }
+    
+    path.push(end)
+    return path
+  }
+
+  const neuralConnections = [
+    // Primary neural pathways
+    { start: [0, 2, 0] as [number, number, number], end: [-8, 2, -6] as [number, number, number], type: 'primary', color: '#10b981' },
+    { start: [0, 2, 0] as [number, number, number], end: [8, 2, -6] as [number, number, number], type: 'primary', color: '#f59e0b' },
+    { start: [0, 2, 0] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'primary', color: '#8b5cf6' },
+    { start: [0, 2, 0] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'primary', color: '#06d6a0' },
+    
+    // Secondary neural pathways (inter-node communication)
+    { start: [-8, 2, -6] as [number, number, number], end: [8, 2, -6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
+    { start: [8, 2, -6] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
+    { start: [8, 2, 6] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
+    { start: [-8, 2, 6] as [number, number, number], end: [-8, 2, -6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
+    
+    // Quantum entanglement connections
+    { start: [-8, 2, -6] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'quantum', color: '#ec4899' },
+    { start: [8, 2, -6] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'quantum', color: '#ec4899' },
+  ]
+
   return (
     <group ref={groupRef}>
-      {/* Base circuit board */}
-      <mesh position={[0, -0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[50, 50]} />
-        <meshBasicMaterial color="#0f172a" transparent opacity={0.8} />
+      {/* Quantum field base */}
+      <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[60, 60]} />
+        <meshStandardMaterial 
+          color="#0f172a" 
+          transparent 
+          opacity={0.3}
+          emissive="#1e293b"
+          emissiveIntensity={0.1}
+        />
       </mesh>
 
-      {/* Circuit paths */}
-      {([
-        [
-          [-15, 0, -15],
-          [0, 0, 0],
-          [15, 0, 15],
-        ],
-        [
-          [15, 0, -15],
-          [0, 0, 0],
-          [-15, 0, 15],
-        ],
-      ] as [number, number, number][][]).map((path, i) => (
-        <Line key={i} points={path} color="#3b82f6" transparent opacity={0.6} />
-      ))}
+      {/* Flowing Neural Connections */}
+      {neuralConnections.map((connection, i) => {
+        const path = generateFlowingPath(connection.start, connection.end, 3 + i * 0.5)
+        const isActive = activeNode !== null
+        const opacity = connection.type === 'primary' ? 0.8 : connection.type === 'secondary' ? 0.6 : 0.4
+        
+        return (
+          <Line
+            key={`neural-flow-${i}`}
+            points={path}
+            color={isActive ? connection.color : "#374151"}
+            transparent
+            opacity={isActive ? opacity : 0.2}
+          />
+        )
+      })}
 
-      {/* Circuit nodes */}
-      {([
-        [-12, 0.2, -8],
-        [12, 0.2, -8],
-        [-12, 0.2, 8],
-        [12, 0.2, 8],
-        [0, 0.2, 0],
-      ] as [number, number, number][]).map((pos, i) => (
-        <Sphere key={i} position={pos} args={[0.3]}>
-          <meshBasicMaterial color="#3b82f6" />
-        </Sphere>
-      ))}
+      {/* Quantum Processing Nodes */}
+      {[
+        { pos: [0, 2, 0] as [number, number, number], size: 0.4, type: 'quantum-core', color: '#ff6b6b' },
+        { pos: [-8, 2, -6] as [number, number, number], size: 0.25, type: 'feature-node', color: '#10b981' },
+        { pos: [8, 2, -6] as [number, number, number], size: 0.25, type: 'pizza-node', color: '#f59e0b' },
+        { pos: [-8, 2, 6] as [number, number, number], size: 0.25, type: 'roadmap-node', color: '#8b5cf6' },
+        { pos: [8, 2, 6] as [number, number, number], size: 0.25, type: 'ecosystem-node', color: '#06d6a0' },
+        
+        // Quantum processors
+        { pos: [-4, 1, -3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
+        { pos: [4, 1, -3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
+        { pos: [-4, 1, 3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
+        { pos: [4, 1, 3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
+        { pos: [0, 1, -4] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
+        { pos: [0, 1, 4] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
+      ].map((node, i) => {
+        const isActive = activeNode !== null
+        const pulsePhase = time * 2 + i * 0.5
+        const pulseIntensity = isActive ? 0.3 + Math.sin(pulsePhase) * 0.2 : 0.1
+        const scaleMultiplier = node.type === 'quantum-core' ? 1.2 + Math.sin(pulsePhase * 0.5) * 0.1 : 1
+        
+        return (
+          <group key={`quantum-node-${i}`} position={node.pos}>
+            <Sphere args={[node.size * scaleMultiplier]}>
+              <meshStandardMaterial
+                color={isActive ? node.color : "#4b5563"}
+                emissive={node.color}
+                emissiveIntensity={pulseIntensity}
+                transparent
+                opacity={0.9}
+                metalness={0.3}
+                roughness={0.2}
+              />
+            </Sphere>
+            
+            {/* Quantum field around core */}
+            {node.type === 'quantum-core' && (
+              <Sphere args={[node.size * 2]}>
+                <meshStandardMaterial
+                  color={node.color}
+                  transparent
+                  opacity={0.1 + Math.sin(pulsePhase) * 0.05}
+                  emissive={node.color}
+                  emissiveIntensity={0.1}
+                />
+              </Sphere>
+            )}
+          </group>
+        )
+      })}
+
+      {/* Quantum Energy Particles */}
+      {Array.from({ length: 20 }, (_, i) => {
+        const angle = (i / 20) * Math.PI * 2
+        const radius = 12 + Math.sin(time + i) * 2
+        const x = Math.cos(angle + time * 0.1) * radius
+        const z = Math.sin(angle + time * 0.1) * radius
+        const y = 1 + Math.sin(time * 2 + i) * 0.5
+        
+        return (
+          <Sphere key={`quantum-particle-${i}`} position={[x, y, z]} args={[0.05]}>
+            <meshStandardMaterial
+              color="#00d4ff"
+              emissive="#00d4ff"
+              emissiveIntensity={0.6 + Math.sin(time * 3 + i) * 0.3}
+              transparent
+              opacity={0.8}
+            />
+          </Sphere>
+        )
+      })}
     </group>
   )
 }
@@ -392,30 +499,198 @@ function ContentNode({ position, title, isActive, onClick }: any) {
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = state.clock.elapsedTime * 0.3
-      meshRef.current.scale.setScalar(isActive ? 1.1 : 1)
+      if (isActive) {
+        meshRef.current.scale.setScalar(1.1 + Math.sin(state.clock.elapsedTime * 3) * 0.1)
+      } else {
+        meshRef.current.scale.setScalar(1)
+      }
     }
   })
+
+  // Different shapes based on content type
+  const getGeometry = () => {
+    switch(title) {
+      case 'FEATURES':
+        return <octahedronGeometry args={[1.2]} /> // Diamond shape for features
+      case 'PIZZA':
+        return <cylinderGeometry args={[1.2, 1.2, 0.3, 8]} /> // Pizza slice shape
+      case 'ROADMAP':
+        return <coneGeometry args={[1, 2, 6]} /> // Arrow/direction shape
+      case 'ECOSYSTEM':
+        return <sphereGeometry args={[1.2]} /> // Sphere for ecosystem
+      default:
+        return <boxGeometry args={[1.5, 1.5, 1.5]} />
+    }
+  }
+
+  const getColor = () => {
+    switch(title) {
+      case 'FEATURES':
+        return isActive ? "#10b981" : "#065f46"
+      case 'PIZZA':
+        return isActive ? "#f59e0b" : "#92400e"
+      case 'ROADMAP':
+        return isActive ? "#8b5cf6" : "#5b21b6"
+      case 'ECOSYSTEM':
+        return isActive ? "#06d6a0" : "#047857"
+      default:
+        return isActive ? "#3b82f6" : "#1e40af"
+    }
+  }
 
   return (
     <group position={position} onClick={onClick}>
       <mesh ref={meshRef}>
-        <boxGeometry args={[1.5, 1.5, 1.5]} />
-        <meshBasicMaterial
-          color={isActive ? "#3b82f6" : "#1e40af"}
+        {getGeometry()}
+        <meshStandardMaterial
+          color={getColor()}
+          emissive={getColor()}
+          emissiveIntensity={isActive ? 0.4 : 0.25}
+          metalness={0.6}
+          roughness={0.3}
           transparent
-          opacity={isActive ? 0.9 : 0.7}
-          wireframe={!isActive}
+          opacity={isActive ? 1.0 : 0.8}
         />
       </mesh>
       <Text
         position={[0, 2.5, 0]}
         fontSize={0.6}
-        color={isActive ? "#3b82f6" : "#64748b"}
+        color={isActive ? getColor() : "#ffffff"}
         anchorX="center"
         anchorY="middle"
       >
         {title}
       </Text>
+    </group>
+  )
+}
+
+// Quantum Data Stream Component
+function QuantumDataStream({ start, end, activeNode, streamColor = "#00d4ff" }: {
+  start: [number, number, number]
+  end: [number, number, number]
+  activeNode: number | null
+  streamColor?: string
+}) {
+  const streamRef = useRef<THREE.Group>(null!)
+  const [time, setTime] = useState(0)
+  const [dataPackets, setDataPackets] = useState<Array<{ id: number; progress: number; phase: number }>>([]);
+
+  useFrame((state) => {
+    setTime(state.clock.elapsedTime)
+  })
+
+  useEffect(() => {
+    if (!activeNode) return
+    
+    // Create quantum data packets
+    const packets = Array.from({ length: 3 }, (_, i) => ({
+      id: i,
+      progress: i * -0.33,
+      phase: i * Math.PI * 0.67
+    }))
+    setDataPackets(packets)
+    
+    const interval = setInterval(() => {
+      setDataPackets(prev => prev.map(packet => ({
+        ...packet,
+        progress: packet.progress >= 1.2 ? -0.2 : packet.progress + 0.018
+      })))
+    }, 40)
+    
+    return () => clearInterval(interval)
+  }, [activeNode])
+
+  // Generate quantum tunnel path
+  const getQuantumPath = (start: [number, number, number], end: [number, number, number]): [number, number, number][] => {
+    const path: [number, number, number][] = []
+    const steps = 16
+    
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps
+      const smoothT = t * t * (3 - 2 * t)
+      
+      // Create quantum tunnel effect with helical motion
+      const helixRadius = 0.3 * Math.sin(t * Math.PI)
+      const helixAngle = t * Math.PI * 4 + time * 0.5
+      
+      const x = start[0] + (end[0] - start[0]) * smoothT + Math.cos(helixAngle) * helixRadius
+      const y = start[1] + (end[1] - start[1]) * smoothT + Math.sin(helixAngle) * helixRadius * 0.5
+      const z = start[2] + (end[2] - start[2]) * smoothT + Math.sin(helixAngle + Math.PI/2) * helixRadius
+      
+      path.push([x, y, z] as [number, number, number])
+    }
+    
+    return path
+  }
+
+  const pathPoints = getQuantumPath(start, end)
+
+  // Calculate position along quantum path
+  const getQuantumPosition = (progress: number): [number, number, number] => {
+    if (progress <= 0) return pathPoints[0]
+    if (progress >= 1) return pathPoints[pathPoints.length - 1]
+    
+    const scaledProgress = progress * (pathPoints.length - 1)
+    const index = Math.floor(scaledProgress)
+    const t = scaledProgress - index
+    
+    if (index >= pathPoints.length - 1) return pathPoints[pathPoints.length - 1]
+    
+    const current = pathPoints[index]
+    const next = pathPoints[index + 1]
+    
+    return [
+      current[0] + (next[0] - current[0]) * t,
+      current[1] + (next[1] - current[1]) * t,
+      current[2] + (next[2] - current[2]) * t
+    ]
+  }
+
+  if (!activeNode) return null
+
+  return (
+    <group ref={streamRef}>
+      {/* Quantum tunnel visualization */}
+      <Line
+        points={pathPoints}
+        color={streamColor}
+        transparent
+        opacity={0.6 + Math.sin(time * 2) * 0.2}
+      />
+      
+      {/* Quantum data packets */}
+      {dataPackets.filter(packet => packet.progress >= 0 && packet.progress <= 1).map((packet) => {
+        const position = getQuantumPosition(packet.progress)
+        const size = 0.06 + Math.sin(time * 4 + packet.phase) * 0.02
+        const intensity = 0.8 + Math.sin(time * 3 + packet.phase) * 0.2
+        
+        return (
+          <group key={packet.id}>
+            {/* Core data packet */}
+            <Sphere position={position} args={[size]}>
+              <meshStandardMaterial
+                color={streamColor}
+                emissive={streamColor}
+                emissiveIntensity={intensity}
+                transparent
+                opacity={0.9}
+              />
+            </Sphere>
+            
+            {/* Quantum field around packet */}
+            <Sphere position={position} args={[size * 2.5]}>
+              <meshStandardMaterial
+                color={streamColor}
+                emissive={streamColor}
+                emissiveIntensity={0.2}
+                transparent
+                opacity={0.2}
+              />
+            </Sphere>
+          </group>
+        )
+      })}
     </group>
   )
 }
@@ -442,7 +717,7 @@ function Scene({ activeNode, setActiveNode }: any) {
       {/* Background sphere */}
       <mesh>
         <sphereGeometry args={[100]} />
-        <meshBasicMaterial color="#0f172a" side={2} />
+        <meshBasicMaterial color="#000510" side={2} />
       </mesh>
       
       <ambientLight intensity={0.4} />
@@ -450,7 +725,7 @@ function Scene({ activeNode, setActiveNode }: any) {
       <pointLight position={[-10, 10, -10]} intensity={0.8} color="#1e40af" />
 
       <FloatingParticles />
-      <CircuitBoard />
+      <QuantumNeuralNetwork activeNode={activeNode} />
 
       {nodes.map((node) => (
         <ContentNode
@@ -462,13 +737,13 @@ function Scene({ activeNode, setActiveNode }: any) {
         />
       ))}
 
-      {/* Connection lines */}
+      {/* Quantum Data Stream Connection */}
       {activeNode !== null && activeNode !== 0 && (
-        <Line
-          points={[nodes[0].position, nodes[activeNode]?.position || [0, 0, 0]]}
-          color="#3b82f6"
-          transparent
-          opacity={0.8}
+        <QuantumDataStream
+          start={nodes[0].position}
+          end={nodes[activeNode]?.position || [0, 0, 0]}
+          activeNode={activeNode}
+          streamColor="#00d4ff"
         />
       )}
 
