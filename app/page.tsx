@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, Suspense, useMemo } from "react"
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { Text, OrbitControls, Sphere } from "@react-three/drei"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -21,6 +19,10 @@ import {
   ChevronRight,
   Menu,
   X,
+  Code,
+  Terminal,
+  Save,
+  Sparkles,
 } from "lucide-react"
 
 // Matrix Background Component
@@ -107,7 +109,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
     { text: 'LOADING 3D INTERFACE', delay: 10 },
     { text: 'PARSING SMART CONTRACTS', delay: 7 },
     { text: 'FINALIZING INITIALIZATION', delay: 10 },
-    { text: 'BITORA PROTOCOL READY 🚀', delay: 12 },
+    { text: 'BITORA PROTOCOL READY', delay: 12 },
   ]
 
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
@@ -211,11 +213,11 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
               <div key={index} className="flex items-center space-x-3">
                 <div className="w-6 text-center">
                   {completedSteps[index] ? (
-                    <span className="text-green-400">✓</span>
+                    <span className="text-green-400">[OK]</span>
                   ) : index === currentStep ? (
-                    <span className="text-blue-400 animate-pulse">●</span>
+                    <span className="text-blue-400 animate-pulse">[...]</span>
                   ) : (
-                    <span className="text-slate-600">○</span>
+                    <span className="text-slate-600">[ ]</span>
                   )}
                 </div>
                 <div className="flex-1">
@@ -271,494 +273,523 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
   )
 }
 
-// Custom Line Component - Simplified Version
-function Line({ points, color = "#ffffff", transparent = false, opacity = 1 }: {
-  points: [number, number, number][]
-  color?: string
-  transparent?: boolean
-  opacity?: number
-}) {
-  const geometry = useMemo(() => {
-    const geom = new THREE.BufferGeometry()
-    const positions = new Float32Array(points.length * 3)
 
-    points.forEach((point, i) => {
-      positions[i * 3] = point[0]
-      positions[i * 3 + 1] = point[1]
-      positions[i * 3 + 2] = point[2]
-    })
 
-    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    return geom
-  }, [points])
+// AI Code Editor Component
+function AICodeEditor({ activeNode, setActiveNode }: any) {
+  const [codeContent, setCodeContent] = useState('')
+  const [isGenerating, setIsGenerating] = useState(true)
+  const [generatedCards, setGeneratedCards] = useState<any[]>([])
+  const [currentLine, setCurrentLine] = useState(0)
+  const [currentTemplate, setCurrentTemplate] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
 
-  return (
-    <line>
-      <primitive object={geometry} attach="geometry" />
-      <lineBasicMaterial color={color} transparent={transparent} opacity={opacity} />
-    </line>
-  )
-}
-
-// Floating Particles Component
-function FloatingParticles() {
-  const meshRef = useRef<THREE.InstancedMesh>(null!)
-  const [particles] = useState(() => {
-    return Array.from({ length: 50 }, () => ({
-      x: (Math.random() - 0.5) * 40,
-      y: (Math.random() - 0.5) * 20,
-      z: (Math.random() - 0.5) * 40,
-      speed: Math.random() * 0.02 + 0.01,
-      phase: Math.random() * Math.PI * 2,
-    }))
-  })
-
-  useFrame((state) => {
-    if (!meshRef.current) return
-
-    const matrix = new THREE.Matrix4()
-    particles.forEach((particle, i) => {
-      particle.phase += particle.speed
-      const y = particle.y + Math.sin(particle.phase) * 2
-      matrix.setPosition(particle.x, y, particle.z)
-      meshRef.current.setMatrixAt(i, matrix)
-    })
-
-    meshRef.current.instanceMatrix.needsUpdate = true
-  })
-
-  return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, 50]}>
-      <sphereGeometry args={[0.1]} />
-      <meshBasicMaterial color="#3b82f6" transparent opacity={0.6} />
-    </instancedMesh>
-  )
-}
-
-// Quantum Neural Network Component
-function QuantumNeuralNetwork({ activeNode }: { activeNode: number | null }) {
-  const groupRef = useRef<THREE.Group>(null!)
-  const [time, setTime] = useState(0)
-
-  useFrame((state) => {
-    setTime(state.clock.elapsedTime)
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.05) * 0.02
-    }
-  })
-
-  // Generate flowing energy paths
-  const generateFlowingPath = (start: [number, number, number], end: [number, number, number], complexity: number = 5) => {
-    const path: [number, number, number][] = [start]
-    const steps = 12
-    
-    for (let i = 1; i < steps; i++) {
-      const t = i / steps
-      const smoothT = t * t * (3 - 2 * t) // Smooth interpolation
-      
-      // Create organic flowing curves
-      const x = start[0] + (end[0] - start[0]) * smoothT + Math.sin(t * Math.PI * complexity + time) * 0.8
-      const y = start[1] + (end[1] - start[1]) * smoothT + Math.cos(t * Math.PI * complexity * 1.5 + time * 0.7) * 0.5
-      const z = start[2] + (end[2] - start[2]) * smoothT + Math.sin(t * Math.PI * complexity * 0.8 + time * 0.5) * 0.6
-      
-      path.push([x, y, z] as [number, number, number])
-    }
-    
-    path.push(end)
-    return path
+  const codeTemplates = [
+    `// Bitora Protocol Core
+class BitoraProtocol {
+  constructor() {
+    this.network = 'cosmos-sdk'
+    this.consensus = 'tendermint'
+    this.token = 'BTO'
+    this.validators = new Set()
+    this.blocks = []
   }
-
-  const neuralConnections = [
-    // Primary neural pathways
-    { start: [0, 2, 0] as [number, number, number], end: [-8, 2, -6] as [number, number, number], type: 'primary', color: '#10b981' },
-    { start: [0, 2, 0] as [number, number, number], end: [8, 2, -6] as [number, number, number], type: 'primary', color: '#f59e0b' },
-    { start: [0, 2, 0] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'primary', color: '#8b5cf6' },
-    { start: [0, 2, 0] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'primary', color: '#06d6a0' },
+  
+  async initialize() {
+    console.log('Bitora Protocol Initializing')
+    await this.connectValidators()
+    await this.syncBlockchain()
+    this.startConsensus()
+    return 'Protocol Ready'
+  }
+  
+  async processTransaction(tx) {
+    const validation = await this.validateTx(tx)
+    if (validation.valid) {
+      this.addToMempool(tx)
+      return tx.hash
+    }
+    throw new Error('Invalid transaction')
+  }
+}`,
+    `// Advanced Feature Engine
+class FeatureEngine {
+  constructor() {
+    this.tokenFactory = new TokenFactory()
+    this.posSystem = new POSSystem()
+    this.complianceLayer = new ComplianceLayer()
+  }
+  
+  async generateToken(config) {
+    const compliance = await this.validateCompliance(config)
+    const token = new Token({
+      name: config.name,
+      symbol: config.symbol,
+      supply: config.totalSupply,
+      compliance: compliance,
+      kyc: config.kycRequired,
+      mintable: config.mintable
+    })
     
-    // Secondary neural pathways (inter-node communication)
-    { start: [-8, 2, -6] as [number, number, number], end: [8, 2, -6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    { start: [8, 2, -6] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    { start: [8, 2, 6] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    { start: [-8, 2, 6] as [number, number, number], end: [-8, 2, -6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
+    await this.deployContract(token)
+    return token
+  }
+  
+  async deployPOS(storeConfig) {
+    const pos = new POSSystem({
+      storeId: storeConfig.id,
+      location: storeConfig.location,
+      realtime: true,
+      compliance: 'built-in',
+      paymentMethods: ['BTO', 'USDC', 'ETH']
+    })
     
-    // Quantum entanglement connections
-    { start: [-8, 2, -6] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'quantum', color: '#ec4899' },
-    { start: [8, 2, -6] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'quantum', color: '#ec4899' },
+    await pos.initialize()
+    return pos
+  }
+}`,
+    `// Pizza Proof of Concept
+class PizzaProofOfConcept {
+  constructor() {
+    this.stores = new Map()
+    this.transactions = []
+    this.inventory = new InventoryManager()
+    this.analytics = new AnalyticsEngine()
+  }
+  
+  async processSale(saleData) {
+    const { amount, items, storeId, paymentMethod } = saleData
+    
+    // Process payment
+    const payment = await this.processPayment(amount, paymentMethod)
+    
+    // Update inventory
+    await this.inventory.updateStock(items)
+    
+    // Token economics
+    const burnAmount = amount * 0.01
+    const yieldAmount = amount * 0.02
+    
+    await this.burnTokens(burnAmount)
+    await this.distributeYield(yieldAmount)
+    
+    // Compliance reporting
+    await this.reportCompliance({
+      transactionId: payment.id,
+      amount: amount,
+      timestamp: Date.now(),
+      storeId: storeId
+    })
+    
+    return payment
+  }
+  
+  async openNewStore(location) {
+    const store = new PizzaStore({
+      location: location,
+      posSystem: await this.deployPOS(),
+      inventory: new InventoryManager(),
+      compliance: true
+    })
+    
+    this.stores.set(store.id, store)
+    return store
+  }
+}`,
+    `// Roadmap Execution Engine
+const roadmapEngine = {
+  phases: {
+    '2025_Q1': {
+      milestones: [
+        'mainnet_launch',
+        'bto_token_live',
+        'validator_network_active'
+      ],
+      status: 'in_progress',
+      completion: 75
+    },
+    '2025_Q2': {
+      milestones: [
+        'dex_integration',
+        'pizza_stores_anz',
+        'mobile_wallet_launch'
+      ],
+      status: 'planned',
+      completion: 0
+    },
+    '2026': {
+      milestones: [
+        'asia_pacific_expansion',
+        'national_stablecoins',
+        'audx_phpx_launch',
+        'enterprise_partnerships'
+      ],
+      status: 'planned',
+      completion: 0
+    },
+    '2027': {
+      milestones: [
+        'us_eu_compliance',
+        'treasury_deflation_protocol',
+        'global_adoption',
+        'institutional_integration'
+      ],
+      status: 'future',
+      completion: 0
+    }
+  },
+  
+  async executeMilestone(phase, milestone) {
+    console.log('Executing milestone:', milestone)
+    const result = await this.deployMilestone(milestone)
+    this.updateProgress(phase, milestone)
+    return result
+  }
+}`,
+    `// Ecosystem Management Platform
+class EcosystemManager {
+  constructor() {
+    this.developers = new DeveloperRegistry()
+    this.validators = new ValidatorNetwork()
+    this.dapps = new DAppRegistry()
+    this.grants = new GrantProgram()
+    this.governance = new GovernanceSystem()
+  }
+  
+  async onboardDeveloper(profile) {
+    const developer = await this.developers.register({
+      address: profile.walletAddress,
+      skills: profile.skills,
+      experience: profile.experience,
+      github: profile.github
+    })
+    
+    // Assign starter grant
+    const starterGrant = await this.grants.createGrant({
+      recipient: developer.id,
+      amount: 1000, // BTO
+      type: 'starter',
+      requirements: ['complete_tutorial', 'deploy_testnet']
+    })
+    
+    return { developer, grant: starterGrant }
+  }
+  
+  async launchDApp(dappConfig) {
+    const dapp = new DApp({
+      name: dappConfig.name,
+      category: dappConfig.category,
+      developer: dappConfig.developerId,
+      contract: dappConfig.contractAddress
+    })
+    
+    await this.dapps.register(dapp)
+    await this.governance.proposeListingVote(dapp)
+    
+    return dapp
+  }
+  
+  async distributeRewards() {
+    const validators = await this.validators.getActive()
+    const developers = await this.developers.getActive()
+    
+    for (const validator of validators) {
+      await this.distributeValidatorReward(validator)
+    }
+    
+    for (const developer of developers) {
+      await this.distributeDeveloperReward(developer)
+    }
+  }
+}`,
+    `// Smart Contract Factory
+class SmartContractFactory {
+  constructor() {
+    this.templates = new Map()
+    this.deployedContracts = new Map()
+    this.compiler = new SolidityCompiler()
+  }
+  
+  async createTokenContract(params) {
+    const template = this.templates.get('ERC20')
+    const customizedCode = template.customize({
+      name: params.name,
+      symbol: params.symbol,
+      decimals: params.decimals,
+      totalSupply: params.totalSupply,
+      mintable: params.mintable,
+      burnable: params.burnable
+    })
+    
+    const compiled = await this.compiler.compile(customizedCode)
+    const deployed = await this.deploy(compiled, params.network)
+    
+    this.deployedContracts.set(deployed.address, {
+      type: 'token',
+      params: params,
+      deployedAt: Date.now()
+    })
+    
+    return deployed
+  }
+  
+  async createNFTContract(params) {
+    const template = this.templates.get('ERC721')
+    const customizedCode = template.customize(params)
+    
+    const compiled = await this.compiler.compile(customizedCode)
+    const deployed = await this.deploy(compiled, params.network)
+    
+    return deployed
+  }
+}`,
+    `// DeFi Protocol Integration
+class DeFiProtocol {
+  constructor() {
+    this.liquidityPools = new Map()
+    this.stakingPools = new Map()
+    this.yieldFarms = new Map()
+    this.governance = new GovernanceToken()
+  }
+  
+  async createLiquidityPool(tokenA, tokenB, fee) {
+    const pool = new LiquidityPool({
+      tokenA: tokenA,
+      tokenB: tokenB,
+      fee: fee,
+      protocol: 'Bitora-AMM'
+    })
+    
+    await pool.initialize()
+    this.liquidityPools.set(pool.id, pool)
+    
+    return pool
+  }
+  
+  async stake(amount, duration) {
+    const stakingPool = this.stakingPools.get('BTO-STAKE')
+    const position = await stakingPool.stake({
+      amount: amount,
+      duration: duration,
+      user: this.getCurrentUser()
+    })
+    
+    return position
+  }
+  
+  async calculateYield(poolId, userAddress) {
+    const pool = this.yieldFarms.get(poolId)
+    const userPosition = await pool.getUserPosition(userAddress)
+    
+    const timeStaked = Date.now() - userPosition.startTime
+    const apr = pool.getCurrentAPR()
+    const yield = (userPosition.amount * apr * timeStaked) / (365 * 24 * 60 * 60 * 1000)
+    
+    return yield
+  }
+}`
   ]
 
-  return (
-    <group ref={groupRef}>
-      {/* Quantum field base */}
-      <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial 
-          color="#0f172a" 
-          transparent 
-          opacity={0.3}
-          emissive="#1e293b"
-          emissiveIntensity={0.1}
-        />
-      </mesh>
-
-      {/* Flowing Neural Connections */}
-      {neuralConnections.map((connection, i) => {
-        const path = generateFlowingPath(connection.start, connection.end, 3 + i * 0.5)
-        const isActive = activeNode !== null
-        const opacity = connection.type === 'primary' ? 0.8 : connection.type === 'secondary' ? 0.6 : 0.4
-        
-        return (
-          <Line
-            key={`neural-flow-${i}`}
-            points={path}
-            color={isActive ? connection.color : "#374151"}
-            transparent
-            opacity={isActive ? opacity : 0.2}
-          />
-        )
-      })}
-
-      {/* Quantum Processing Nodes */}
-      {[
-        { pos: [0, 2, 0] as [number, number, number], size: 0.4, type: 'quantum-core', color: '#ff6b6b' },
-        { pos: [-8, 2, -6] as [number, number, number], size: 0.25, type: 'feature-node', color: '#10b981' },
-        { pos: [8, 2, -6] as [number, number, number], size: 0.25, type: 'pizza-node', color: '#f59e0b' },
-        { pos: [-8, 2, 6] as [number, number, number], size: 0.25, type: 'roadmap-node', color: '#8b5cf6' },
-        { pos: [8, 2, 6] as [number, number, number], size: 0.25, type: 'ecosystem-node', color: '#06d6a0' },
-        
-        // Quantum processors
-        { pos: [-4, 1, -3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
-        { pos: [4, 1, -3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
-        { pos: [-4, 1, 3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
-        { pos: [4, 1, 3] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
-        { pos: [0, 1, -4] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
-        { pos: [0, 1, 4] as [number, number, number], size: 0.12, type: 'processor', color: '#3b82f6' },
-      ].map((node, i) => {
-        const isActive = activeNode !== null
-        const pulsePhase = time * 2 + i * 0.5
-        const pulseIntensity = isActive ? 0.3 + Math.sin(pulsePhase) * 0.2 : 0.1
-        const scaleMultiplier = node.type === 'quantum-core' ? 1.2 + Math.sin(pulsePhase * 0.5) * 0.1 : 1
-        
-        return (
-          <group key={`quantum-node-${i}`} position={node.pos}>
-            <Sphere args={[node.size * scaleMultiplier]}>
-              <meshStandardMaterial
-                color={isActive ? node.color : "#4b5563"}
-                emissive={node.color}
-                emissiveIntensity={pulseIntensity}
-                transparent
-                opacity={0.9}
-                metalness={0.3}
-                roughness={0.2}
-              />
-            </Sphere>
-            
-            {/* Quantum field around core */}
-            {node.type === 'quantum-core' && (
-              <Sphere args={[node.size * 2]}>
-                <meshStandardMaterial
-                  color={node.color}
-                  transparent
-                  opacity={0.1 + Math.sin(pulsePhase) * 0.05}
-                  emissive={node.color}
-                  emissiveIntensity={0.1}
-                />
-              </Sphere>
-            )}
-          </group>
-        )
-      })}
-
-      {/* Quantum Energy Particles */}
-      {Array.from({ length: 20 }, (_, i) => {
-        const angle = (i / 20) * Math.PI * 2
-        const radius = 12 + Math.sin(time + i) * 2
-        const x = Math.cos(angle + time * 0.1) * radius
-        const z = Math.sin(angle + time * 0.1) * radius
-        const y = 1 + Math.sin(time * 2 + i) * 0.5
-        
-        return (
-          <Sphere key={`quantum-particle-${i}`} position={[x, y, z]} args={[0.05]}>
-            <meshStandardMaterial
-              color="#00d4ff"
-              emissive="#00d4ff"
-              emissiveIntensity={0.6 + Math.sin(time * 3 + i) * 0.3}
-              transparent
-              opacity={0.8}
-            />
-          </Sphere>
-        )
-      })}
-    </group>
-  )
-}
-
-// Content Node Component
-function ContentNode({ position, title, isActive, onClick }: any) {
-  const meshRef = useRef<THREE.Mesh>(null!)
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3
-      if (isActive) {
-        meshRef.current.scale.setScalar(1.1 + Math.sin(state.clock.elapsedTime * 3) * 0.1)
+  // Continuous code generation effect
+  useEffect(() => {
+    const generateCode = () => {
+      const currentCode = codeTemplates[currentTemplate]
+      
+      if (!isDeleting) {
+        // Typing effect
+        if (charIndex < currentCode.length) {
+          setCodeContent(currentCode.slice(0, charIndex + 1))
+          setCharIndex(prev => prev + 1)
+          setCurrentLine(currentCode.slice(0, charIndex + 1).split('\n').length - 1)
+        } else {
+          // Start deleting after a pause
+          setTimeout(() => setIsDeleting(true), 2000)
+        }
       } else {
-        meshRef.current.scale.setScalar(1)
+        // Deleting effect
+        if (charIndex > 0) {
+          setCodeContent(currentCode.slice(0, charIndex - 1))
+          setCharIndex(prev => prev - 1)
+          setCurrentLine(currentCode.slice(0, charIndex - 1).split('\n').length - 1)
+        } else {
+          // Switch to next template
+          setIsDeleting(false)
+          setCurrentTemplate(prev => (prev + 1) % codeTemplates.length)
+          
+          // Generate card for completed code
+          const newCard = {
+            id: Date.now() + Math.random(),
+            title: getNodeTitle(currentTemplate),
+            code: currentCode,
+            timestamp: new Date().toLocaleTimeString()
+          }
+          setGeneratedCards(prev => {
+            const newCards = [newCard, ...prev]
+            return newCards.slice(0, 8) // Keep max 8 cards
+          })
+        }
       }
     }
-  })
 
-  // Different shapes based on content type
-  const getGeometry = () => {
-    switch(title) {
-      case 'FEATURES':
-        return <octahedronGeometry args={[1.2]} /> // Diamond shape for features
-      case 'PIZZA':
-        return <cylinderGeometry args={[1.2, 1.2, 0.3, 8]} /> // Pizza slice shape
-      case 'ROADMAP':
-        return <coneGeometry args={[1, 2, 6]} /> // Arrow/direction shape
-      case 'ECOSYSTEM':
-        return <sphereGeometry args={[1.2]} /> // Sphere for ecosystem
-      default:
-        return <boxGeometry args={[1.5, 1.5, 1.5]} />
-    }
-  }
+    const speed = isDeleting ? 30 : (Math.random() * 50 + 30) // Variable typing speed
+    const timer = setTimeout(generateCode, speed)
+    
+    return () => clearTimeout(timer)
+  }, [charIndex, isDeleting, currentTemplate])
 
-  const getColor = () => {
-    switch(title) {
-      case 'FEATURES':
-        return isActive ? "#10b981" : "#065f46"
-      case 'PIZZA':
-        return isActive ? "#f59e0b" : "#92400e"
-      case 'ROADMAP':
-        return isActive ? "#8b5cf6" : "#5b21b6"
-      case 'ECOSYSTEM':
-        return isActive ? "#06d6a0" : "#047857"
-      default:
-        return isActive ? "#3b82f6" : "#1e40af"
-    }
-  }
-
-  return (
-    <group position={position} onClick={onClick}>
-      <mesh ref={meshRef}>
-        {getGeometry()}
-        <meshStandardMaterial
-          color={getColor()}
-          emissive={getColor()}
-          emissiveIntensity={isActive ? 0.4 : 0.25}
-          metalness={0.6}
-          roughness={0.3}
-          transparent
-          opacity={isActive ? 1.0 : 0.8}
-        />
-      </mesh>
-      <Text
-        position={[0, 2.5, 0]}
-        fontSize={0.6}
-        color={isActive ? getColor() : "#ffffff"}
-        anchorX="center"
-        anchorY="middle"
-      >
-        {title}
-      </Text>
-    </group>
-  )
-}
-
-// Quantum Data Stream Component
-function QuantumDataStream({ start, end, activeNode, streamColor = "#00d4ff" }: {
-  start: [number, number, number]
-  end: [number, number, number]
-  activeNode: number | null
-  streamColor?: string
-}) {
-  const streamRef = useRef<THREE.Group>(null!)
-  const [time, setTime] = useState(0)
-  const [dataPackets, setDataPackets] = useState<Array<{ id: number; progress: number; phase: number }>>([]);
-
-  useFrame((state) => {
-    setTime(state.clock.elapsedTime)
-  })
-
+  // Generate card when activeNode changes
   useEffect(() => {
-    if (!activeNode) return
-    
-    // Create quantum data packets
-    const packets = Array.from({ length: 3 }, (_, i) => ({
-      id: i,
-      progress: i * -0.33,
-      phase: i * Math.PI * 0.67
-    }))
-    setDataPackets(packets)
-    
-    const interval = setInterval(() => {
-      setDataPackets(prev => prev.map(packet => ({
-        ...packet,
-        progress: packet.progress >= 1.2 ? -0.2 : packet.progress + 0.018
-      })))
-    }, 40)
-    
-    return () => clearInterval(interval)
+    if (activeNode !== null) {
+      const nodeCard = {
+        id: Date.now() + Math.random(),
+        title: getNodeTitle(activeNode),
+        code: codeTemplates[activeNode % codeTemplates.length],
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setGeneratedCards(prev => {
+        // Check if card with same title already exists
+        const exists = prev.some(card => card.title === nodeCard.title)
+        if (!exists) {
+          const newCards = [nodeCard, ...prev]
+          return newCards.slice(0, 8)
+        }
+        return prev
+      })
+    }
   }, [activeNode])
 
-  // Generate quantum tunnel path
-  const getQuantumPath = (start: [number, number, number], end: [number, number, number]): [number, number, number][] => {
-    const path: [number, number, number][] = []
-    const steps = 16
-    
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps
-      const smoothT = t * t * (3 - 2 * t)
-      
-      // Create quantum tunnel effect with helical motion
-      const helixRadius = 0.3 * Math.sin(t * Math.PI)
-      const helixAngle = t * Math.PI * 4 + time * 0.5
-      
-      const x = start[0] + (end[0] - start[0]) * smoothT + Math.cos(helixAngle) * helixRadius
-      const y = start[1] + (end[1] - start[1]) * smoothT + Math.sin(helixAngle) * helixRadius * 0.5
-      const z = start[2] + (end[2] - start[2]) * smoothT + Math.sin(helixAngle + Math.PI/2) * helixRadius
-      
-      path.push([x, y, z] as [number, number, number])
-    }
-    
-    return path
-  }
-
-  const pathPoints = getQuantumPath(start, end)
-
-  // Calculate position along quantum path
-  const getQuantumPosition = (progress: number): [number, number, number] => {
-    if (progress <= 0) return pathPoints[0]
-    if (progress >= 1) return pathPoints[pathPoints.length - 1]
-    
-    const scaledProgress = progress * (pathPoints.length - 1)
-    const index = Math.floor(scaledProgress)
-    const t = scaledProgress - index
-    
-    if (index >= pathPoints.length - 1) return pathPoints[pathPoints.length - 1]
-    
-    const current = pathPoints[index]
-    const next = pathPoints[index + 1]
-    
-    return [
-      current[0] + (next[0] - current[0]) * t,
-      current[1] + (next[1] - current[1]) * t,
-      current[2] + (next[2] - current[2]) * t
+  const getNodeTitle = (templateIndex: number) => {
+    const titles = [
+      'Protocol Core', 
+      'Feature Engine', 
+      'Pizza PoC', 
+      'Roadmap Engine', 
+      'Ecosystem Manager',
+      'Smart Contracts',
+      'DeFi Protocol'
     ]
+    return titles[templateIndex] || 'Code Module'
   }
-
-  if (!activeNode) return null
 
   return (
-    <group ref={streamRef}>
-      {/* Quantum tunnel visualization */}
-      <Line
-        points={pathPoints}
-        color={streamColor}
-        transparent
-        opacity={0.6 + Math.sin(time * 2) * 0.2}
-      />
-      
-      {/* Quantum data packets */}
-      {dataPackets.filter(packet => packet.progress >= 0 && packet.progress <= 1).map((packet) => {
-        const position = getQuantumPosition(packet.progress)
-        const size = 0.06 + Math.sin(time * 4 + packet.phase) * 0.02
-        const intensity = 0.8 + Math.sin(time * 3 + packet.phase) * 0.2
-        
-        return (
-          <group key={packet.id}>
-            {/* Core data packet */}
-            <Sphere position={position} args={[size]}>
-              <meshStandardMaterial
-                color={streamColor}
-                emissive={streamColor}
-                emissiveIntensity={intensity}
-                transparent
-                opacity={0.9}
-              />
-            </Sphere>
+    <div className="h-full bg-slate-900 text-green-400 font-mono text-sm overflow-hidden">
+      {/* Editor Header */}
+      <div className="bg-slate-800 border-b border-slate-700 p-3 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Terminal className="h-4 w-4 text-blue-400" />
+            <span className="text-blue-400">Bitora AI Agent</span>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2">
+          {isGenerating && (
+            <>
+              <Sparkles className="h-4 w-4 text-yellow-400 animate-pulse" />
+              <span className="text-yellow-400 text-xs">Generating...</span>
+            </>
+          )}
+          <Save className="h-4 w-4 text-slate-400" />
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:flex-row h-full">
+        {/* Code Editor */}
+        <div className="flex-1 p-2 sm:p-4 overflow-auto min-h-0">
+          <div className="flex h-full">
+            {/* Line Numbers */}
+            <div className="text-slate-500 text-right pr-2 sm:pr-4 select-none flex-shrink-0">
+              {codeContent.split('\n').map((_, i) => (
+                <div key={i} className={`leading-6 text-xs sm:text-sm ${i === currentLine && isGenerating ? 'text-yellow-400' : ''}`}>
+                  {i + 1}
+                </div>
+              ))}
+            </div>
             
-            {/* Quantum field around packet */}
-            <Sphere position={position} args={[size * 2.5]}>
-              <meshStandardMaterial
-                color={streamColor}
-                emissive={streamColor}
-                emissiveIntensity={0.2}
-                transparent
-                opacity={0.2}
-              />
-            </Sphere>
-          </group>
-        )
-      })}
-    </group>
+            {/* Code Content */}
+            <div className="flex-1 overflow-auto">
+              <pre className="leading-6">
+                <code className="text-green-400 text-xs sm:text-sm">
+                  {codeContent}
+                  {isGenerating && (
+                    <span className="bg-green-400 text-black animate-pulse">█</span>
+                  )}
+                </code>
+              </pre>
+            </div>
+          </div>
+        </div>
+
+        {/* Generated Cards Sidebar */}
+        <div className="w-full lg:w-80 bg-slate-800 border-t lg:border-t-0 lg:border-l border-slate-700 p-2 sm:p-4 overflow-auto max-h-64 lg:max-h-none">
+          <div className="flex items-center space-x-2 mb-4">
+            <Code className="h-4 w-4 text-blue-400" />
+            <span className="text-blue-400 font-semibold text-sm">Generated Modules</span>
+            <span className="text-slate-400 text-xs ml-auto">{generatedCards.length}</span>
+          </div>
+          
+          <div className="space-y-3">
+            <AnimatePresence>
+              {generatedCards.map((card, index) => (
+                <motion.div
+                  key={card.id}
+                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  className="bg-slate-700 border border-slate-600 rounded-lg p-3 cursor-pointer hover:bg-slate-600 hover:border-blue-500/50 transition-all duration-200 group"
+                  onClick={() => {
+                    // Map card title to correct activeNode
+                    const titleToNodeMap = {
+                      'Protocol Core': 0,
+                      'Feature Engine': 1, 
+                      'Pizza PoC': 2,
+                      'Roadmap Engine': 3,
+                      'Ecosystem Manager': 4,
+                      'Smart Contracts': 1, // Map to Features
+                      'DeFi Protocol': 1 // Map to Features
+                    }
+                    const targetNode = titleToNodeMap[card.title as keyof typeof titleToNodeMap] ?? 0
+                    setActiveNode(targetNode)
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white font-medium text-xs group-hover:text-blue-300">{card.title}</span>
+                    <span className="text-slate-400 text-xs">{card.timestamp}</span>
+                  </div>
+                  <div className="text-green-400 text-xs font-mono bg-slate-800 p-2 rounded overflow-hidden relative">
+                    <div className="truncate">{card.code.split('\n')[0]}</div>
+                    <div className="text-slate-500 truncate">{card.code.split('\n')[1] || '...'}</div>
+                    <div className="absolute bottom-0 right-0 bg-gradient-to-l from-slate-800 to-transparent px-2 text-slate-500">...</div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+          
+          {generatedCards.length === 0 && (
+            <div className="text-slate-500 text-center text-sm mt-8">
+              <Code className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <p>Click navigation items to generate code modules</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 
-// 3D Scene Component
+// 3D Scene Component (Simplified)
 function Scene({ activeNode, setActiveNode }: any) {
-  const { camera } = useThree()
-
-  useEffect(() => {
-    camera.position.set(0, 12, 20)
-    camera.lookAt(0, 0, 0)
-  }, [camera])
-
-  const nodes: { id: number; title: string; position: [number, number, number] }[] = [
-    { id: 0, title: "PROTOCOL", position: [0, 4, 0] },
-    { id: 1, title: "FEATURES", position: [-8, 2, -6] },
-    { id: 2, title: "PIZZA", position: [8, 2, -6] },
-    { id: 3, title: "ROADMAP", position: [-8, 2, 6] },
-    { id: 4, title: "ECOSYSTEM", position: [8, 2, 6] },
-  ]
-
   return (
-    <>
-      {/* Background sphere */}
-      <mesh>
-        <sphereGeometry args={[100]} />
-        <meshBasicMaterial color="#000510" side={2} />
-      </mesh>
-      
-      <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={0.8} color="#3b82f6" />
-      <pointLight position={[-10, 10, -10]} intensity={0.8} color="#1e40af" />
-
-      <FloatingParticles />
-      <QuantumNeuralNetwork activeNode={activeNode} />
-
-      {nodes.map((node) => (
-        <ContentNode
-          key={node.id}
-          position={node.position}
-          title={node.title}
-          isActive={activeNode === node.id}
-          onClick={() => setActiveNode(node.id)}
-        />
-      ))}
-
-      {/* Quantum Data Stream Connection */}
-      {activeNode !== null && activeNode !== 0 && (
-        <QuantumDataStream
-          start={nodes[0].position}
-          end={nodes[activeNode]?.position || [0, 0, 0]}
-          activeNode={activeNode}
-          streamColor="#00d4ff"
-        />
-      )}
-
-      <OrbitControls
-        enablePan={false}
-        enableZoom={true}
-        enableRotate={true}
-        minDistance={12}
-        maxDistance={30}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 2}
-        autoRotate
-        autoRotateSpeed={0.5}
-      />
-    </>
+    <div className="h-full">
+      <AICodeEditor activeNode={activeNode} setActiveNode={setActiveNode} />
+    </div>
   )
 }
 
@@ -915,12 +946,26 @@ export default function BitoraLanding() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6">
               <div className="flex items-center space-x-4 text-sm">
+                {['Protocol', 'Features', 'Pizza', 'Roadmap', 'Ecosystem'].map((item, index) => (
+                  <button
+                    key={item}
+                    onClick={() => setActiveNode(index)}
+                    className={`px-3 py-1 rounded transition-colors ${
+                      activeNode === index
+                        ? 'bg-blue-600 text-white'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center space-x-4 text-sm border-l border-slate-600 pl-4">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                   <span className="text-green-400">Live</span>
                 </div>
                 <span className="text-slate-400">BTO: ${stats.btoPrice}</span>
-                <span className="text-slate-400">Validators: {stats.validators}</span>
               </div>
             </nav>
 
@@ -942,13 +987,32 @@ export default function BitoraLanding() {
                 exit={{ opacity: 0, height: 0 }}
                 className="lg:hidden mt-4 pt-4 border-t border-slate-700"
               >
-                <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <span className="text-green-400">Live</span>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    {['Protocol', 'Features', 'Pizza', 'Roadmap', 'Ecosystem'].map((item, index) => (
+                      <button
+                        key={item}
+                        onClick={() => {
+                          setActiveNode(index)
+                          setIsMobileMenuOpen(false)
+                        }}
+                        className={`px-3 py-2 rounded text-sm transition-colors ${
+                          activeNode === index
+                            ? 'bg-blue-600 text-white'
+                            : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    ))}
                   </div>
-                  <span className="text-slate-400">BTO: ${stats.btoPrice}</span>
-                  <span className="text-slate-400">{stats.validators} Validators</span>
+                  <div className="flex items-center justify-between text-sm pt-2 border-t border-slate-700">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      <span className="text-green-400">Live</span>
+                    </div>
+                    <span className="text-slate-400">BTO: ${stats.btoPrice}</span>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -957,23 +1021,19 @@ export default function BitoraLanding() {
       </header>
 
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
-        {/* 3D Scene */}
+        {/* AI Code Editor */}
         <div className="lg:w-1/2 h-64 sm:h-80 lg:h-auto relative bg-slate-900">
-          <Canvas>
-            <Suspense fallback={null}>
-              <Scene activeNode={activeNode} setActiveNode={setActiveNode} />
-            </Suspense>
-          </Canvas>
+          <Scene activeNode={activeNode} setActiveNode={setActiveNode} />
 
-          {/* 3D Controls Info */}
+          {/* AI Agent Info */}
           <div className="absolute bottom-4 left-4 bg-slate-800/90 backdrop-blur-sm border border-slate-600 rounded-lg p-3 text-xs">
             <div className="flex items-center space-x-2 mb-2">
-              <Network className="h-4 w-4 text-blue-400" />
-              <span className="text-blue-400 font-semibold">3D Controls</span>
+              <Sparkles className="h-4 w-4 text-yellow-400" />
+              <span className="text-yellow-400 font-semibold">Bitora AI Agent</span>
             </div>
             <div className="space-y-1 text-slate-300">
-              <div>• Click nodes to explore</div>
-              <div className="hidden sm:block">• Drag to rotate • Scroll to zoom</div>
+              <div>• Auto-generates protocol code</div>
+              <div className="hidden sm:block">• Real-time module creation</div>
             </div>
           </div>
         </div>
