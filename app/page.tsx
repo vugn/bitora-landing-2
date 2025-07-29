@@ -36,34 +36,31 @@ function MatrixBackground() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    resizeCanvas()
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
 
-    const chars = '0123456789ABCDEF'
-    const charArray = chars.split('')
-    const fontSize = 16
-    const columns = Math.floor(canvas.width / fontSize)
-    const drops: number[] = Array(columns).fill(1)
+    const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}"
+    const matrixArray = matrix.split("")
+
+    const fontSize = 10
+    const columns = canvas.width / fontSize
+
+    const drops: number[] = []
+    for (let x = 0; x < columns; x++) {
+      drops[x] = 1
+    }
 
     function draw() {
       if (!ctx || !canvas) return
-
-      // Fade effect
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.1)'
+      
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.font = `${fontSize}px monospace`
+      ctx.fillStyle = '#3B82F6'  // Matrix blue
+      ctx.font = fontSize + 'px arial'
 
       for (let i = 0; i < drops.length; i++) {
-        const text = charArray[Math.floor(Math.random() * charArray.length)]
-
-        // Color gradient - blue theme
-        const alpha = Math.random() * 0.8 + 0.2
-        ctx.fillStyle = `rgba(59, 130, 246, ${alpha})`
-
+        const text = matrixArray[Math.floor(Math.random() * matrixArray.length)]
         ctx.fillText(text, i * fontSize, drops[i] * fontSize)
 
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
@@ -73,12 +70,18 @@ function MatrixBackground() {
       }
     }
 
-    const interval = setInterval(draw, 100)
-    window.addEventListener('resize', resizeCanvas)
+    const interval = setInterval(draw, 35)
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    window.addEventListener('resize', handleResize)
 
     return () => {
       clearInterval(interval)
-      window.removeEventListener('resize', resizeCanvas)
+      window.removeEventListener('resize', handleResize)
     }
   }, [])
 
@@ -86,152 +89,118 @@ function MatrixBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0"
-      style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 100%)'
-      }}
+      style={{ background: 'black' }}
     />
   )
 }
 
-// Terminal Loading Component
-function TerminalLoader({ onComplete }: { onComplete: () => void }) {
+// Modern Loading Component
+function ModernLoader({ onComplete }: { onComplete: () => void }) {
   const [currentStep, setCurrentStep] = useState(0)
-  const [isTyping, setIsTyping] = useState(false)
-  const [displayText, setDisplayText] = useState('')
-  const [showCursor, setShowCursor] = useState(true)
+  const [progress, setProgress] = useState(0)
 
   const steps = [
-    { text: 'INITIALIZING BITORA PROTOCOL', delay: 8 },
-    { text: 'LOADING QUANTUM ENCRYPTION', delay: 7 },
-    { text: 'CONNECTING TO VALIDATOR NETWORK', delay: 10 },
-    { text: 'SYNCING BLOCKCHAIN STATE', delay: 10 },
-    { text: 'ACTIVATING CONSENSUS LAYER', delay: 8 },
-    { text: 'LOADING 3D INTERFACE', delay: 10 },
-    { text: 'PARSING SMART CONTRACTS', delay: 7 },
-    { text: 'FINALIZING INITIALIZATION', delay: 10 },
-    { text: 'BITORA PROTOCOL READY', delay: 12 },
+    { text: 'Initializing Bitora Protocol', icon: '🚀' },
+    { text: 'Loading Quantum Encryption', icon: '🔐' },
+    { text: 'Connecting Validator Network', icon: '🌐' },
+    { text: 'Syncing Blockchain State', icon: '⛓️' },
+    { text: 'Activating Consensus Layer', icon: '⚡' },
+    { text: 'Loading 3D Interface', icon: '🎯' },
+    { text: 'Parsing Smart Contracts', icon: '📋' },
+    { text: 'Finalizing Setup', icon: '✨' },
   ]
 
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     new Array(steps.length).fill(false)
   )
 
-  // Cursor blinking effect
+  // Auto progress through steps
   useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev)
-    }, 500)
-    return () => clearInterval(cursorInterval)
-  }, [])
+    if (currentStep >= steps.length) {
+      setTimeout(() => onComplete(), 1000)
+      return
+    }
 
-  // Main typing effect
+    const timer = setTimeout(() => {
+      setCompletedSteps(prev => {
+        const newSteps = [...prev]
+        newSteps[currentStep] = true
+        return newSteps
+      })
+      
+      setTimeout(() => {
+        setCurrentStep(prev => prev + 1)
+        setProgress(((currentStep + 1) / steps.length) * 100)
+      }, 200)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [currentStep, onComplete])
+
   useEffect(() => {
-    if (currentStep >= steps.length) return
-
-    setIsTyping(true)
-    setDisplayText('')
-
-    const currentText = steps[currentStep].text
-    const typingDelay = steps[currentStep].delay
-
-    let charIndex = 0
-    const typeInterval = setInterval(() => {
-      if (charIndex < currentText.length) {
-        setDisplayText(currentText.slice(0, charIndex + 1))
-        charIndex++
-      } else {
-        clearInterval(typeInterval)
-        setIsTyping(false)
-
-        // Mark step as completed
-        setCompletedSteps(prev => {
-          const newSteps = [...prev]
-          newSteps[currentStep] = true
-          return newSteps
-        })
-
-        // Move to next step after a pause
-        setTimeout(() => {
-          if (currentStep + 1 >= steps.length) {
-            // All steps completed, wait a bit then call onComplete
-            setTimeout(() => {
-              onComplete()
-            }, 80) // Short wait time
-          } else {
-            setCurrentStep(prev => prev + 1)
-          }
-        }, 30) // Short transition between steps
-      }
-    }, typingDelay)
-
-    return () => clearInterval(typeInterval)
+    setProgress((currentStep / steps.length) * 100)
   }, [currentStep])
 
-  const progress = ((currentStep) / steps.length) * 100
-
   return (
-    <div className="relative z-10 w-full max-w-4xl mx-auto px-4">
+    <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
       {/* Terminal Window */}
-      <div className="bg-slate-900/95 backdrop-blur-lg border border-blue-500/20 rounded-2xl shadow-2xl overflow-hidden">
+      <div className="bg-slate-900/98 backdrop-blur-xl border border-blue-400/30 rounded-3xl shadow-2xl overflow-hidden">
         {/* Terminal Header */}
-        <div className="bg-slate-800/90 px-6 py-4 border-b border-blue-500/20">
+        <div className="bg-gradient-to-r from-slate-800/95 to-slate-700/95 px-4 sm:px-6 py-3 sm:py-4 border-b border-blue-400/30">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="flex space-x-1.5 sm:space-x-2">
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-yellow-500 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
               </div>
-              <span className="text-blue-400 font-mono text-sm font-semibold">
+              <span className="text-blue-300 font-mono text-xs sm:text-sm font-semibold truncate">
                 BITORA_PROTOCOL_v2.1.0.exe
               </span>
             </div>
-            <div className="text-xs text-slate-400 font-mono">
+            <div className="text-xs text-blue-300 font-mono bg-blue-500/20 px-2 py-1 rounded-lg">
               {Math.round(progress)}%
             </div>
           </div>
         </div>
 
         {/* Terminal Body */}
-        <div className="p-8 min-h-[500px] font-mono">
+        <div className="p-4 sm:p-6 lg:p-8 min-h-[400px] sm:min-h-[500px] font-mono">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="text-blue-400 text-sm mb-2">
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="text-blue-300 text-xs sm:text-sm mb-2 hidden sm:block">
               ╔══════════════════════════════════════════════════════════╗
             </div>
-            <div className="text-blue-400 text-sm mb-2">
-              ║               BITORA PROTOCOL INITIALIZATION            ║
+            <div className="text-blue-300 text-xs sm:text-sm mb-2 px-2">
+              <span className="hidden sm:inline">║</span> BITORA PROTOCOL INITIALIZATION <span className="hidden sm:inline">║</span>
             </div>
-            <div className="text-blue-400 text-sm mb-4">
+            <div className="text-blue-300 text-xs sm:text-sm mb-4 hidden sm:block">
               ╚══════════════════════════════════════════════════════════╝
             </div>
           </div>
 
           {/* Steps */}
-          <div className="space-y-3 mb-8">
+          <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
             {steps.map((step, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <div className="w-6 text-center">
+              <div key={index} className="flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
+                <div className="w-8 sm:w-10 text-center">
                   {completedSteps[index] ? (
-                    <span className="text-green-400">[OK]</span>
+                    <span className="text-green-400 text-sm sm:text-base">✓</span>
                   ) : index === currentStep ? (
-                    <span className="text-blue-400 animate-pulse">[...]</span>
+                    <span className="text-blue-400 animate-spin text-sm sm:text-base">⟳</span>
                   ) : (
-                    <span className="text-slate-600">[ ]</span>
+                    <span className="text-slate-600 text-sm sm:text-base">○</span>
                   )}
                 </div>
                 <div className="flex-1">
-                  {index < currentStep ? (
-                    <span className="text-green-400">{step.text}</span>
+                  {completedSteps[index] ? (
+                    <span className="text-green-400 text-xs sm:text-sm">{step.text}</span>
                   ) : index === currentStep ? (
-                    <span className="text-blue-300">
-                      {displayText}
-                      {isTyping && showCursor && (
-                        <span className="bg-blue-400 text-blue-900 ml-1">█</span>
-                      )}
+                    <span className="text-blue-300 animate-pulse text-xs sm:text-sm">
+                      {step.text}
                     </span>
                   ) : (
-                    <span className="text-slate-500">{step.text}</span>
+                    <span className="text-slate-500 text-xs sm:text-sm">{step.text}</span>
                   )}
                 </div>
               </div>
@@ -239,32 +208,43 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
           </div>
 
           {/* System Info */}
-          <div className="border-t border-slate-700 pt-6 text-xs text-slate-400 space-y-1">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div>NETWORK: Cosmos SDK</div>
-                <div>CONSENSUS: Tendermint BFT</div>
+          <div className="border-t border-blue-500/30 pt-4 sm:pt-6 text-xs text-blue-200 space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+              <div className="bg-slate-800/50 p-3 rounded-lg">
+                <div className="text-blue-300 font-semibold mb-1">NETWORK</div>
+                <div>Cosmos SDK</div>
+                <div className="text-blue-300 font-semibold mb-1 mt-2">CONSENSUS</div>
+                <div>Tendermint BFT</div>
               </div>
-              <div>
-                <div>TOKEN: $BTO</div>
-                <div>STATUS: {currentStep >= steps.length ? 'READY' : 'INITIALIZING'}</div>
+              <div className="bg-slate-800/50 p-3 rounded-lg">
+                <div className="text-blue-300 font-semibold mb-1">TOKEN</div>
+                <div>$BTO</div>
+                <div className="text-blue-300 font-semibold mb-1 mt-2">STATUS</div>
+                <div className={currentStep >= steps.length ? 'text-green-400' : 'text-yellow-400'}>
+                  {currentStep >= steps.length ? 'READY' : 'INITIALIZING'}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="mt-6">
-            <div className="flex justify-between text-xs text-blue-400 mb-2">
-              <span>INITIALIZATION PROGRESS</span>
-              <span>{Math.round(progress)}%</span>
+          <div className="mt-4 sm:mt-6">
+            <div className="flex justify-between text-xs text-blue-300 mb-3">
+              <span className="font-semibold">INITIALIZATION PROGRESS</span>
+              <span className="bg-blue-500/20 px-2 py-1 rounded">{Math.round(progress)}%</span>
             </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-slate-800/70 rounded-full h-3 sm:h-4 overflow-hidden border border-blue-500/30">
               <motion.div
-                className="bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 h-full rounded-full"
+                className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 h-full rounded-full shadow-lg"
                 initial={{ width: "0%" }}
                 animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
               />
+            </div>
+            <div className="flex justify-between text-xs text-blue-400/70 mt-2">
+              <span>0%</span>
+              <span>50%</span>
+              <span>100%</span>
             </div>
           </div>
         </div>
@@ -284,6 +264,7 @@ function AICodeEditor({ activeNode, setActiveNode }: any) {
   const [currentTemplate, setCurrentTemplate] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [mobileTab, setMobileTab] = useState<'code' | 'modules'>('code')
 
   const codeTemplates = [
     `// Bitora Protocol Core
@@ -698,23 +679,51 @@ class DeFiProtocol {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-full">
+      {/* Mobile Tabs */}
+      <div className="lg:hidden mb-4">
+        <div className="flex bg-slate-800 rounded-lg p-1">
+          <button
+            onClick={() => setMobileTab('code')}
+            className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${
+              mobileTab === 'code'
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Code Editor
+          </button>
+          <button
+            onClick={() => setMobileTab('modules')}
+            className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${
+              mobileTab === 'modules'
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            Modules ({generatedCards.length})
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:flex-row h-full min-h-0">
         {/* Code Editor */}
-        <div className="flex-1 p-2 sm:p-4 overflow-auto min-h-0">
-          <div className="flex h-full">
+        <div className={`flex-1 p-2 sm:p-4 overflow-auto h-64 sm:h-80 lg:min-h-full bg-slate-900 ${
+          mobileTab === 'code' ? 'block' : 'hidden lg:block'
+        }`}>
+          <div className="flex h-full min-h-60 sm:min-h-76">
             {/* Line Numbers */}
-            <div className="text-slate-500 text-right pr-2 sm:pr-4 select-none flex-shrink-0">
+            <div className="w-8 sm:w-10 bg-slate-800 border-r border-slate-700 text-slate-500 text-right pr-2 select-none flex-shrink-0 overflow-hidden">
               {codeContent.split('\n').map((_, i) => (
-                <div key={i} className={`leading-6 text-xs sm:text-sm ${i === currentLine && isGenerating ? 'text-yellow-400' : ''}`}>
+                <div key={i} className={`leading-5 sm:leading-6 text-xs sm:text-sm py-0.5 ${i === currentLine && isGenerating ? 'text-yellow-400' : ''}`}>
                   {i + 1}
                 </div>
               ))}
             </div>
             
             {/* Code Content */}
-            <div className="flex-1 overflow-auto">
-              <pre className="leading-6">
-                <code className="text-green-400 text-xs sm:text-sm">
+            <div className="flex-1 overflow-auto p-2 sm:p-3">
+              <pre className="leading-5 sm:leading-6">
+                <code className="text-green-400 text-xs sm:text-sm block whitespace-pre-wrap break-words">
                   {codeContent}
                   {isGenerating && (
                     <span className="bg-green-400 text-black animate-pulse">█</span>
@@ -726,48 +735,187 @@ class DeFiProtocol {
         </div>
 
         {/* Generated Cards Sidebar */}
-        <div className="w-full lg:w-80 bg-slate-800 border-t lg:border-t-0 lg:border-l border-slate-700 p-2 sm:p-4 overflow-auto max-h-64 lg:max-h-none">
-          <div className="flex items-center space-x-2 mb-4">
-            <Code className="h-4 w-4 text-blue-400" />
-            <span className="text-blue-400 font-semibold text-sm">Generated Modules</span>
+        <div className={`w-full lg:w-80 bg-slate-800 border-t lg:border-t-0 lg:border-l border-slate-700 p-2 sm:p-3 lg:p-4 overflow-y-auto lg:max-h-none flex-shrink-0 ${
+          mobileTab === 'modules' ? 'block' : 'hidden lg:block'
+        }`}>
+          <div className="flex items-center space-x-2 mb-2 sm:mb-3">
+            <Code className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
+            <span className="text-blue-400 font-semibold text-xs sm:text-sm">Generated Modules</span>
             <span className="text-slate-400 text-xs ml-auto">{generatedCards.length}</span>
           </div>
           
-          <div className="space-y-3">
+          <div className="relative space-y-3">
+            {/* Enhanced Connecting Lines */}
+            {generatedCards.length > 1 && (
+              <div className="absolute left-4 sm:left-6 top-0 bottom-0 z-0">
+                {/* Main glowing line */}
+                <div className="absolute w-1 h-full bg-gradient-to-b from-cyan-400/20 via-blue-500/40 via-purple-500/40 to-emerald-400/20 rounded-full" />
+                <div className="absolute w-0.5 h-full bg-gradient-to-b from-cyan-300 via-blue-400 via-purple-400 to-emerald-300 rounded-full left-0.25 shadow-lg shadow-blue-500/50" />
+                
+                {/* Animated energy pulses */}
+                <motion.div
+                  className="absolute w-3 h-8 bg-gradient-to-b from-cyan-400 to-transparent rounded-full -left-1 blur-sm"
+                  animate={{
+                    y: [0, 400],
+                    opacity: [0, 1, 1, 0]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                <motion.div
+                  className="absolute w-2 h-6 bg-gradient-to-b from-blue-400 to-transparent rounded-full -left-0.5 blur-sm"
+                  animate={{
+                    y: [0, 400],
+                    opacity: [0, 1, 1, 0]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.5
+                  }}
+                />
+                <motion.div
+                  className="absolute w-2.5 h-7 bg-gradient-to-b from-purple-400 to-transparent rounded-full -left-0.75 blur-sm"
+                  animate={{
+                    y: [0, 400],
+                    opacity: [0, 1, 1, 0]
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 3
+                  }}
+                />
+                
+                {/* Flowing particles */}
+                <motion.div
+                  className="absolute w-1.5 h-1.5 bg-cyan-300 rounded-full -left-0.25 shadow-lg shadow-cyan-300/80"
+                  animate={{
+                    y: [0, 400],
+                    opacity: [0, 1, 0],
+                    scale: [0.5, 1, 0.5]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+                <motion.div
+                  className="absolute w-1 h-1 bg-blue-300 rounded-full left-0 shadow-md shadow-blue-300/60"
+                  animate={{
+                    y: [0, 400],
+                    opacity: [0, 1, 0],
+                    scale: [0.3, 1, 0.3]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: 1
+                  }}
+                />
+                <motion.div
+                  className="absolute w-1.5 h-1.5 bg-emerald-300 rounded-full -left-0.25 shadow-lg shadow-emerald-300/80"
+                  animate={{
+                    y: [0, 400],
+                    opacity: [0, 1, 0],
+                    scale: [0.5, 1, 0.5]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: 2
+                  }}
+                />
+              </div>
+            )}
+            
             <AnimatePresence>
               {generatedCards.map((card, index) => (
-                <motion.div
-                  key={card.id}
-                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                  transition={{ delay: index * 0.1, duration: 0.3 }}
-                  className="bg-slate-700 border border-slate-600 rounded-lg p-3 cursor-pointer hover:bg-slate-600 hover:border-blue-500/50 transition-all duration-200 group"
-                  onClick={() => {
-                    // Map card title to correct activeNode
-                    const titleToNodeMap = {
-                      'Protocol Core': 0,
-                      'Feature Engine': 1, 
-                      'Pizza PoC': 2,
-                      'Roadmap Engine': 3,
-                      'Ecosystem Manager': 4,
-                      'Smart Contracts': 1, // Map to Features
-                      'DeFi Protocol': 1 // Map to Features
-                    }
-                    const targetNode = titleToNodeMap[card.title as keyof typeof titleToNodeMap] ?? 0
-                    setActiveNode(targetNode)
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-white font-medium text-xs group-hover:text-blue-300">{card.title}</span>
-                    <span className="text-slate-400 text-xs">{card.timestamp}</span>
-                  </div>
-                  <div className="text-green-400 text-xs font-mono bg-slate-800 p-2 rounded overflow-hidden relative">
-                    <div className="truncate">{card.code.split('\n')[0]}</div>
-                    <div className="text-slate-500 truncate">{card.code.split('\n')[1] || '...'}</div>
-                    <div className="absolute bottom-0 right-0 bg-gradient-to-l from-slate-800 to-transparent px-2 text-slate-500">...</div>
-                  </div>
-                </motion.div>
+                <div key={card.id} className="relative z-10">
+                  {/* Enhanced Connection Node */}
+                    {index < generatedCards.length && (
+                      <div className="absolute left-2.5 sm:left-4.5 top-4 sm:top-6 w-3 h-3 sm:w-4 sm:h-4 z-20">
+                       {/* Outer glow ring */}
+                       <motion.div
+                         className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur-sm"
+                         animate={{
+                           scale: [1, 1.8, 1],
+                           opacity: [0.3, 0.8, 0.3]
+                         }}
+                         transition={{
+                           duration: 2.5,
+                           repeat: Infinity,
+                           delay: index * 0.4
+                         }}
+                       />
+                       {/* Inner core */}
+                       <div className="absolute inset-1 bg-gradient-to-br from-cyan-300 to-blue-400 rounded-full shadow-lg shadow-blue-400/60" />
+                       {/* Center dot */}
+                       <div className="absolute inset-2 bg-white rounded-full" />
+                       {/* Pulse effect */}
+                       <motion.div
+                         className="absolute inset-0 border-2 border-cyan-300 rounded-full"
+                         animate={{
+                           scale: [1, 2, 1],
+                           opacity: [0.8, 0, 0.8]
+                         }}
+                         transition={{
+                           duration: 2,
+                           repeat: Infinity,
+                           delay: index * 0.3
+                         }}
+                       />
+                     </div>
+                   )}
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                    className="ml-6 sm:ml-8 bg-slate-700 border border-slate-600 rounded-lg p-2 sm:p-3 cursor-pointer hover:bg-slate-600 hover:border-blue-500/50 transition-all duration-200 group relative"
+                    onClick={() => {
+                      // Map card title to correct activeNode
+                      const titleToNodeMap = {
+                        'Protocol Core': 0,
+                        'Feature Engine': 1, 
+                        'Pizza PoC': 2,
+                        'Roadmap Engine': 3,
+                        'Ecosystem Manager': 4,
+                        'Smart Contracts': 1, // Map to Features
+                        'DeFi Protocol': 1 // Map to Features
+                      }
+                      const targetNode = titleToNodeMap[card.title as keyof typeof titleToNodeMap] ?? 0
+                      setActiveNode(targetNode)
+                    }}
+                  >
+                    {/* Card Status Indicator */}
+                     <div className="absolute -left-1 sm:-left-2 top-2 sm:top-3 w-0.5 sm:w-1 h-6 sm:h-8 bg-gradient-to-b from-blue-400 to-green-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="flex items-center justify-between mb-1 sm:mb-2">
+                       <span className="text-white font-medium text-xs sm:text-sm group-hover:text-blue-300 truncate">{card.title}</span>
+                       <span className="text-slate-400 text-xs ml-2 flex-shrink-0">{card.timestamp}</span>
+                     </div>
+                     <div className="text-green-400 text-xs font-mono bg-slate-800 p-1.5 sm:p-2 rounded overflow-hidden relative">
+                       <div className="truncate text-xs">{card.code?.split('\n')[0] || 'Loading...'}</div>
+                       <div className="text-slate-500 truncate text-xs hidden sm:block">{card.code?.split('\n')[1] || '...'}</div>
+                       <div className="absolute bottom-0 right-0 bg-gradient-to-l from-slate-800 to-transparent px-1 sm:px-2 text-slate-500 text-xs">...</div>
+                     </div>
+                    
+                    {/* Process Step Number */}
+                     <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                       {index + 1}
+                     </div>
+                  </motion.div>
+                </div>
               ))}
             </AnimatePresence>
           </div>
@@ -921,7 +1069,7 @@ export default function BitoraLanding() {
       <div className="min-h-screen bg-slate-900 relative overflow-hidden flex items-center justify-center">
         <MatrixBackground />
         <div className="text-center space-y-6 px-4">
-          <TerminalLoader onComplete={handleLoadingComplete} />
+          <ModernLoader onComplete={handleLoadingComplete} />
         </div>
       </div>
     )
@@ -945,12 +1093,12 @@ export default function BitoraLanding() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6">
-              <div className="flex items-center space-x-4 text-sm">
+              <div className="flex flex-wrap items-center gap-2 text-sm">
                 {['Protocol', 'Features', 'Pizza', 'Roadmap', 'Ecosystem'].map((item, index) => (
                   <button
                     key={item}
                     onClick={() => setActiveNode(index)}
-                    className={`px-3 py-1 rounded transition-colors ${
+                    className={`px-3 py-1.5 rounded transition-colors flex-shrink-0 ${
                       activeNode === index
                         ? 'bg-blue-600 text-white'
                         : 'text-slate-400 hover:text-white hover:bg-slate-700'
@@ -988,7 +1136,7 @@ export default function BitoraLanding() {
                 className="lg:hidden mt-4 pt-4 border-t border-slate-700"
               >
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {['Protocol', 'Features', 'Pizza', 'Roadmap', 'Ecosystem'].map((item, index) => (
                       <button
                         key={item}
@@ -996,7 +1144,7 @@ export default function BitoraLanding() {
                           setActiveNode(index)
                           setIsMobileMenuOpen(false)
                         }}
-                        className={`px-3 py-2 rounded text-sm transition-colors ${
+                        className={`px-3 py-2 rounded text-sm transition-colors flex-shrink-0 ${
                           activeNode === index
                             ? 'bg-blue-600 text-white'
                             : 'text-slate-400 hover:text-white hover:bg-slate-700'
@@ -1021,8 +1169,8 @@ export default function BitoraLanding() {
       </header>
 
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
-        {/* AI Code Editor */}
-        <div className="lg:w-1/2 h-64 sm:h-80 lg:h-auto relative bg-slate-900">
+        {/* 3D Scene - Desktop Only */}
+        <div className="hidden lg:block lg:w-1/2 relative bg-slate-900 min-h-0 overflow-hidden">
           <Scene activeNode={activeNode} setActiveNode={setActiveNode} />
 
           {/* AI Agent Info */}
@@ -1038,8 +1186,13 @@ export default function BitoraLanding() {
           </div>
         </div>
 
+        {/* Mobile AI Code Editor */}
+        <div className="lg:hidden">
+          <AICodeEditor activeNode={activeNode} setActiveNode={setActiveNode} />
+        </div>
+
         {/* Content Panel */}
-        <div className="lg:w-1/2 p-4 lg:p-8 overflow-y-auto">
+        <div className="w-full lg:w-1/2 p-4 lg:p-8 overflow-y-auto min-h-96 sm:min-h-[32rem] lg:min-h-0 max-h-screen">
           <motion.div
             key={activeNode}
             initial={{ opacity: 0, y: 20 }}
@@ -1074,7 +1227,7 @@ export default function BitoraLanding() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
               {[
                 { label: "BTO Price", value: `$${stats.btoPrice}`, icon: <TrendingUp className="h-5 w-5" /> },
                 { label: "Validators", value: stats.validators, icon: <Network className="h-5 w-5" /> },
