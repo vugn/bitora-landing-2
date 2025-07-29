@@ -335,85 +335,229 @@ function FloatingParticles() {
   )
 }
 
-// Quantum Neural Network Component
-function QuantumNeuralNetwork({ activeNode }: { activeNode: number | null }) {
+// Solar System Component
+function SolarSystem({ activeNode }: { activeNode: number | null }) {
   const groupRef = useRef<THREE.Group>(null!)
+  const planetRefs = useRef<(THREE.Group | null)[]>([])
   const [time, setTime] = useState(0)
 
   useFrame((state) => {
     setTime(state.clock.elapsedTime)
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.05) * 0.02
+      groupRef.current.rotation.y += 0.0005 // Very slow system rotation
     }
+    
+    // Animate planets in orbital motion
+    planetRefs.current.forEach((planetGroup, index) => {
+      if (planetGroup) {
+        const planet = planets[index]
+        const speed = 0.3 + index * 0.1 // Different orbital speeds
+        const angle = state.clock.elapsedTime * speed
+        
+        planetGroup.position.x = Math.cos(angle) * planet.distance
+        planetGroup.position.z = Math.sin(angle) * planet.distance
+        planetGroup.position.y = 2 + Math.sin(angle * 0.3) * 0.2 // Slight vertical oscillation
+        
+        // Planet self-rotation
+        planetGroup.rotation.y += 0.01 + index * 0.003
+      }
+    })
   })
 
-  // Generate flowing energy paths
-  const generateFlowingPath = (start: [number, number, number], end: [number, number, number], complexity: number = 5) => {
-    const path: [number, number, number][] = [start]
-    const steps = 12
+  // Generate circuit-style orbital paths
+  const generateOrbitPath = (radius: number) => {
+    const points: [number, number, number][] = []
+    const segments = 128 // More segments for smoother circuit lines
     
-    for (let i = 1; i < steps; i++) {
-      const t = i / steps
-      const smoothT = t * t * (3 - 2 * t) // Smooth interpolation
-      
-      // Create organic flowing curves
-      const x = start[0] + (end[0] - start[0]) * smoothT + Math.sin(t * Math.PI * complexity + time) * 0.8
-      const y = start[1] + (end[1] - start[1]) * smoothT + Math.cos(t * Math.PI * complexity * 1.5 + time * 0.7) * 0.5
-      const z = start[2] + (end[2] - start[2]) * smoothT + Math.sin(t * Math.PI * complexity * 0.8 + time * 0.5) * 0.6
-      
-      path.push([x, y, z] as [number, number, number])
+    for (let i = 0; i <= segments; i++) {
+      const angle = (i / segments) * Math.PI * 2
+      // Add slight circuit-like variations
+      const variation = Math.sin(angle * 8) * 0.1
+      const x = Math.cos(angle) * (radius + variation)
+      const z = Math.sin(angle) * (radius + variation)
+      const y = 2 + Math.sin(angle * 4) * 0.05 // Slight vertical wave
+      points.push([x, y, z])
     }
     
-    path.push(end)
-    return path
+    return points
   }
 
-  const neuralConnections = [
-    // Primary neural pathways
-    { start: [0, 2, 0] as [number, number, number], end: [-8, 2, -6] as [number, number, number], type: 'primary', color: '#10b981' },
-    { start: [0, 2, 0] as [number, number, number], end: [8, 2, -6] as [number, number, number], type: 'primary', color: '#f59e0b' },
-    { start: [0, 2, 0] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'primary', color: '#8b5cf6' },
-    { start: [0, 2, 0] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'primary', color: '#06d6a0' },
-    
-    // Secondary neural pathways (inter-node communication)
-    { start: [-8, 2, -6] as [number, number, number], end: [8, 2, -6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    { start: [8, 2, -6] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    { start: [8, 2, 6] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    { start: [-8, 2, 6] as [number, number, number], end: [-8, 2, -6] as [number, number, number], type: 'secondary', color: '#3b82f6' },
-    
-    // Quantum entanglement connections
-    { start: [-8, 2, -6] as [number, number, number], end: [8, 2, 6] as [number, number, number], type: 'quantum', color: '#ec4899' },
-    { start: [8, 2, -6] as [number, number, number], end: [-8, 2, 6] as [number, number, number], type: 'quantum', color: '#ec4899' },
+  // Solar system planets data with proper distances
+  const planets = [
+    { name: 'FEATURES', color: '#10b981', size: 0.8, distance: 5 },
+    { name: 'PIZZA', color: '#f59e0b', size: 1.0, distance: 7 },
+    { name: 'ROADMAP', color: '#8b5cf6', size: 1.2, distance: 9 },
+    { name: 'ECOSYSTEM', color: '#06d6a0', size: 1.4, distance: 11 },
   ]
 
   return (
     <group ref={groupRef}>
-      {/* Quantum field base */}
+      {/* Space background with stars */}
       <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[60, 60]} />
+        <planeGeometry args={[80, 80]} />
         <meshStandardMaterial 
-          color="#0f172a" 
+          color="#000510" 
           transparent 
-          opacity={0.3}
-          emissive="#1e293b"
+          opacity={0.9}
+          emissive="#001122"
           emissiveIntensity={0.1}
         />
       </mesh>
 
-      {/* Flowing Neural Connections */}
-      {neuralConnections.map((connection, i) => {
-        const path = generateFlowingPath(connection.start, connection.end, 3 + i * 0.5)
-        const isActive = activeNode !== null
-        const opacity = connection.type === 'primary' ? 0.8 : connection.type === 'secondary' ? 0.6 : 0.4
+      {/* Central Sun */}
+      <mesh position={[0, 2, 0]}>
+        <sphereGeometry args={[1.8, 32, 32]} />
+        <meshStandardMaterial
+          color="#ffaa00"
+          emissive="#ff6600"
+          emissiveIntensity={0.9 + Math.sin(time * 2) * 0.3}
+        />
+      </mesh>
+      
+      {/* Sun corona layers */}
+      <mesh position={[0, 2, 0]}>
+        <sphereGeometry args={[2.2, 32, 32]} />
+        <meshBasicMaterial
+          color="#ffaa00"
+          transparent
+          opacity={0.3 + Math.sin(time * 1.5) * 0.1}
+          side={2}
+        />
+      </mesh>
+      
+      <mesh position={[0, 2, 0]}>
+        <sphereGeometry args={[2.6, 32, 32]} />
+        <meshBasicMaterial
+          color="#ff8800"
+          transparent
+          opacity={0.15 + Math.sin(time * 1.2) * 0.05}
+          side={2}
+        />
+      </mesh>
+
+      {/* Circuit-style Orbital Paths with Plasma Effect */}
+      {planets.map((planet, index) => {
+        const orbitPath = generateOrbitPath(planet.distance)
+        const isActive = activeNode !== null && index + 1 === activeNode
         
         return (
-          <Line
-            key={`neural-flow-${i}`}
-            points={path}
-            color={isActive ? connection.color : "#374151"}
-            transparent
-            opacity={isActive ? opacity : 0.2}
-          />
+          <group key={`orbit-group-${index}`}>
+            {/* Main Circuit Line */}
+            <Line
+              points={orbitPath}
+              color={isActive ? planet.color : '#66ccff'}
+              transparent
+              opacity={isActive ? 1.0 : 0.7}
+            />
+            
+            {/* Plasma Glow Effect */}
+            <Line
+              points={orbitPath}
+              color={isActive ? '#ffffff' : '#88ddff'}
+              transparent
+              opacity={isActive ? 0.6 : 0.3}
+            />
+            
+            {/* Circuit Nodes */}
+            {orbitPath.filter((_, i) => i % 8 === 0).map((point, nodeIndex) => (
+              <mesh key={`node-${index}-${nodeIndex}`} position={point}>
+                <sphereGeometry args={[0.05, 8, 8]} />
+                <meshBasicMaterial 
+                  color={isActive ? planet.color : '#66ccff'}
+                  transparent
+                  opacity={isActive ? 1.0 : 0.8}
+                />
+              </mesh>
+            ))}
+            
+            {/* Plasma Particles */}
+            {isActive && Array.from({ length: 12 }).map((_, particleIndex) => {
+              const angle = (particleIndex / 12) * Math.PI * 2 + time * 2
+              const x = Math.cos(angle) * planet.distance
+              const z = Math.sin(angle) * planet.distance
+              const y = 2 + Math.sin(time * 3 + particleIndex) * 0.2
+              
+              return (
+                <mesh key={`plasma-${index}-${particleIndex}`} position={[x, y, z]}>
+                  <sphereGeometry args={[0.08, 6, 6]} />
+                  <meshBasicMaterial 
+                    color={planet.color}
+                    transparent
+                    opacity={0.8 + Math.sin(time * 4 + particleIndex) * 0.2}
+                  />
+                </mesh>
+              )
+            })}
+          </group>
+        )
+      })}
+      
+      {/* Orbiting planets (invisible placeholders for ContentNode positioning) */}
+      {planets.map((planet, index) => (
+        <group
+          key={`planet-${index}`}
+          ref={(el) => {
+            if (planetRefs.current) {
+              planetRefs.current[index] = el
+            }
+          }}
+        >
+          {/* This will be overridden by ContentNode positioning */}
+        </group>
+      ))}
+
+      {/* Solar Energy Beams to active planet */}
+      {activeNode !== null && activeNode > 0 && activeNode <= planets.length && (
+        <Line
+          points={[
+            [0, 2, 0],
+            [
+              Math.cos((time * (0.3 + (activeNode - 1) * 0.1))) * planets[activeNode - 1].distance,
+              2 + Math.sin((time * (0.3 + (activeNode - 1) * 0.1)) * 0.3) * 0.2,
+              Math.sin((time * (0.3 + (activeNode - 1) * 0.1))) * planets[activeNode - 1].distance
+            ]
+          ]}
+          color={planets[activeNode - 1].color}
+          transparent
+          opacity={0.7 + Math.sin(time * 3) * 0.2}
+        />
+      )}
+
+      {/* Asteroid belt */}
+      {Array.from({ length: 30 }, (_, i) => {
+        const angle = (i / 30) * Math.PI * 2 + time * 0.05
+        const radius = 13 + Math.sin(i * 0.5) * 1.5
+        const x = Math.cos(angle) * radius
+        const z = Math.sin(angle) * radius
+        const y = 2 + Math.sin(i * 2 + time * 0.3) * 0.3
+        
+        return (
+          <mesh key={`asteroid-${i}`} position={[x, y, z]}>
+            <sphereGeometry args={[0.03 + Math.sin(i) * 0.02, 6, 6]} />
+            <meshStandardMaterial
+              color="#666666"
+              metalness={0.7}
+              roughness={0.5}
+            />
+          </mesh>
+        )
+      })}
+      
+      {/* Distant stars */}
+      {Array.from({ length: 50 }, (_, i) => {
+        const angle = (i / 50) * Math.PI * 2
+        const radius = 25 + Math.random() * 10
+        const x = Math.cos(angle) * radius
+        const z = Math.sin(angle) * radius
+        const y = 2 + (Math.random() - 0.5) * 8
+        
+        return (
+          <mesh key={`star-${i}`} position={[x, y, z]}>
+            <sphereGeometry args={[0.02, 4, 4]} />
+            <meshBasicMaterial
+              color="#aaccff"
+            />
+          </mesh>
         )
       })}
 
@@ -507,19 +651,19 @@ function ContentNode({ position, title, isActive, onClick }: any) {
     }
   })
 
-  // Different shapes based on content type
-  const getGeometry = () => {
+  // Planet sizes for solar system
+  const getPlanetSize = (title: string) => {
     switch(title) {
       case 'FEATURES':
-        return <octahedronGeometry args={[1.2]} /> // Diamond shape for features
+        return 1.2 // Mercury-like
       case 'PIZZA':
-        return <cylinderGeometry args={[1.2, 1.2, 0.3, 8]} /> // Pizza slice shape
+        return 1.5 // Venus-like
       case 'ROADMAP':
-        return <coneGeometry args={[1, 2, 6]} /> // Arrow/direction shape
+        return 1.8 // Earth-like
       case 'ECOSYSTEM':
-        return <sphereGeometry args={[1.2]} /> // Sphere for ecosystem
+        return 2.0 // Mars-like
       default:
-        return <boxGeometry args={[1.5, 1.5, 1.5]} />
+        return 1.0
     }
   }
 
@@ -541,7 +685,7 @@ function ContentNode({ position, title, isActive, onClick }: any) {
   return (
     <group position={position} onClick={onClick}>
       <mesh ref={meshRef}>
-        {getGeometry()}
+        <sphereGeometry args={[getPlanetSize(title), 32, 32]} />
         <meshStandardMaterial
           color={getColor()}
           emissive={getColor()}
@@ -552,21 +696,62 @@ function ContentNode({ position, title, isActive, onClick }: any) {
           opacity={isActive ? 1.0 : 0.8}
         />
       </mesh>
-      <Text
-        position={[0, 2.5, 0]}
-        fontSize={0.6}
-        color={isActive ? getColor() : "#ffffff"}
-        anchorX="center"
-        anchorY="middle"
-      >
-        {title}
-      </Text>
+      {/* Planet Ring for active planet */}
+      {isActive && (
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[getPlanetSize(title) + 0.3, getPlanetSize(title) + 0.5, 32]} />
+          <meshBasicMaterial
+            color={getColor()}
+            transparent
+            opacity={0.3}
+            side={2}
+          />
+        </mesh>
+      )}
+      <group>
+        {/* Text Shadow/Outline */}
+        <Text
+          position={[0, 2.5, 0.01]}
+          fontSize={0.6}
+          color="#000000"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.02}
+          outlineColor="#000000"
+        >
+          {title}
+        </Text>
+        
+        {/* Main Text */}
+        <Text
+          position={[0, 2.5, 0.02]}
+          fontSize={0.6}
+          color={isActive ? getColor() : "#ffffff"}
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0.01}
+          outlineColor="#333333"
+        >
+          {title}
+        </Text>
+        
+        {/* Glow Effect */}
+         <Text
+           position={[0, 2.5, 0.03]}
+           fontSize={0.62}
+           color={isActive ? "#ffffff" : "#cccccc"}
+           anchorX="center"
+           anchorY="middle"
+         >
+           {title}
+         </Text>
+      </group>
     </group>
   )
 }
 
-// Quantum Data Stream Component
-function QuantumDataStream({ start, end, activeNode, streamColor = "#00d4ff" }: {
+// Solar Energy Beam Component
+function SolarEnergyBeam({ start, end, activeNode, streamColor = "#ffaa00" }: {
   start: [number, number, number]
   end: [number, number, number]
   activeNode: number | null
@@ -698,11 +883,35 @@ function QuantumDataStream({ start, end, activeNode, streamColor = "#00d4ff" }: 
 // 3D Scene Component
 function Scene({ activeNode, setActiveNode }: any) {
   const { camera } = useThree()
+  const [time, setTime] = useState(0)
+
+  useFrame((state) => {
+    setTime(state.clock.elapsedTime)
+  })
 
   useEffect(() => {
     camera.position.set(0, 12, 20)
     camera.lookAt(0, 0, 0)
   }, [camera])
+
+  const getContentPosition = (content: string, time: number = 0): [number, number, number] => {
+    const planets = [
+      { name: 'FEATURES', distance: 5, speed: 0.3 },
+      { name: 'PIZZA', distance: 7, speed: 0.4 },
+      { name: 'ROADMAP', distance: 9, speed: 0.5 },
+      { name: 'ECOSYSTEM', distance: 11, speed: 0.6 },
+    ]
+    
+    const planet = planets.find(p => p.name === content)
+    if (!planet) return [0, 2, 0]
+    
+    const angle = time * planet.speed
+    return [
+      Math.cos(angle) * planet.distance,
+      2 + Math.sin(angle * 0.3) * 0.2,
+      Math.sin(angle) * planet.distance
+    ]
+  }
 
   const nodes: { id: number; title: string; position: [number, number, number] }[] = [
     { id: 0, title: "PROTOCOL", position: [0, 4, 0] },
@@ -725,25 +934,34 @@ function Scene({ activeNode, setActiveNode }: any) {
       <pointLight position={[-10, 10, -10]} intensity={0.8} color="#1e40af" />
 
       <FloatingParticles />
-      <QuantumNeuralNetwork activeNode={activeNode} />
+      <SolarSystem activeNode={activeNode} />
 
-      {nodes.map((node) => (
+      {nodes.slice(1).map((node) => (
         <ContentNode
           key={node.id}
-          position={node.position}
+          position={getContentPosition(node.title, time)}
           title={node.title}
           isActive={activeNode === node.id}
           onClick={() => setActiveNode(node.id)}
         />
       ))}
+      
+      {/* Central Sun Node */}
+      <ContentNode
+        key={nodes[0].id}
+        position={[0, 2, 0]}
+        title={nodes[0].title}
+        isActive={activeNode === nodes[0].id}
+        onClick={() => setActiveNode(nodes[0].id)}
+      />
 
-      {/* Quantum Data Stream Connection */}
+      {/* Solar Energy Beam Connection */}
       {activeNode !== null && activeNode !== 0 && (
-        <QuantumDataStream
-          start={nodes[0].position}
-          end={nodes[activeNode]?.position || [0, 0, 0]}
+        <SolarEnergyBeam
+          start={[0, 2, 0]}
+          end={getContentPosition(nodes[activeNode]?.title || '', time)}
           activeNode={activeNode}
-          streamColor="#00d4ff"
+          streamColor="#ffaa00"
         />
       )}
 
