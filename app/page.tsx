@@ -57,7 +57,7 @@ function MatrixBackground() {
 
     function draw() {
       if (!ctx || !canvas) return
-      
+
       ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -69,14 +69,14 @@ function MatrixBackground() {
 
       for (let i = 0; i < drops.length; i++) {
         const text = matrixArray[Math.floor(Math.random() * matrixArray.length)]
-        
+
         // Add gradient effect for leading characters
         if (drops[i] * fontSize < canvas.height - fontSize * 5) {
           ctx.fillStyle = '#60A5FA'
         } else {
           ctx.fillStyle = '#1E40AF'
         }
-        
+
         ctx.fillText(text, i * fontSize, drops[i] * fontSize)
 
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.970) {
@@ -84,7 +84,7 @@ function MatrixBackground() {
         }
         drops[i]++
       }
-      
+
       // Reset shadow
       ctx.shadowBlur = 0
     }
@@ -113,7 +113,7 @@ function MatrixBackground() {
   )
 }
 
-// Navigation Component
+// Navigation Component (Updated for Bitora)
 function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -124,41 +124,43 @@ function Navigation() {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">B</span>
+              <span className="text-white font-bold text-sm font-mono">B</span>
             </div>
-            <span className="text-white font-bold text-xl">Bitora</span>
+            <span className="text-white font-bold text-lg sm:text-xl font-mono">[BITORA]</span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-slate-300 hover:text-white transition-colors">Features</a>
-            <a href="#technology" className="text-slate-300 hover:text-white transition-colors">Technology</a>
-            <a href="#demo" className="text-slate-300 hover:text-white transition-colors">Demo</a>
-            <a href="#about" className="text-slate-300 hover:text-white transition-colors">About</a>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-              Get Started
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <a href="#features" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Protocol</a>
+            <a href="#demo" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Live Demo</a>
+            <a href="#about" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Infrastructure</a>
+            <a href="#ecosystem" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Ecosystem</a>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-sm px-4 py-2">
+              <Terminal className="mr-1 h-4 w-4" />
+              Launch App
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white"
+            className="md:hidden text-white p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-700">
-            <div className="flex flex-col space-y-4">
-              <a href="#features" className="text-slate-300 hover:text-white transition-colors">Features</a>
-              <a href="#technology" className="text-slate-300 hover:text-white transition-colors">Technology</a>
-              <a href="#demo" className="text-slate-300 hover:text-white transition-colors">Demo</a>
-              <a href="#about" className="text-slate-300 hover:text-white transition-colors">About</a>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
-                Get Started
+            <div className="flex flex-col space-y-3">
+              <a href="#features" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Protocol</a>
+              <a href="#demo" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Live Demo</a>
+              <a href="#about" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Infrastructure</a>
+              <a href="#ecosystem" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Ecosystem</a>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full font-mono mt-2">
+                <Terminal className="mr-2 h-4 w-4" />
+                Launch App
               </Button>
             </div>
           </div>
@@ -230,69 +232,56 @@ function LiveStats() {
   )
 }
 
-// Hero Section Component
+// Hero Section Component (Updated with better mobile responsivity)
 function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="mb-6">
-            <div className="text-sm text-blue-400 font-mono mb-2">[PROTOCOL INITIALIZATION COMPLETE]</div>
-            <div className="text-xs text-slate-400 font-mono">BITORA LAYER 1 BLOCKCHAIN // STATUS: ONLINE</div>
+          <div className="mb-4 sm:mb-6">
+            <div className="text-xs sm:text-sm text-blue-400 font-mono mb-1 sm:mb-2">
+              <span className="hidden sm:inline">[PROTOCOL INITIALIZATION COMPLETE]</span>
+              <span className="sm:hidden">[PROTOCOL ONLINE]</span>
+            </div>
+            <div className="text-xs text-slate-400 font-mono">
+              <span className="hidden sm:inline">BITORA LAYER 1 BLOCKCHAIN // STATUS: ONLINE</span>
+              <span className="sm:hidden">BITORA L1 // ONLINE</span>
+            </div>
           </div>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 font-mono">
-            The Infrastructure Layer for
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent block"> Crypto-Natives, Retail Builders,</span>
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> and Sovereign Systems</span>
+          <h1 className="text-2xl sm:text-4xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">The Infrastructure Layer for</span>
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent block mt-2 sm:mt-0"> Crypto-Natives, Retail Builders,</span>
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent block"> and Sovereign Systems</span>
           </h1>
-          <p className="text-xl sm:text-2xl text-slate-300 mb-8 max-w-4xl mx-auto font-mono">
-            Build anything. Trade instantly. Operate legally. Pay globally.
+          <p className="text-base sm:text-xl lg:text-2xl text-slate-300 mb-6 sm:mb-8 max-w-4xl mx-auto font-mono leading-relaxed px-2">
+            <span className="block sm:inline">Build anything. Trade instantly. Operate legally. Pay globally.</span>
             <span className="block text-blue-400 mt-2">Powered by the $BTO token on the Bitora Layer 1 chain.</span>
           </p>
-          
+
           {/* Live Stats Ticker */}
           <LiveStats />
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-mono">
-              <Terminal className="mr-2 h-5 w-5" />
+
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
+            <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+              <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Launch App
             </Button>
-            <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg font-mono">
-              <FileText className="mr-2 h-5 w-5" />
+            <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+              <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Read Whitepaper
             </Button>
-            <Button size="lg" variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-8 py-4 text-lg font-mono">
-              <Network className="mr-2 h-5 w-5" />
+            <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+              <Network className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               Join Ecosystem
             </Button>
           </div>
         </motion.div>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8"
-        >
-          <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">99.9%</div>
-            <div className="text-slate-300">Uptime</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">10k+</div>
-            <div className="text-slate-300">Transactions/sec</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-blue-400 mb-2">$2B+</div>
-            <div className="text-slate-300">Total Value Locked</div>
-          </div>
-        </motion.div>
+
       </div>
     </section>
   )
@@ -309,13 +298,13 @@ function WhatIsBitoraSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 font-mono">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-8 font-mono leading-tight">
             [WHAT_IS_BITORA]
           </h2>
           <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8 max-w-4xl mx-auto">
-            <p className="text-xl text-slate-300 leading-relaxed font-mono">
-              Bitora is a next-generation Layer 1 blockchain built for real-world usage, crypto-native systems, 
-              and regulated institutional operations. It enables token creation, real-time trading, retail payments, 
+            <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-mono px-4">
+              Bitora is a next-generation Layer 1 blockchain built for real-world usage, crypto-native systems,
+              and regulated institutional operations. It enables token creation, real-time trading, retail payments,
               and fiat compliance—all on-chain.
             </p>
           </div>
@@ -364,10 +353,10 @@ function FeaturesSection() {
     <section id="features" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
             [CORE_FEATURES]
           </h2>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto font-mono">
+          <p className="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4">
             Modular infrastructure components powering the next generation of financial systems.
           </p>
         </div>
@@ -444,7 +433,7 @@ function WhyPizzaSection() {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-lg font-semibold text-white font-mono">Pizza Store Metrics</h4>
@@ -512,7 +501,7 @@ function RoadmapSection() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
             [ROADMAP]
           </h2>
         </div>
@@ -585,7 +574,7 @@ function TargetAudiencesSection() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
             [TARGET_AUDIENCES]
           </h2>
         </div>
@@ -632,8 +621,9 @@ function EcosystemResourceCenter() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-            [ECOSYSTEM_RESOURCE_CENTER]
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[ECOSYSTEM_RESOURCE</span>
+            <span className="block sm:inline">_CENTER]</span>
           </h2>
         </div>
 
@@ -665,7 +655,7 @@ function EcosystemResourceCenter() {
 function NewsroomSection() {
   const newsCategories = [
     "Protocol Announcements",
-    "Governance and DAO Votes", 
+    "Governance and DAO Votes",
     "Wallet & POS Launches",
     "Real-World Expansion Reports",
     "Exchange Listings",
@@ -677,8 +667,9 @@ function NewsroomSection() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-            [BITORA_NEWSROOM]
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[BITORA_</span>
+            <span className="block sm:inline">NEWSROOM]</span>
           </h2>
         </div>
 
@@ -715,8 +706,9 @@ function WalletSection() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-            [WALLET_FOR_REAL_WORLD_+_WEB3]
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[WALLET_FOR_REAL_WORLD</span>
+            <span className="block sm:inline">_+_WEB3]</span>
           </h2>
         </div>
 
@@ -747,7 +739,7 @@ function WalletSection() {
               </button>
             </div>
           </div>
-          
+
           <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8">
             <div className="text-center">
               <div className="text-6xl mb-4">📱</div>
@@ -772,10 +764,11 @@ function BTXSection() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-            [BTX_–_BITORA_TRADING_ENGINE]
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[BTX_–_BITORA_</span>
+            <span className="block sm:inline">TRADING_ENGINE]</span>
           </h2>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto font-mono">
+          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4 sm:px-0">
             Trade Instantly with BTX
           </p>
         </div>
@@ -807,7 +800,7 @@ function BTXSection() {
               </button>
             </div>
           </div>
-          
+
           <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-8">
             <div className="text-center">
               <div className="text-6xl mb-4">⚡</div>
@@ -852,7 +845,7 @@ function TypewriterText({ text, delay = 0, speed = 50 }: { text: string, delay?:
     const timer = setTimeout(() => {
       setIsTyping(true)
       let currentIndex = 0
-      
+
       const typeInterval = setInterval(() => {
         if (currentIndex <= text.length) {
           setDisplayedText(text.slice(0, currentIndex))
@@ -873,7 +866,7 @@ function TypewriterText({ text, delay = 0, speed = 50 }: { text: string, delay?:
     <span className="block">
       {displayedText}
       {isTyping && (
-        <motion.span 
+        <motion.span
           className="bg-blue-400 text-black inline-block w-1 ml-0.5"
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 0.5, repeat: Infinity }}
@@ -891,8 +884,8 @@ function CodeDemo() {
   const [completedCards, setCompletedCards] = useState<number[]>([])
   const [isSimulating, setIsSimulating] = useState(false)
   const [simulationSpeed, setSimulationSpeed] = useState(2000)
-  const [networkNodes, setNetworkNodes] = useState<{id: number, x: number, y: number, active: boolean}[]>([])
-  const [dataFlow, setDataFlow] = useState<{from: number, to: number, progress: number}[]>([])
+  const [networkNodes, setNetworkNodes] = useState<{ id: number, x: number, y: number, active: boolean }[]>([])
+  const [dataFlow, setDataFlow] = useState<{ from: number, to: number, progress: number }[]>([])
   const [systemMetrics, setSystemMetrics] = useState({
     cpu: 0,
     memory: 0,
@@ -900,7 +893,7 @@ function CodeDemo() {
     transactions: 0
   })
   const [terminalLogs, setTerminalLogs] = useState<string[]>([])
-  const [particleSystem, setParticleSystem] = useState<{id: number, x: number, y: number, vx: number, vy: number}[]>([])
+  const [particleSystem, setParticleSystem] = useState<{ id: number, x: number, y: number, vx: number, vy: number }[]>([])
   const [soundEffects, setSoundEffects] = useState({
     typing: false,
     compilation: false,
@@ -980,10 +973,10 @@ function CodeDemo() {
         const nextCard = prev + 1
         if (nextCard < codingSteps.length) {
           setCompletedCards(completed => [...completed, prev])
-          
+
           // Add terminal log
           setTerminalLogs(logs => [...logs.slice(-4), `[${new Date().toLocaleTimeString()}] ${codingSteps[prev].title} completed successfully`])
-          
+
           // Update metrics based on step
           setSystemMetrics(metrics => ({
             cpu: Math.min(100, metrics.cpu + Math.random() * 20),
@@ -991,13 +984,13 @@ function CodeDemo() {
             network: Math.min(100, metrics.network + Math.random() * 25),
             transactions: metrics.transactions + Math.floor(Math.random() * 100)
           }))
-          
+
           return nextCard
         } else {
           setCompletedCards(completed => [...completed, prev])
           setTerminalLogs(logs => [...logs, `[${new Date().toLocaleTimeString()}] 🚀 Bitora Protocol fully deployed!`])
           setIsSimulating(false)
-          
+
           // Reset after completion
           setTimeout(() => {
             setActiveCard(0)
@@ -1023,7 +1016,7 @@ function CodeDemo() {
       active: false
     }))
     setNetworkNodes(nodes)
-    
+
     const particles = Array.from({ length: 20 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
@@ -1032,23 +1025,23 @@ function CodeDemo() {
       vy: (Math.random() - 0.5) * 2
     }))
     setParticleSystem(particles)
-    
+
     // Auto-start simulation
     setIsSimulating(true)
   }, [])
-  
+
   // Animate network nodes and data flow
   useEffect(() => {
     if (!isSimulating) return
-    
+
     const interval = setInterval(() => {
-      setNetworkNodes(nodes => 
+      setNetworkNodes(nodes =>
         nodes.map(node => ({
           ...node,
           active: Math.random() > 0.7
         }))
       )
-      
+
       setDataFlow(flows => {
         const newFlows = Array.from({ length: 3 }, (_, i) => ({
           from: Math.floor(Math.random() * 8),
@@ -1057,29 +1050,29 @@ function CodeDemo() {
         }))
         return newFlows
       })
-      
+
       // Animate particles
-      setParticleSystem(particles => 
+      setParticleSystem(particles =>
         particles.map(p => ({
           ...p,
           x: (p.x + p.vx + 100) % 100,
           y: (p.y + p.vy + 100) % 100
         }))
       )
-      
+
       // Update quantum state
       setQuantumState(prev => ({
         entanglement: Math.min(100, prev.entanglement + Math.random() * 5),
         coherence: Math.max(50, prev.coherence - Math.random() * 2),
         qubits: Math.min(64, prev.qubits + (Math.random() > 0.8 ? 1 : 0))
       }))
-      
+
       // Trigger sound effects
       if (Math.random() > 0.7) {
         setSoundEffects(prev => ({ ...prev, typing: true }))
         setTimeout(() => setSoundEffects(prev => ({ ...prev, typing: false })), 200)
       }
-      
+
       // AI Assistant messages
       if (aiAssistant.active && Math.random() > 0.9) {
         const messages = [
@@ -1094,14 +1087,14 @@ function CodeDemo() {
           message: messages[Math.floor(Math.random() * messages.length)]
         }))
       }
-      
+
       // Visual effects triggers
       if (hackingMode && Math.random() > 0.8) {
         setVisualEffects(prev => ({ ...prev, glitch: true }))
         setTimeout(() => setVisualEffects(prev => ({ ...prev, glitch: false })), 300)
       }
     }, 500)
-    
+
     return () => clearInterval(interval)
   }, [isSimulating, aiAssistant.active, hackingMode])
 
@@ -1114,42 +1107,42 @@ function CodeDemo() {
   return (
     <div className="space-y-8">
       {/* Advanced Control Panel */}
-      <div className="bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-blue-500/30 p-6 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-blue-500/30 p-4 sm:p-6 mb-8 overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
           {/* System Metrics */}
-          <div className="space-y-3">
-            <h4 className="text-blue-400 font-semibold text-sm">System Metrics</h4>
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">System Metrics</h4>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="text-gray-300">CPU</span>
                 <span className="text-green-400">{systemMetrics.cpu.toFixed(1)}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-green-500 to-blue-500 h-1.5 rounded-full transition-all duration-500" style={{width: `${systemMetrics.cpu}%`}}></div>
+                <div className="bg-gradient-to-r from-green-500 to-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.cpu}%` }}></div>
               </div>
-              
+
               <div className="flex justify-between text-xs">
                 <span className="text-gray-300">Memory</span>
                 <span className="text-blue-400">{systemMetrics.memory.toFixed(1)}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full transition-all duration-500" style={{width: `${systemMetrics.memory}%`}}></div>
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.memory}%` }}></div>
               </div>
-              
+
               <div className="flex justify-between text-xs">
                 <span className="text-gray-300">Network</span>
                 <span className="text-purple-400">{systemMetrics.network.toFixed(1)}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full transition-all duration-500" style={{width: `${systemMetrics.network}%`}}></div>
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.network}%` }}></div>
               </div>
             </div>
           </div>
-          
+
           {/* Network Visualization */}
-          <div className="space-y-3">
-            <h4 className="text-blue-400 font-semibold text-sm">Network Topology</h4>
-            <div className="relative h-24 bg-gray-800/50 rounded-lg overflow-hidden">
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">Network Topology</h4>
+            <div className="relative h-20 sm:h-24 bg-gray-800/50 rounded-lg overflow-hidden">
               {/* Particle Background */}
               {particleSystem.map(particle => (
                 <div
@@ -1162,28 +1155,27 @@ function CodeDemo() {
                   }}
                 />
               ))}
-              
+
               {/* Network Nodes */}
               {networkNodes.map(node => (
                 <div
                   key={node.id}
-                  className={`absolute w-2 h-2 rounded-full transition-all duration-300 ${
-                    node.active ? 'bg-green-400 shadow-lg shadow-green-400/50 scale-125' : 'bg-gray-500'
-                  }`}
+                  className={`absolute w-2 h-2 rounded-full transition-all duration-300 ${node.active ? 'bg-green-400 shadow-lg shadow-green-400/50 scale-125' : 'bg-gray-500'
+                    }`}
                   style={{
                     left: `${node.x}%`,
                     top: `${node.y}%`
                   }}
                 />
               ))}
-              
+
               {/* Data Flow Lines */}
               <svg className="absolute inset-0 w-full h-full">
                 {dataFlow.map((flow, i) => {
                   const fromNode = networkNodes[flow.from]
                   const toNode = networkNodes[flow.to]
                   if (!fromNode || !toNode) return null
-                  
+
                   return (
                     <line
                       key={i}
@@ -1201,10 +1193,10 @@ function CodeDemo() {
               </svg>
             </div>
           </div>
-          
+
           {/* Transaction Counter */}
-          <div className="space-y-3">
-            <h4 className="text-blue-400 font-semibold text-sm">Blockchain Stats</h4>
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">Blockchain Stats</h4>
             <div className="space-y-2">
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-400">{systemMetrics.transactions}</div>
@@ -1216,11 +1208,11 @@ function CodeDemo() {
               </div>
             </div>
           </div>
-          
+
           {/* Terminal Logs */}
-          <div className="space-y-3">
-            <h4 className="text-blue-400 font-semibold text-sm">System Logs</h4>
-            <div className="bg-black/50 rounded-lg p-2 h-24 overflow-y-auto font-mono text-xs">
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">System Logs</h4>
+            <div className="bg-black/50 rounded-lg p-2 h-20 sm:h-24 overflow-y-auto font-mono text-xs">
               {terminalLogs.map((log, i) => (
                 <div key={i} className="text-green-400 mb-1 animate-fadeIn">
                   {log}
@@ -1228,19 +1220,18 @@ function CodeDemo() {
               ))}
             </div>
           </div>
-          
+
           {/* AI Assistant & Quantum Computing */}
-          <div className="space-y-3">
-            <h4 className="text-blue-400 font-semibold text-sm">AI Assistant</h4>
-            <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg p-3 h-24 overflow-hidden relative">
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">AI Assistant</h4>
+            <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg p-2 sm:p-3 h-20 sm:h-24 overflow-hidden relative">
               {/* Quantum Visualization */}
               <div className="absolute inset-0 opacity-30">
                 {Array.from({ length: 12 }).map((_, i) => (
                   <div
                     key={i}
-                    className={`absolute w-1 h-1 rounded-full ${
-                      quantumState.entanglement > 50 ? 'bg-purple-400' : 'bg-blue-400'
-                    } animate-pulse`}
+                    className={`absolute w-1 h-1 rounded-full ${quantumState.entanglement > 50 ? 'bg-purple-400' : 'bg-blue-400'
+                      } animate-pulse`}
                     style={{
                       left: `${10 + (i % 4) * 20}%`,
                       top: `${20 + Math.floor(i / 4) * 25}%`,
@@ -1250,18 +1241,17 @@ function CodeDemo() {
                   />
                 ))}
               </div>
-              
+
               {/* AI Status */}
               <div className="relative z-10">
                 <div className="flex items-center space-x-2 mb-2">
-                  <div className={`w-2 h-2 rounded-full ${
-                    aiAssistant.active ? 'bg-green-400 animate-pulse' : 'bg-gray-500'
-                  }`}></div>
+                  <div className={`w-2 h-2 rounded-full ${aiAssistant.active ? 'bg-green-400 animate-pulse' : 'bg-gray-500'
+                    }`}></div>
                   <span className="text-xs text-purple-300">
                     {aiAssistant.active ? 'AI Online' : 'AI Standby'}
                   </span>
                 </div>
-                
+
                 {/* Quantum Metrics */}
                 <div className="space-y-1">
                   <div className="flex justify-between text-xs">
@@ -1277,12 +1267,12 @@ function CodeDemo() {
             </div>
           </div>
         </div>
-        
+
         {/* Advanced Controls */}
-        <div className="mt-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <label className="text-sm text-gray-300">Speed:</label>
+        <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <label className="text-xs sm:text-sm text-gray-300">Speed:</label>
               <input
                 type="range"
                 min="500"
@@ -1290,24 +1280,23 @@ function CodeDemo() {
                 step="500"
                 value={simulationSpeed}
                 onChange={(e) => setSimulationSpeed(Number(e.target.value))}
-                className="w-32 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                className="w-24 sm:w-32 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
               />
               <span className="text-xs text-blue-400">{(6000 - simulationSpeed) / 1000}x</span>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <div className={`w-3 h-3 rounded-full ${
-                isSimulating ? 'bg-green-400 animate-pulse' : 'bg-red-400'
-              }`}></div>
-              <span className="text-sm text-gray-300">
+              <div className={`w-3 h-3 rounded-full ${isSimulating ? 'bg-green-400 animate-pulse' : 'bg-red-400'
+                }`}></div>
+              <span className="text-xs sm:text-sm text-gray-300">
                 {isSimulating ? 'Running' : 'Stopped'}
               </span>
             </div>
           </div>
-          
+
           {/* Advanced Mode Controls */}
-          <div className="flex items-center justify-between border-t border-gray-700/50 pt-4">
-            <div className="flex items-center space-x-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700/50 pt-3 sm:pt-4 space-y-3 sm:space-y-0">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6">
               {/* Hacking Mode */}
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
@@ -1316,57 +1305,51 @@ function CodeDemo() {
                   onChange={(e) => setHackingMode(e.target.checked)}
                   className="sr-only"
                 />
-                <div className={`w-10 h-6 rounded-full transition-all duration-300 ${
-                  hackingMode ? 'bg-red-500' : 'bg-gray-600'
-                } relative`}>
-                  <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-all duration-300 ${
-                    hackingMode ? 'left-5' : 'left-1'
-                  }`}></div>
+                <div className={`w-8 sm:w-10 h-5 sm:h-6 rounded-full transition-all duration-300 ${hackingMode ? 'bg-red-500' : 'bg-gray-600'
+                  } relative`}>
+                  <div className={`w-3 sm:w-4 h-3 sm:h-4 bg-white rounded-full absolute top-1 transition-all duration-300 ${hackingMode ? 'left-4 sm:left-5' : 'left-1'
+                    }`}></div>
                 </div>
-                <span className={`text-sm ${
-                  hackingMode ? 'text-red-400' : 'text-gray-300'
-                }`}>Hacking Mode</span>
+                <span className={`text-xs sm:text-sm ${hackingMode ? 'text-red-400' : 'text-gray-300'
+                  }`}>Hacking Mode</span>
               </label>
-              
+
               {/* Visual Effects */}
               <button
                 onClick={() => setVisualEffects(prev => ({ ...prev, matrix: !prev.matrix }))}
-                className={`px-3 py-1 rounded-lg text-xs transition-all ${
-                  visualEffects.matrix 
-                    ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
+                className={`px-2 sm:px-3 py-1 rounded-lg text-xs transition-all ${visualEffects.matrix
+                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                     : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
-                }`}
+                  }`}
               >
                 Matrix FX
               </button>
-              
+
               <button
                 onClick={() => setVisualEffects(prev => ({ ...prev, hologram: !prev.hologram }))}
-                className={`px-3 py-1 rounded-lg text-xs transition-all ${
-                  visualEffects.hologram 
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
+                className={`px-2 sm:px-3 py-1 rounded-lg text-xs transition-all ${visualEffects.hologram
+                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
                     : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
-                }`}
+                  }`}
               >
                 Hologram
               </button>
             </div>
-            
+
             {/* AI Assistant Toggle */}
             <button
               onClick={() => setAiAssistant(prev => ({ ...prev, active: !prev.active }))}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                aiAssistant.active
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all w-full sm:w-auto ${aiAssistant.active
                   ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                   : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
-              }`}
+                }`}
             >
               {aiAssistant.active ? '🤖 AI Active' : '🤖 Activate AI'}
             </button>
           </div>
         </div>
       </div>
-      
+
       {/* Enhanced Connection Lines */}
       <div className="relative">
         <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
@@ -1390,47 +1373,41 @@ function CodeDemo() {
         </svg>
 
         {/* Cards Grid */}
-         <div className={`relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-full transition-all duration-300 ${
-           visualEffects.glitch ? 'animate-pulse filter blur-[1px]' : ''
-         } ${
-           visualEffects.hologram ? 'opacity-80' : ''
-         }`} style={{ zIndex: 2 }}>
+        <div className={`relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full transition-all duration-300 ${visualEffects.glitch ? 'animate-pulse filter blur-[1px]' : ''
+          } ${visualEffects.hologram ? 'opacity-80' : ''
+          }`} style={{ zIndex: 2 }}>
           {codingSteps.map((step, index) => {
             const status = getCardStatus(index)
             return (
               <motion.div
                 key={step.id}
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: 1, 
+                animate={{
+                  opacity: 1,
                   scale: status === 'active' ? 1.05 : 1,
                   y: status === 'active' ? -5 : 0
                 }}
                 transition={{ duration: 0.3 }}
-                className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 min-h-[320px] max-w-full ${
-                   status === 'completed' 
-                     ? 'border-green-500 bg-green-900/20' 
-                     : status === 'active'
-                     ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/25'
-                     : 'border-gray-600 bg-gray-900/50'
-                 } ${
-                   hackingMode && status === 'active' ? 'border-red-500 bg-red-900/20 shadow-lg shadow-red-500/25' : ''
-                 } ${
-                   visualEffects.matrix && status === 'active' ? 'animate-bounce' : ''
-                 } ${
-                   soundEffects.typing && status === 'active' ? 'ring-2 ring-blue-400/50' : ''
-                 }`}
+                className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 min-h-[280px] sm:min-h-[320px] w-full ${status === 'completed'
+                    ? 'border-green-500 bg-green-900/20'
+                    : status === 'active'
+                      ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/25'
+                      : 'border-gray-600 bg-gray-900/50'
+                  } ${hackingMode && status === 'active' ? 'border-red-500 bg-red-900/20 shadow-lg shadow-red-500/25' : ''
+                  } ${visualEffects.matrix && status === 'active' ? 'animate-bounce' : ''
+                  } ${soundEffects.typing && status === 'active' ? 'ring-2 ring-blue-400/50' : ''
+                  }`}
               >
                 {/* Card Header */}
-                <div className={`p-4 bg-gradient-to-r ${step.color} bg-opacity-10`}>
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-lg bg-gradient-to-r ${step.color} text-white flex-shrink-0`}>
+                <div className={`p-3 sm:p-4 bg-gradient-to-r ${step.color} bg-opacity-10`}>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className={`p-1.5 sm:p-2 rounded-lg bg-gradient-to-r ${step.color} text-white flex-shrink-0`}>
                       {step.icon}
                     </div>
                     <div className="flex-1 min-w-0 overflow-hidden">
-                       <h3 className="text-white font-semibold text-sm truncate">{step.title}</h3>
-                       <p className="text-gray-300 text-xs leading-tight break-words">{step.description}</p>
-                     </div>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm truncate">{step.title}</h3>
+                      <p className="text-gray-300 text-xs leading-tight break-words">{step.description}</p>
+                    </div>
                     {status === 'completed' && (
                       <div className="ml-auto">
                         <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
@@ -1447,45 +1424,43 @@ function CodeDemo() {
                 </div>
 
                 {/* Code Preview */}
-                 <div className="p-3 flex-1">
-                    <div className="bg-gray-900 rounded-lg p-3 font-mono text-xs h-32 overflow-hidden">
-                      <div className={`h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 ${
-                        status === 'completed' ? 'text-green-400' :
+                <div className="p-2 sm:p-3 flex-1">
+                  <div className="bg-gray-900 rounded-lg p-2 sm:p-3 font-mono text-xs h-28 sm:h-32 overflow-hidden">
+                    <div className={`h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 ${status === 'completed' ? 'text-green-400' :
                         status === 'active' ? 'text-blue-400' : 'text-gray-500'
                       }`}>
-                        {step.code.split('\n').map((line, lineIndex) => (
-                          <div key={lineIndex} className="leading-tight mb-1 text-xs overflow-hidden">
-                            {status === 'active' ? (
-                              <TypewriterText 
-                                text={line} 
-                                delay={lineIndex * 150}
-                                speed={25}
-                              />
-                            ) : (
-                              <span className="block whitespace-pre-wrap break-words">{line}</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                      {status === 'active' && (
-                        <motion.div 
-                          className="mt-1 flex items-center"
-                          animate={{ opacity: [1, 0, 1] }}
-                          transition={{ duration: 1, repeat: Infinity }}
-                        >
-                          <span className="bg-blue-400 text-black inline-block w-2 h-3 mr-1">█</span>
-                          <span className="text-blue-400 text-xs">Typing...</span>
-                        </motion.div>
-                      )}
+                      {step.code.split('\n').map((line, lineIndex) => (
+                        <div key={lineIndex} className="leading-tight mb-1 text-xs overflow-hidden">
+                          {status === 'active' ? (
+                            <TypewriterText
+                              text={line}
+                              delay={lineIndex * 150}
+                              speed={25}
+                            />
+                          ) : (
+                            <span className="block whitespace-pre-wrap break-all">{line}</span>
+                          )}
+                        </div>
+                      ))}
                     </div>
+                    {status === 'active' && (
+                      <motion.div
+                        className="mt-1 flex items-center"
+                        animate={{ opacity: [1, 0, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
+                        <span className="bg-blue-400 text-black inline-block w-2 h-3 mr-1">█</span>
+                        <span className="text-blue-400 text-xs">Typing...</span>
+                      </motion.div>
+                    )}
                   </div>
+                </div>
 
                 {/* Progress Indicator */}
                 <div className="absolute bottom-0 left-0 right-0 h-1">
-                  <div className={`h-full transition-all duration-500 ${
-                    status === 'completed' ? 'bg-green-500 w-full' :
-                    status === 'active' ? 'bg-blue-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
-                  }`}></div>
+                  <div className={`h-full transition-all duration-500 ${status === 'completed' ? 'bg-green-500 w-full' :
+                      status === 'active' ? 'bg-blue-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
+                    }`}></div>
                 </div>
               </motion.div>
             )
@@ -1582,10 +1557,11 @@ function AboutSection() {
     <section id="about" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-            [PROTOCOL_INFRASTRUCTURE]
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[PROTOCOL_</span>
+            <span className="block sm:inline">INFRASTRUCTURE]</span>
           </h2>
-          <p className="text-xl text-slate-300 max-w-4xl mx-auto font-mono">
+          <p className="text-lg sm:text-xl text-slate-300 max-w-4xl mx-auto font-mono px-4 sm:px-0">
             Built using Cosmos SDK with validator scoring, fast finality, and native staking. The gas token is $BTO.
           </p>
         </div>
@@ -1600,7 +1576,7 @@ function AboutSection() {
               <p className="text-slate-300 font-mono text-sm">Built using Cosmos SDK with validator scoring and fast finality</p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-slate-800/50 border-green-500/20">
             <CardContent className="p-6 text-center">
               <div className="w-16 h-16 bg-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -1610,7 +1586,7 @@ function AboutSection() {
               <p className="text-slate-300 font-mono text-sm">Jurisdictional KYC, AML scoring, and real-time sanctions enforcement</p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-slate-800/50 border-purple-500/20">
             <CardContent className="p-6 text-center">
               <div className="w-16 h-16 bg-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -1631,23 +1607,23 @@ function CTASection() {
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
           [PROTOCOL_ACTIVATION]
         </h2>
-        <p className="text-xl text-slate-300 mb-8 font-mono">
+        <p className="text-base sm:text-xl text-slate-300 mb-6 sm:mb-8 font-mono px-2">
           Build anything. Trade instantly. Operate legally. Pay globally.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-mono">
-            <Terminal className="mr-2 h-5 w-5" />
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 max-w-3xl mx-auto">
+          <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+            <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Launch App
           </Button>
-          <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg font-mono">
-            <FileText className="mr-2 h-5 w-5" />
+          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+            <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Read Whitepaper
           </Button>
-          <Button size="lg" variant="outline" className="border-green-400 text-green-400 hover:bg-green-400 hover:text-white px-8 py-4 text-lg font-mono">
-            <Network className="mr-2 h-5 w-5" />
+          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+            <Network className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Join Ecosystem
           </Button>
         </div>
@@ -1656,20 +1632,23 @@ function CTASection() {
   )
 }
 
-// Footer Component (Updated for Bitora)
+// Footer Component (Updated for Bitora with better mobile responsivity)
 function Footer() {
   return (
-    <footer className="relative border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+    <footer className="relative border-t border-slate-800 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div className="sm:col-span-2 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm font-mono">B</span>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xs sm:text-sm font-mono">B</span>
               </div>
-              <span className="text-white font-bold text-xl font-mono">[BITORA_PROTOCOL]</span>
+              <span className="text-white font-bold text-base sm:text-xl font-mono">
+                <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
+                <span className="sm:hidden">[BITORA]</span>
+              </span>
             </div>
-            <p className="text-slate-300 mb-4 font-mono">
+            <p className="text-slate-300 mb-4 font-mono text-sm sm:text-base">
               The Infrastructure Layer for Crypto-Natives, Retail Builders, and Sovereign Systems.
             </p>
             <div className="flex space-x-4">
@@ -1684,7 +1663,7 @@ function Footer() {
               </Button>
             </div>
           </div>
-          
+
           <div>
             <h3 className="text-white font-semibold mb-4 font-mono">Protocol</h3>
             <ul className="space-y-2 text-slate-300">
@@ -1694,7 +1673,7 @@ function Footer() {
               <li><a href="#" className="hover:text-white transition-colors font-mono">Ecosystem Partners</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-white font-semibold mb-4 font-mono">Network</h3>
             <ul className="space-y-2 text-slate-300">
@@ -1704,7 +1683,7 @@ function Footer() {
               <li><a href="#" className="hover:text-white transition-colors font-mono">LinkedIn</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="text-white font-semibold mb-4 font-mono">Resources</h3>
             <ul className="space-y-2 text-slate-300">
@@ -1715,7 +1694,7 @@ function Footer() {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-slate-800 mt-8 pt-8 text-center">
           <p className="text-slate-400 font-mono">
             © 2024 Bitora Protocol. All rights reserved.
@@ -1752,7 +1731,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
     }
 
     const currentLineText = codeLines[currentLine]
-    
+
     if (currentChar >= currentLineText.length) {
       setTimeout(() => {
         setCurrentLine(prev => prev + 1)
@@ -1799,112 +1778,112 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
       {/* Matrix Background */}
-       <div className="absolute inset-0 bg-black overflow-hidden">
-          {/* Dense Matrix Background */}
-           <div className="absolute inset-0 opacity-60">
-             {Array.from({ length: 150 }).map((_, i) => {
-               const positions = [
-                 { left: 5, top: 10 }, { left: 12, top: 25 }, { left: 18, top: 5 }, { left: 25, top: 40 }, { left: 32, top: 15 },
-                 { left: 38, top: 30 }, { left: 45, top: 8 }, { left: 52, top: 35 }, { left: 58, top: 20 }, { left: 65, top: 45 },
-                 { left: 72, top: 12 }, { left: 78, top: 38 }, { left: 85, top: 22 }, { left: 92, top: 48 }, { left: 8, top: 55 },
-                 { left: 15, top: 70 }, { left: 22, top: 60 }, { left: 28, top: 75 }, { left: 35, top: 65 }, { left: 42, top: 80 },
-                 { left: 48, top: 58 }, { left: 55, top: 85 }, { left: 62, top: 68 }, { left: 68, top: 90 }, { left: 75, top: 78 },
-                 { left: 82, top: 95 }, { left: 88, top: 85 }, { left: 95, top: 92 }, { left: 3, top: 88 }, { left: 10, top: 95 },
-                 { left: 17, top: 82 }, { left: 23, top: 98 }, { left: 30, top: 88 }, { left: 37, top: 95 }, { left: 43, top: 85 },
-                 { left: 50, top: 92 }, { left: 57, top: 98 }, { left: 63, top: 88 }, { left: 70, top: 95 }, { left: 77, top: 85 },
-                 { left: 83, top: 92 }, { left: 90, top: 98 }, { left: 97, top: 88 }, { left: 2, top: 45 }, { left: 9, top: 52 },
-                 { left: 16, top: 48 }, { left: 23, top: 55 }, { left: 29, top: 42 }, { left: 36, top: 58 }, { left: 43, top: 45 }
-               ];
-               const pos = positions[i % positions.length];
-               return (
-                 <div
-                   key={i}
-                   className="absolute text-blue-400 text-sm font-mono animate-pulse"
-                   style={{
-                     left: `${pos.left}%`,
-                     top: `${pos.top}%`,
-                     animationDelay: `${(i % 8) * 0.1}s`,
-                     animationDuration: `${1.2 + (i % 2) * 0.6}s`,
-                     textShadow: '0 0 10px #3b82f6, 0 0 20px #1e40af, 0 0 30px #1e3a8a'
-                   }}
-                 >
-                   {i % 3 === 0 ? '1' : i % 3 === 1 ? '0' : 'X'}
-                 </div>
-               );
-             })}
-           </div>
-          
-          {/* Fast Falling Matrix Effect */}
-           <div className="absolute inset-0 opacity-40">
-             {Array.from({ length: 60 }).map((_, i) => {
-               const leftPositions = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49, 52, 55, 58, 61, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80];
-               return (
-                 <div
-                   key={i}
-                   className="absolute w-0.5 bg-gradient-to-b from-transparent via-blue-400 to-transparent animate-pulse"
-                   style={{
-                     left: `${leftPositions[i]}%`,
-                     height: '150px',
-                     animationDelay: `${(i % 6) * 0.1}s`,
-                     animationDuration: `${1.2 + (i % 3) * 0.3}s`,
-                     boxShadow: '0 0 10px #3b82f6'
-                   }}
-                 />
-               );
-             })}
-           </div>
-          
-          {/* Matrix Rain Effect */}
-           <div className="absolute inset-0 opacity-50">
-             {Array.from({ length: 50 }).map((_, i) => (
-               <div
-                 key={i}
-                 className="absolute text-blue-300 text-sm font-mono font-bold"
-                 style={{
-                   left: `${(i * 2) % 100}%`,
-                   top: '-20px',
-                   animation: `matrixRain ${1.8 + (i % 3) * 0.6}s linear infinite`,
-                   animationDelay: `${(i % 10) * 0.1}s`,
-                   textShadow: '0 0 8px #3b82f6, 0 0 16px #1e40af'
-                 }}
-               >
-                 {['1', '0', 'A', 'B', 'C', 'X', 'Y', 'Z', '█', '▓', '▒', '░'][i % 12]}
-               </div>
-             ))}
-           </div>
-          
-          {/* Additional Matrix Columns */}
-           <div className="absolute inset-0 opacity-30">
-             {Array.from({ length: 25 }).map((_, i) => (
-               <div
-                 key={i}
-                 className="absolute flex flex-col text-blue-400 text-xs font-mono"
-                 style={{
-                   left: `${i * 4}%`,
-                   top: '0',
-                   height: '100%',
-                   animation: `matrixColumn ${3 + (i % 4) * 1.2}s linear infinite`,
-                   animationDelay: `${(i % 8) * 0.3}s`
-                 }}
-               >
-                 {Array.from({ length: 20 }).map((_, j) => (
-                   <div
-                     key={j}
-                     className="mb-2"
-                     style={{
-                       textShadow: '0 0 5px #3b82f6',
-                       opacity: (i + j) % 2 === 0 ? 1 : 0.3
-                     }}
-                   >
-                     {['1', '0', '█'][j % 3]}
-                   </div>
-                 ))}
-               </div>
-             ))}
-           </div>
+      <div className="absolute inset-0 bg-black overflow-hidden">
+        {/* Dense Matrix Background */}
+        <div className="absolute inset-0 opacity-60">
+          {Array.from({ length: 150 }).map((_, i) => {
+            const positions = [
+              { left: 5, top: 10 }, { left: 12, top: 25 }, { left: 18, top: 5 }, { left: 25, top: 40 }, { left: 32, top: 15 },
+              { left: 38, top: 30 }, { left: 45, top: 8 }, { left: 52, top: 35 }, { left: 58, top: 20 }, { left: 65, top: 45 },
+              { left: 72, top: 12 }, { left: 78, top: 38 }, { left: 85, top: 22 }, { left: 92, top: 48 }, { left: 8, top: 55 },
+              { left: 15, top: 70 }, { left: 22, top: 60 }, { left: 28, top: 75 }, { left: 35, top: 65 }, { left: 42, top: 80 },
+              { left: 48, top: 58 }, { left: 55, top: 85 }, { left: 62, top: 68 }, { left: 68, top: 90 }, { left: 75, top: 78 },
+              { left: 82, top: 95 }, { left: 88, top: 85 }, { left: 95, top: 92 }, { left: 3, top: 88 }, { left: 10, top: 95 },
+              { left: 17, top: 82 }, { left: 23, top: 98 }, { left: 30, top: 88 }, { left: 37, top: 95 }, { left: 43, top: 85 },
+              { left: 50, top: 92 }, { left: 57, top: 98 }, { left: 63, top: 88 }, { left: 70, top: 95 }, { left: 77, top: 85 },
+              { left: 83, top: 92 }, { left: 90, top: 98 }, { left: 97, top: 88 }, { left: 2, top: 45 }, { left: 9, top: 52 },
+              { left: 16, top: 48 }, { left: 23, top: 55 }, { left: 29, top: 42 }, { left: 36, top: 58 }, { left: 43, top: 45 }
+            ];
+            const pos = positions[i % positions.length];
+            return (
+              <div
+                key={i}
+                className="absolute text-blue-400 text-sm font-mono animate-pulse"
+                style={{
+                  left: `${pos.left}%`,
+                  top: `${pos.top}%`,
+                  animationDelay: `${(i % 8) * 0.1}s`,
+                  animationDuration: `${1.2 + (i % 2) * 0.6}s`,
+                  textShadow: '0 0 10px #3b82f6, 0 0 20px #1e40af, 0 0 30px #1e3a8a'
+                }}
+              >
+                {i % 3 === 0 ? '1' : i % 3 === 1 ? '0' : 'X'}
+              </div>
+            );
+          })}
         </div>
-       
-       <style jsx>{`
+
+        {/* Fast Falling Matrix Effect */}
+        <div className="absolute inset-0 opacity-40">
+          {Array.from({ length: 60 }).map((_, i) => {
+            const leftPositions = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49, 52, 55, 58, 61, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80];
+            return (
+              <div
+                key={i}
+                className="absolute w-0.5 bg-gradient-to-b from-transparent via-blue-400 to-transparent animate-pulse"
+                style={{
+                  left: `${leftPositions[i]}%`,
+                  height: '150px',
+                  animationDelay: `${(i % 6) * 0.1}s`,
+                  animationDuration: `${1.2 + (i % 3) * 0.3}s`,
+                  boxShadow: '0 0 10px #3b82f6'
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Matrix Rain Effect */}
+        <div className="absolute inset-0 opacity-50">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-300 text-sm font-mono font-bold"
+              style={{
+                left: `${(i * 2) % 100}%`,
+                top: '-20px',
+                animation: `matrixRain ${1.8 + (i % 3) * 0.6}s linear infinite`,
+                animationDelay: `${(i % 10) * 0.1}s`,
+                textShadow: '0 0 8px #3b82f6, 0 0 16px #1e40af'
+              }}
+            >
+              {['1', '0', 'A', 'B', 'C', 'X', 'Y', 'Z', '█', '▓', '▒', '░'][i % 12]}
+            </div>
+          ))}
+        </div>
+
+        {/* Additional Matrix Columns */}
+        <div className="absolute inset-0 opacity-30">
+          {Array.from({ length: 25 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute flex flex-col text-blue-400 text-xs font-mono"
+              style={{
+                left: `${i * 4}%`,
+                top: '0',
+                height: '100%',
+                animation: `matrixColumn ${3 + (i % 4) * 1.2}s linear infinite`,
+                animationDelay: `${(i % 8) * 0.3}s`
+              }}
+            >
+              {Array.from({ length: 20 }).map((_, j) => (
+                <div
+                  key={j}
+                  className="mb-2"
+                  style={{
+                    textShadow: '0 0 5px #3b82f6',
+                    opacity: (i + j) % 2 === 0 ? 1 : 0.3
+                  }}
+                >
+                  {['1', '0', '█'][j % 3]}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
           @keyframes matrixRain {
             0% { transform: translateY(-20px); opacity: 0; }
             10% { opacity: 1; }
@@ -1964,7 +1943,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
               </div>
             </div>
           </div>
-          
+
           {/* Code Editor Content */}
           <div className="p-6 font-mono text-sm bg-gray-900/50 min-h-[400px] max-h-[500px] overflow-hidden">
             {/* Line Numbers */}
@@ -1976,7 +1955,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
                   </div>
                 ))}
               </div>
-              
+
               {/* Code Content */}
               <div className="flex-1">
                 {codeLines.map((line, index) => (
@@ -1996,7 +1975,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
                 ))}
               </div>
             </div>
-            
+
             {isComplete && (
               <div className="mt-6 p-4 bg-green-900/30 border border-green-500/30 rounded-lg">
                 <div className="flex items-center space-x-2">
@@ -2009,7 +1988,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
               </div>
             )}
           </div>
-          
+
           {/* Progress Bar */}
           <div className="px-6 py-3 bg-gray-800/50 border-t border-gray-700/50">
             <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
@@ -2017,7 +1996,7 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
               <span>{Math.min(Math.round((currentLine / codeLines.length) * 100), 100)}%</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-1.5">
-              <div 
+              <div
                 className="bg-gradient-to-r from-blue-500 to-green-500 h-1.5 rounded-full transition-all duration-300 ease-out"
                 style={{ width: `${Math.min((currentLine / codeLines.length) * 100, 100)}%` }}
               ></div>
@@ -2055,13 +2034,14 @@ export default function Home() {
       <NewsroomSection />
       <WalletSection />
       <BTXSection />
-      <section id="demo" className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-              [LIVE_CODING_DEMO]
+      <section id="demo" className="relative py-12 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="text-center mb-8 sm:mb-16">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+              <span className="block sm:inline">[ROADMAP_</span>
+              <span className="block sm:inline">2025-2027]</span>
             </h2>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto font-mono">
+            <p className="text-sm sm:text-base lg:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4">
               Watch our Bitora Protocol implementation in action.
             </p>
           </div>
