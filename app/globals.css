@@ -4,25 +4,26 @@
 
 @layer base {
   :root {
-    --background: 15 23 42;
+    /* Dark Royal Blue Theme */
+    --background: 23 37 84; /* royal-950 */
     --foreground: 248 250 252;
-    --card: 30 41 59;
+    --card: 30 58 138; /* royal-800 */
     --card-foreground: 248 250 252;
-    --popover: 30 41 59;
+    --popover: 30 58 138;
     --popover-foreground: 248 250 252;
-    --primary: 59 130 246;
+    --primary: 37 99 235; /* royal-600 */
     --primary-foreground: 248 250 252;
-    --secondary: 51 65 85;
+    --secondary: 29 78 216; /* royal-700 */
     --secondary-foreground: 248 250 252;
-    --muted: 51 65 85;
-    --muted-foreground: 148 163 184;
-    --accent: 51 65 85;
+    --muted: 30 58 138;
+    --muted-foreground: 147 197 253; /* royal-300 */
+    --accent: 59 130 246; /* royal-500 */
     --accent-foreground: 248 250 252;
     --destructive: 239 68 68;
     --destructive-foreground: 248 250 252;
-    --border: 51 65 85;
-    --input: 51 65 85;
-    --ring: 59 130 246;
+    --border: 29 78 216; /* royal-700 */
+    --input: 30 58 138;
+    --ring: 96 165 250; /* royal-400 */
     --radius: 0.5rem;
   }
 }
@@ -46,16 +47,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(51 65 85);
+  background: rgb(30 58 138); /* royal-800 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(59 130 246);
+  background: rgb(96 165 250); /* royal-400 */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(37 99 235);
+  background: rgb(59 130 246); /* royal-500 */
 }
 
 /* Smooth scrolling */
