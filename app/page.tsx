@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import * as THREE from "three"
 import {
   Play,
   FileText,
@@ -23,6 +22,12 @@ import {
   Terminal,
   Save,
   Sparkles,
+  Shield,
+  Rocket,
+  Users,
+  ArrowRight,
+  Star,
+  CheckCircle,
 } from "lucide-react"
 
 // Matrix Background Component
@@ -42,7 +47,7 @@ function MatrixBackground() {
     const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}"
     const matrixArray = matrix.split("")
 
-    const fontSize = 10
+    const fontSize = 14
     const columns = canvas.width / fontSize
 
     const drops: number[] = []
@@ -52,25 +57,39 @@ function MatrixBackground() {
 
     function draw() {
       if (!ctx || !canvas) return
-      
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.fillStyle = '#3B82F6'  // Matrix blue
-      ctx.font = fontSize + 'px arial'
+      // Add glow effect
+      ctx.shadowColor = '#3B82F6'
+      ctx.shadowBlur = 10
+      ctx.fillStyle = '#60A5FA'  // Brighter matrix blue
+      ctx.font = `bold ${fontSize}px 'Courier New', monospace`
 
       for (let i = 0; i < drops.length; i++) {
         const text = matrixArray[Math.floor(Math.random() * matrixArray.length)]
+
+        // Add gradient effect for leading characters
+        if (drops[i] * fontSize < canvas.height - fontSize * 5) {
+          ctx.fillStyle = '#60A5FA'
+        } else {
+          ctx.fillStyle = '#1E40AF'
+        }
+
         ctx.fillText(text, i * fontSize, drops[i] * fontSize)
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.970) {
           drops[i] = 0
         }
         drops[i]++
       }
+
+      // Reset shadow
+      ctx.shadowBlur = 0
     }
 
-    const interval = setInterval(draw, 35)
+    const interval = setInterval(draw, 50)
 
     const handleResize = () => {
       canvas.width = window.innerWidth
@@ -88,163 +107,1997 @@ function MatrixBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0"
+      className="fixed inset-0 z-0 opacity-40"
       style={{ background: 'black' }}
     />
   )
 }
 
-// Modern Loading Component
-function ModernLoader({ onComplete }: { onComplete: () => void }) {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [progress, setProgress] = useState(0)
+// Navigation Component (Updated for Bitora with enhanced design)
+function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
-  const steps = [
-    { text: 'Initializing Bitora Protocol', icon: '🚀' },
-    { text: 'Loading Quantum Encryption', icon: '🔐' },
-    { text: 'Connecting Validator Network', icon: '🌐' },
-    { text: 'Syncing Blockchain State', icon: '⛓️' },
-    { text: 'Activating Consensus Layer', icon: '⚡' },
-    { text: 'Loading 3D Interface', icon: '🎯' },
-    { text: 'Parsing Smart Contracts', icon: '📋' },
-    { text: 'Finalizing Setup', icon: '✨' },
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+      setIsMenuOpen(false)
+    }
+  }
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+      ? 'bg-slate-900/98 backdrop-blur-2xl border-b border-blue-500/30 shadow-lg shadow-blue-500/10'
+      : 'bg-slate-900/95 backdrop-blur-xl border-b border-blue-500/20'
+      }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Enhanced Logo */}
+          <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="relative">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 via-cyan-400 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-110">
+                <span className="text-white font-bold text-sm font-mono">B</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse"></div>
+            </div>
+            <span className="text-white font-bold text-lg sm:text-xl font-mono group-hover:text-blue-300 transition-colors duration-300">
+              <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
+              <span className="sm:hidden">[BITORA]</span>
+            </span>
+          </div>
+
+          {/* Enhanced Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
+            {[
+              { id: 'features', label: 'Protocol', icon: '' },
+              { id: 'demo', label: 'Live Demo', icon: '' },
+              { id: 'about', label: 'Infrastructure', icon: '' },
+              { id: 'ecosystem', label: 'Ecosystem', icon: '' }
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="relative px-3 py-2 text-slate-300 hover:text-white transition-all duration-300 font-mono text-sm group overflow-hidden rounded-lg"
+              >
+                <span className="relative z-10 flex items-center space-x-1">
+                  <span className="hidden lg:inline text-xs">{item.icon}</span>
+                  <span>{item.label}</span>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+              </button>
+            ))}
+            <div className="ml-4">
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-mono text-sm px-4 py-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
+                <Terminal className="mr-1 h-4 w-4" />
+                <span className="hidden lg:inline">Launch App</span>
+                <span className="lg:hidden">Launch</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Enhanced Mobile Menu Button */}
+          <button
+            className="md:hidden text-white p-2 rounded-lg hover:bg-slate-800/50 transition-colors duration-300"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <div className="relative w-5 h-5">
+              <span className={`absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-1.5'}`}></span>
+              <span className={`absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-1.5'}`}></span>
+            </div>
+          </button>
+        </div>
+
+        {/* Enhanced Mobile Navigation */}
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
+          <div className="border-t border-slate-700/50">
+            <div className="flex flex-col space-y-1 pt-4">
+              {[
+                { id: 'features', label: 'Protocol', icon: '' },
+                { id: 'demo', label: 'Live Demo', icon: '' },
+                { id: 'about', label: 'Infrastructure', icon: '' },
+                { id: 'ecosystem', label: 'Ecosystem', icon: '' }
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-800/30 transition-all duration-300 font-mono text-sm py-3 px-2 rounded-lg"
+                >
+                  <span className="text-xs">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white w-full font-mono mt-3">
+                <Terminal className="mr-2 h-4 w-4" />
+                Launch App
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}
+
+// Live Stats Component
+function LiveStats() {
+  const [stats, setStats] = useState({
+    btoPrice: 0.00,
+    validators: 0,
+    txVolume: 0,
+    tokensCreated: 0,
+    posLocations: 0,
+    marketCap: 0,
+    countries: 0
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        btoPrice: 0.0847 + (Math.random() - 0.5) * 0.001,
+        validators: 2156 + Math.floor(Math.random() * 10),
+        txVolume: 12847 + Math.floor(Math.random() * 1000),
+        tokensCreated: 1247 + Math.floor(Math.random() * 5),
+        posLocations: 89 + Math.floor(Math.random() * 3),
+        marketCap: 84700000 + Math.floor(Math.random() * 100000),
+        countries: 12 + Math.floor(Math.random() * 2)
+      }))
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-blue-400 font-mono">${stats.btoPrice.toFixed(4)}</div>
+        <div className="text-xs text-slate-300">BTO Price</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-green-400 font-mono">{stats.validators.toLocaleString()}</div>
+        <div className="text-xs text-slate-300">Validators</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-cyan-400 font-mono">{stats.txVolume.toLocaleString()}</div>
+        <div className="text-xs text-slate-300">TX Volume</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-purple-400 font-mono">{stats.tokensCreated.toLocaleString()}</div>
+        <div className="text-xs text-slate-300">Tokens Created</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-orange-400 font-mono">{stats.posLocations}</div>
+        <div className="text-xs text-slate-300">POS Locations</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-yellow-400 font-mono">${(stats.marketCap / 1000000).toFixed(1)}M</div>
+        <div className="text-xs text-slate-300">Market Cap</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-pink-400 font-mono">{stats.countries}</div>
+        <div className="text-xs text-slate-300">Countries</div>
+      </div>
+    </div>
+  )
+}
+
+// Hero Section Component (Updated with better mobile responsivity)
+function HeroSection() {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
+      <div className="relative z-10 max-w-7xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="mb-4 sm:mb-6">
+            <div className="text-xs sm:text-sm text-blue-400 font-mono mb-1 sm:mb-2">
+              <span className="hidden sm:inline">[PROTOCOL INITIALIZATION COMPLETE]</span>
+              <span className="sm:hidden">[PROTOCOL ONLINE]</span>
+            </div>
+            <div className="text-xs text-slate-400 font-mono">
+              <span className="hidden sm:inline">BITORA LAYER 1 BLOCKCHAIN // STATUS: ONLINE</span>
+              <span className="sm:hidden">BITORA L1 // ONLINE</span>
+            </div>
+          </div>
+          <h1 className="text-2xl sm:text-4xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">The Infrastructure Layer for</span>
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent block mt-2 sm:mt-0"> Crypto-Natives, Retail Builders,</span>
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent block"> and Sovereign Systems</span>
+          </h1>
+          <p className="text-base sm:text-xl lg:text-2xl text-slate-300 mb-6 sm:mb-8 max-w-4xl mx-auto font-mono leading-relaxed px-2">
+            <span className="block sm:inline">Build anything. Trade instantly. Operate legally. Pay globally.</span>
+            <span className="block text-blue-400 mt-2">Powered by the $BTO token on the Bitora Layer 1 chain.</span>
+          </p>
+
+          {/* Live Stats Ticker */}
+          <LiveStats />
+
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
+            <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+              <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              Launch App
+            </Button>
+            <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+              <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              Read Whitepaper
+            </Button>
+            <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+              <Network className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              Join Ecosystem
+            </Button>
+          </div>
+        </motion.div>
+
+
+      </div>
+    </section>
+  )
+}
+
+// What is Bitora Section
+function WhatIsBitoraSection() {
+  return (
+    <section id="ecosystem" className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-8 font-mono leading-tight">
+            [WHAT_IS_BITORA]
+          </h2>
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8 max-w-4xl mx-auto">
+            <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-mono px-4">
+              Bitora is a next-generation Layer 1 blockchain built for real-world usage, crypto-native systems,
+              and regulated institutional operations. It enables token creation, real-time trading, retail payments,
+              and fiat compliance—all on-chain.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// Features Section Component
+function FeaturesSection() {
+  const features = [
+    {
+      icon: <Code className="h-8 w-8" />,
+      title: "Token Generation Engine",
+      description: "No-code token creation with compliance-ready templates including vesting, DAOs, and stablecoin logic."
+    },
+    {
+      icon: <Database className="h-8 w-8" />,
+      title: "Layer 1 Blockchain",
+      description: "Built using Cosmos SDK with validator scoring, fast finality, and native staking. The gas token is $BTO."
+    },
+    {
+      icon: <Terminal className="h-8 w-8" />,
+      title: "Real-World POS System",
+      description: "On-chain payments at physical stores using crypto or fiat, with built-in yield logic and loyalty token mechanics."
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8" />,
+      title: "Internal and External Exchanges",
+      description: "Native DEX (BTX) with fiat bridges and upcoming CEX listings."
+    },
+    {
+      icon: <Users className="h-8 w-8" />,
+      title: "Governance Framework",
+      description: "Two-tier governance model with quadratic voting and council veto protection."
+    },
+    {
+      icon: <Shield className="h-8 w-8" />,
+      title: "Compliance Layer",
+      description: "Jurisdictional KYC, AML scoring, and real-time sanctions enforcement, built into the protocol."
+    }
   ]
 
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>(
-    new Array(steps.length).fill(false)
-  )
+  return (
+    <section id="features" className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [CORE_FEATURES]
+          </h2>
+          <p className="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4">
+            Modular infrastructure components powering the next generation of financial systems.
+          </p>
+        </div>
 
-  // Auto progress through steps
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Card className="bg-slate-800/50 border-blue-500/20 hover:border-blue-400/40 transition-all duration-300 h-full">
+                <CardContent className="p-6">
+                  <div className="text-blue-400 mb-4">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-slate-300">
+                    {feature.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Why Pizza First Section
+function WhyPizzaSection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [WHY_PIZZA_FIRST]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="bg-slate-800/50 border border-orange-500/20 rounded-lg p-8">
+              <h3 className="text-2xl font-bold text-orange-400 mb-6 font-mono">Pizza provides the ideal proof-of-use:</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-slate-300 font-mono">High transaction volume and low margin economics</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-slate-300 font-mono">Origin of crypto payments (Bitcoin Pizza, 2010)</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-slate-300 font-mono">Each pizza sale triggers token burns, yield distribution, and compliance reporting</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 p-4 bg-orange-900/20 border border-orange-500/30 rounded-lg">
+                <p className="text-orange-300 font-mono text-center font-bold">
+                  Pizza is not the business. It's the first benchmark.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-lg font-semibold text-white font-mono">Pizza Store Metrics</h4>
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex justify-between">
+                <span className="text-slate-300 font-mono">Daily Orders</span>
+                <span className="text-orange-400 font-mono">847</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300 font-mono">BTO Burned</span>
+                <span className="text-red-400 font-mono">1,247</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300 font-mono">Yield Distributed</span>
+                <span className="text-green-400 font-mono">$2,156</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-300 font-mono">Compliance Reports</span>
+                <span className="text-blue-400 font-mono">24/7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Roadmap Section
+function RoadmapSection() {
+  const roadmapItems = [
+    {
+      year: "2025",
+      items: [
+        "Bitora Mainnet Live",
+        "$BTO Launched",
+        "Internal DEX Active",
+        "Pizza Stores in AU/NZ"
+      ],
+      color: "blue"
+    },
+    {
+      year: "2026",
+      items: [
+        "Asia-Pacific Expansion",
+        "National Stablecoins (AUDx, PHPx, etc.)",
+        "Institutional Validator Onboarding"
+      ],
+      color: "cyan"
+    },
+    {
+      year: "2027+",
+      items: [
+        "U.S. and European Regulatory Integration",
+        "Full Retail Sector Expansion",
+        "Treasury-backed deflation protocol activated"
+      ],
+      color: "purple"
+    }
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [ROADMAP]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {roadmapItems.map((phase, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              className={`bg-slate-800/50 border border-${phase.color}-500/20 rounded-lg p-6`}
+            >
+              <h3 className={`text-2xl font-bold text-${phase.color}-400 mb-6 font-mono`}>
+                {phase.year}
+              </h3>
+              <div className="space-y-3">
+                {phase.items.map((item, itemIndex) => (
+                  <div key={itemIndex} className="flex items-start space-x-3">
+                    <div className={`w-2 h-2 bg-${phase.color}-400 rounded-full mt-2 flex-shrink-0`}></div>
+                    <p className="text-slate-300 font-mono text-sm">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Target Audiences Section
+function TargetAudiencesSection() {
+  const audiences = [
+    {
+      title: "Builders",
+      description: "Deploy tokens, DAOs, or payment tools",
+      icon: "",
+      color: "blue"
+    },
+    {
+      title: "Traders",
+      description: "Swap assets via DEX/CEX, interact with fiat bridges",
+      icon: "",
+      color: "green"
+    },
+    {
+      title: "Retailers",
+      description: "Accept crypto legally, settle in fiat, deploy loyalty programs",
+      icon: "",
+      color: "orange"
+    },
+    {
+      title: "Institutions",
+      description: "Issue regulated assets or stablecoins",
+      icon: "",
+      color: "purple"
+    },
+    {
+      title: "Governments",
+      description: "Tokenize grants, ID systems, and public revenue",
+      icon: "",
+      color: "cyan"
+    }
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [TARGET_AUDIENCES]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {audiences.map((audience, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`bg-slate-800/50 border border-${audience.color}-500/20 rounded-lg p-6 hover:border-${audience.color}-500/40 transition-colors`}
+            >
+              <div className="text-center">
+                <div className="text-4xl mb-4">{audience.icon}</div>
+                <h3 className={`text-xl font-bold text-${audience.color}-400 mb-3 font-mono`}>
+                  {audience.title}
+                </h3>
+                <p className="text-slate-300 font-mono text-sm">
+                  {audience.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Ecosystem Resource Center Section
+function EcosystemResourceCenter() {
+  const resources = [
+    { title: "Developer Documentation", icon: "", color: "blue" },
+    { title: "Run a Validator", icon: "", color: "green" },
+    { title: "Use POS System", icon: "", color: "orange" },
+    { title: "Apply for Grants", icon: "", color: "purple" },
+    { title: "Launch dApps", icon: "", color: "cyan" },
+    { title: "Join Governance", icon: "", color: "pink" }
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[ECOSYSTEM_RESOURCE</span>
+            <span className="block sm:inline">_CENTER]</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {resources.map((resource, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`bg-slate-800/50 border border-${resource.color}-500/20 rounded-lg p-6 hover:border-${resource.color}-500/40 transition-colors cursor-pointer group`}
+            >
+              <div className="text-center">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{resource.icon}</div>
+                <h3 className={`text-lg font-bold text-${resource.color}-400 font-mono group-hover:text-${resource.color}-300 transition-colors`}>
+                  {resource.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Bitora Newsroom Section
+function NewsroomSection() {
+  const newsCategories = [
+    "Protocol Announcements",
+    "Governance and DAO Votes",
+    "Wallet & POS Launches",
+    "Real-World Expansion Reports",
+    "Exchange Listings",
+    "Strategic Partnerships",
+    "Research & Economics"
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[BITORA_</span>
+            <span className="block sm:inline">NEWSROOM]</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {newsCategories.map((category, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 transition-colors cursor-pointer"
+            >
+              <h3 className="text-blue-400 font-mono text-sm font-bold">
+                {category}
+              </h3>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-mono px-8 py-3 rounded-lg transition-colors">
+            View All Updates
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Bitora Wallet Section
+function WalletSection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[WALLET_FOR_REAL_WORLD</span>
+            <span className="block sm:inline">_+_WEB3]</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Purpose-built wallet with:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Non-custodial storage for $BTO and all TGE tokens</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Biometric login, PIN, and delegated recovery</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">On-chain loyalty tokens, coupons, and receipts</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Integrated fiat balance display (via off-ramp APIs)</p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-mono px-8 py-3 rounded-lg transition-colors">
+                Download Wallet (Coming Soon)
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <div className="text-6xl mb-4"></div>
+              <h4 className="text-xl font-bold text-blue-400 mb-4 font-mono">Mobile UI Mockup</h4>
+              <div className="bg-slate-900/50 rounded-lg p-4 font-mono text-sm">
+                <div className="text-green-400 mb-2">Balance: $2,847.32</div>
+                <div className="text-blue-400 mb-2">BTO: 15,247 tokens</div>
+                <div className="text-orange-400 mb-2">Loyalty Points: 847</div>
+                <div className="text-purple-400">Recent: Pizza Store #42</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// BTX Trading Engine Section
+function BTXSection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[BTX_–_BITORA_</span>
+            <span className="block sm:inline">TRADING_ENGINE]</span>
+          </h2>
+          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4 sm:px-0">
+            Trade Instantly with BTX
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Bitora's native decentralized exchange:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">No-gas token swaps</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">AMM-based architecture</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Fee distribution to treasury and stakers</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Jurisdiction-gated listings for compliance</p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <button className="bg-green-600 hover:bg-green-700 text-white font-mono px-8 py-3 rounded-lg transition-colors">
+                Launch DEX
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <div className="text-6xl mb-4"></div>
+              <h4 className="text-xl font-bold text-green-400 mb-4 font-mono">BTX Live Stats</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">24h Volume</span>
+                  <span className="text-green-400 font-mono">$2.4M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">Active Pairs</span>
+                  <span className="text-green-400 font-mono">47</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">Total Liquidity</span>
+                  <span className="text-green-400 font-mono">$12.8M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">Avg Swap Time</span>
+                  <span className="text-green-400 font-mono">0.3s</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Typewriter Text Component
+function TypewriterText({ text, delay = 0, speed = 50 }: { text: string, delay?: number, speed?: number }) {
+  const [displayedText, setDisplayedText] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+
   useEffect(() => {
-    if (currentStep >= steps.length) {
-      setTimeout(() => onComplete(), 1000)
+    if (!text) {
+      setDisplayedText('')
       return
     }
 
     const timer = setTimeout(() => {
-      setCompletedSteps(prev => {
-        const newSteps = [...prev]
-        newSteps[currentStep] = true
-        return newSteps
-      })
-      
-      setTimeout(() => {
-        setCurrentStep(prev => prev + 1)
-        setProgress(((currentStep + 1) / steps.length) * 100)
-      }, 200)
-    }, 300)
+      setIsTyping(true)
+      let currentIndex = 0
+
+      const typeInterval = setInterval(() => {
+        if (currentIndex <= text.length) {
+          setDisplayedText(text.slice(0, currentIndex))
+          currentIndex++
+        } else {
+          setIsTyping(false)
+          clearInterval(typeInterval)
+        }
+      }, speed)
+
+      return () => clearInterval(typeInterval)
+    }, delay)
 
     return () => clearTimeout(timer)
-  }, [currentStep, onComplete])
-
-  useEffect(() => {
-    setProgress((currentStep / steps.length) * 100)
-  }, [currentStep])
+  }, [text, delay, speed])
 
   return (
-    <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
-      {/* Terminal Window */}
-      <div className="bg-slate-900/98 backdrop-blur-xl border border-blue-400/30 rounded-3xl shadow-2xl overflow-hidden">
-        {/* Terminal Header */}
-        <div className="bg-gradient-to-r from-slate-800/95 to-slate-700/95 px-4 sm:px-6 py-3 sm:py-4 border-b border-blue-400/30">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="flex space-x-1.5 sm:space-x-2">
-                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-yellow-500 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
-                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+    <span className="block">
+      {displayedText}
+      {isTyping && (
+        <motion.span
+          className="bg-blue-400 text-black inline-block w-1 ml-0.5"
+          animate={{ opacity: [1, 0, 1] }}
+          transition={{ duration: 0.5, repeat: Infinity }}
+        >
+          |
+        </motion.span>
+      )}
+    </span>
+  )
+}
+
+// Interactive Live Coding Demo Component
+function CodeDemo() {
+  const [activeCard, setActiveCard] = useState(0)
+  const [completedCards, setCompletedCards] = useState<number[]>([])
+  const [isSimulating, setIsSimulating] = useState(false)
+  const [simulationSpeed, setSimulationSpeed] = useState(2000)
+  const [networkNodes, setNetworkNodes] = useState<{ id: number, x: number, y: number, active: boolean }[]>([])
+  const [dataFlow, setDataFlow] = useState<{ from: number, to: number, progress: number }[]>([])
+  const [systemMetrics, setSystemMetrics] = useState({
+    cpu: 0,
+    memory: 0,
+    network: 0,
+    transactions: 0
+  })
+  const [terminalLogs, setTerminalLogs] = useState<string[]>([])
+  const [particleSystem, setParticleSystem] = useState<{ id: number, x: number, y: number, vx: number, vy: number }[]>([])
+  const [soundEffects, setSoundEffects] = useState({
+    typing: false,
+    compilation: false,
+    success: false
+  })
+  const [visualEffects, setVisualEffects] = useState({
+    glitch: false,
+    hologram: false,
+    matrix: false
+  })
+  const [aiAssistant, setAiAssistant] = useState({
+    active: false,
+    message: '',
+    suggestions: [] as string[]
+  })
+  const [hackingMode, setHackingMode] = useState(false)
+  const [quantumState, setQuantumState] = useState({
+    entanglement: 0,
+    coherence: 100,
+    qubits: 0
+  })
+
+  const codingSteps = [
+    {
+      id: 1,
+      title: "Initialize Protocol",
+      description: "Setting up Bitora Protocol core",
+      code: `package main\n\nimport "github.com/bitora/protocol/core"\n\nfunc main() {\n    protocol := core.NewProtocol()\n}`,
+      icon: <Database className="h-6 w-6" />,
+      color: "from-blue-500 to-blue-600",
+      status: "pending"
+    },
+    {
+      id: 2,
+      title: "Quantum Consensus",
+      description: "Implementing quantum-resistant consensus",
+      code: `consensus := consensus.NewQuantumPoS()\nprotocol.SetConsensus(consensus)\n\n// Quantum-resistant validation\nconsensus.EnableQuantumSecurity()`,
+      icon: <Shield className="h-6 w-6" />,
+      color: "from-green-500 to-green-600",
+      status: "pending"
+    },
+    {
+      id: 3,
+      title: "Network Layer",
+      description: "Establishing P2P network connections",
+      code: `network := network.NewP2PNetwork()\nprotocol.SetNetwork(network)\n\n// Connect to peers\nnetwork.ConnectToPeers()`,
+      icon: <Network className="h-6 w-6" />,
+      color: "from-purple-500 to-purple-600",
+      status: "pending"
+    },
+    {
+      id: 4,
+      title: "Smart Contracts",
+      description: "Deploying smart contract engine",
+      code: `contracts := contracts.NewEngine()\nprotocol.SetContractEngine(contracts)\n\n// Deploy sample contract\ncontract := contracts.Deploy(sampleContract)`,
+      icon: <Code className="h-6 w-6" />,
+      color: "from-orange-500 to-orange-600",
+      status: "pending"
+    },
+    {
+      id: 5,
+      title: "Launch Network",
+      description: "Starting the blockchain network",
+      code: `// Start the protocol\nprotocol.Start()\n\nfmt.Println("Bitora Protocol is running!")\nfmt.Println("Network ready for transactions")`,
+      icon: <Rocket className="h-6 w-6" />,
+      color: "from-cyan-500 to-cyan-600",
+      status: "pending"
+    }
+  ]
+
+  // Advanced simulation with real-time metrics
+  useEffect(() => {
+    if (!isSimulating) return
+
+    const timer = setInterval(() => {
+      setActiveCard(prev => {
+        const nextCard = prev + 1
+        if (nextCard < codingSteps.length) {
+          setCompletedCards(completed => [...completed, prev])
+
+          // Add terminal log
+          setTerminalLogs(logs => [...logs.slice(-4), `[${new Date().toLocaleTimeString()}] ${codingSteps[prev].title} completed successfully`])
+
+          // Update metrics based on step
+          setSystemMetrics(metrics => ({
+            cpu: Math.min(100, metrics.cpu + Math.random() * 20),
+            memory: Math.min(100, metrics.memory + Math.random() * 15),
+            network: Math.min(100, metrics.network + Math.random() * 25),
+            transactions: metrics.transactions + Math.floor(Math.random() * 100)
+          }))
+
+          return nextCard
+        } else {
+          setCompletedCards(completed => [...completed, prev])
+          setTerminalLogs(logs => [...logs, `[${new Date().toLocaleTimeString()}] Bitora Protocol fully deployed!`])
+          setIsSimulating(false)
+
+          // Reset after completion
+          setTimeout(() => {
+            setActiveCard(0)
+            setCompletedCards([])
+            setTerminalLogs([])
+            setSystemMetrics({ cpu: 0, memory: 0, network: 0, transactions: 0 })
+            setIsSimulating(true)
+          }, 5000)
+          return prev
+        }
+      })
+    }, simulationSpeed)
+
+    return () => clearInterval(timer)
+  }, [isSimulating, simulationSpeed, codingSteps.length])
+
+  // Initialize network nodes and particle system
+  useEffect(() => {
+    const nodes = Array.from({ length: 8 }, (_, i) => ({
+      id: i,
+      x: 20 + (i % 4) * 20,
+      y: 20 + Math.floor(i / 4) * 60,
+      active: false
+    }))
+    setNetworkNodes(nodes)
+
+    const particles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2
+    }))
+    setParticleSystem(particles)
+
+    // Auto-start simulation
+    setIsSimulating(true)
+  }, [])
+
+  // Animate network nodes and data flow
+  useEffect(() => {
+    if (!isSimulating) return
+
+    const interval = setInterval(() => {
+      setNetworkNodes(nodes =>
+        nodes.map(node => ({
+          ...node,
+          active: Math.random() > 0.7
+        }))
+      )
+
+      setDataFlow(flows => {
+        const newFlows = Array.from({ length: 3 }, (_, i) => ({
+          from: Math.floor(Math.random() * 8),
+          to: Math.floor(Math.random() * 8),
+          progress: 0
+        }))
+        return newFlows
+      })
+
+      // Animate particles
+      setParticleSystem(particles =>
+        particles.map(p => ({
+          ...p,
+          x: (p.x + p.vx + 100) % 100,
+          y: (p.y + p.vy + 100) % 100
+        }))
+      )
+
+      // Update quantum state
+      setQuantumState(prev => ({
+        entanglement: Math.min(100, prev.entanglement + Math.random() * 5),
+        coherence: Math.max(50, prev.coherence - Math.random() * 2),
+        qubits: Math.min(64, prev.qubits + (Math.random() > 0.8 ? 1 : 0))
+      }))
+
+      // Trigger sound effects
+      if (Math.random() > 0.7) {
+        setSoundEffects(prev => ({ ...prev, typing: true }))
+        setTimeout(() => setSoundEffects(prev => ({ ...prev, typing: false })), 200)
+      }
+
+      // AI Assistant messages
+      if (aiAssistant.active && Math.random() > 0.9) {
+        const messages = [
+          'Optimizing quantum entanglement...',
+          'Neural network convergence detected',
+          'Blockchain integrity verified',
+          'Quantum tunneling established',
+          'AI consensus algorithm active'
+        ]
+        setAiAssistant(prev => ({
+          ...prev,
+          message: messages[Math.floor(Math.random() * messages.length)]
+        }))
+      }
+
+      // Visual effects triggers
+      if (hackingMode && Math.random() > 0.8) {
+        setVisualEffects(prev => ({ ...prev, glitch: true }))
+        setTimeout(() => setVisualEffects(prev => ({ ...prev, glitch: false })), 300)
+      }
+    }, 500)
+
+    return () => clearInterval(interval)
+  }, [isSimulating, aiAssistant.active, hackingMode])
+
+  const getCardStatus = (index: number) => {
+    if (completedCards.includes(index)) return 'completed'
+    if (index === activeCard) return 'active'
+    return 'pending'
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Advanced Control Panel */}
+      <div className="bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-blue-500/30 p-4 sm:p-6 mb-8 overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+          {/* System Metrics */}
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">System Metrics</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-300">CPU</span>
+                <span className="text-green-400">{systemMetrics.cpu.toFixed(1)}%</span>
               </div>
-              <span className="text-blue-300 font-mono text-xs sm:text-sm font-semibold truncate">
-                BITORA_PROTOCOL_v2.1.0.exe
-              </span>
+              <div className="w-full bg-gray-700 rounded-full h-1.5">
+                <div className="bg-gradient-to-r from-green-500 to-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.cpu}%` }}></div>
+              </div>
+
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-300">Memory</span>
+                <span className="text-blue-400">{systemMetrics.memory.toFixed(1)}%</span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-1.5">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.memory}%` }}></div>
+              </div>
+
+              <div className="flex justify-between text-xs">
+                <span className="text-gray-300">Network</span>
+                <span className="text-purple-400">{systemMetrics.network.toFixed(1)}%</span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-1.5">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.network}%` }}></div>
+              </div>
             </div>
-            <div className="text-xs text-blue-300 font-mono bg-blue-500/20 px-2 py-1 rounded-lg">
-              {Math.round(progress)}%
+          </div>
+
+          {/* Network Visualization */}
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">Network Topology</h4>
+            <div className="relative h-20 sm:h-24 bg-gray-800/50 rounded-lg overflow-hidden">
+              {/* Particle Background */}
+              {particleSystem.map(particle => (
+                <div
+                  key={particle.id}
+                  className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60"
+                  style={{
+                    left: `${particle.x}%`,
+                    top: `${particle.y}%`,
+                    transition: 'all 0.5s ease-in-out'
+                  }}
+                />
+              ))}
+
+              {/* Network Nodes */}
+              {networkNodes.map(node => (
+                <div
+                  key={node.id}
+                  className={`absolute w-2 h-2 rounded-full transition-all duration-300 ${node.active ? 'bg-green-400 shadow-lg shadow-green-400/50 scale-125' : 'bg-gray-500'
+                    }`}
+                  style={{
+                    left: `${node.x}%`,
+                    top: `${node.y}%`
+                  }}
+                />
+              ))}
+
+              {/* Data Flow Lines */}
+              <svg className="absolute inset-0 w-full h-full">
+                {dataFlow.map((flow, i) => {
+                  const fromNode = networkNodes[flow.from]
+                  const toNode = networkNodes[flow.to]
+                  if (!fromNode || !toNode) return null
+
+                  return (
+                    <line
+                      key={i}
+                      x1={`${fromNode.x}%`}
+                      y1={`${fromNode.y}%`}
+                      x2={`${toNode.x}%`}
+                      y2={`${toNode.y}%`}
+                      stroke="#3b82f6"
+                      strokeWidth="1"
+                      opacity="0.6"
+                      className="animate-pulse"
+                    />
+                  )
+                })}
+              </svg>
+            </div>
+          </div>
+
+          {/* Transaction Counter */}
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">Blockchain Stats</h4>
+            <div className="space-y-2">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-400">{systemMetrics.transactions}</div>
+                <div className="text-xs text-gray-400">Transactions</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-semibold text-blue-400">{completedCards.length}/{codingSteps.length}</div>
+                <div className="text-xs text-gray-400">Modules</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Terminal Logs */}
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">System Logs</h4>
+            <div className="bg-black/50 rounded-lg p-2 h-20 sm:h-24 overflow-y-auto font-mono text-xs">
+              {terminalLogs.map((log, i) => (
+                <div key={i} className="text-green-400 mb-1 animate-fadeIn">
+                  {log}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* AI Assistant & Quantum Computing */}
+          <div className="space-y-2 sm:space-y-3">
+            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">AI Assistant</h4>
+            <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded-lg p-2 sm:p-3 h-20 sm:h-24 overflow-hidden relative">
+              {/* Quantum Visualization */}
+              <div className="absolute inset-0 opacity-30">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`absolute w-1 h-1 rounded-full ${quantumState.entanglement > 50 ? 'bg-purple-400' : 'bg-blue-400'
+                      } animate-pulse`}
+                    style={{
+                      left: `${10 + (i % 4) * 20}%`,
+                      top: `${20 + Math.floor(i / 4) * 25}%`,
+                      animationDelay: `${i * 0.1}s`,
+                      animationDuration: `${1 + (i % 3) * 0.5}s`
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* AI Status */}
+              <div className="relative z-10">
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className={`w-2 h-2 rounded-full ${aiAssistant.active ? 'bg-green-400 animate-pulse' : 'bg-gray-500'
+                    }`}></div>
+                  <span className="text-xs text-purple-300">
+                    {aiAssistant.active ? 'AI Online' : 'AI Standby'}
+                  </span>
+                </div>
+
+                {/* Quantum Metrics */}
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-300">Qubits</span>
+                    <span className="text-purple-400">{quantumState.qubits}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-300">Coherence</span>
+                    <span className="text-blue-400">{quantumState.coherence}%</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Terminal Body */}
-        <div className="p-4 sm:p-6 lg:p-8 min-h-[400px] sm:min-h-[500px] font-mono">
-          {/* Header */}
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="text-blue-300 text-xs sm:text-sm mb-2 hidden sm:block">
-              ╔══════════════════════════════════════════════════════════╗
+        {/* Advanced Controls */}
+        <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <label className="text-xs sm:text-sm text-gray-300">Speed:</label>
+              <input
+                type="range"
+                min="500"
+                max="5000"
+                step="500"
+                value={simulationSpeed}
+                onChange={(e) => setSimulationSpeed(Number(e.target.value))}
+                className="w-24 sm:w-32 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+              />
+              <span className="text-xs text-blue-400">{(6000 - simulationSpeed) / 1000}x</span>
             </div>
-            <div className="text-blue-300 text-xs sm:text-sm mb-2 px-2">
-              <span className="hidden sm:inline">║</span> BITORA PROTOCOL INITIALIZATION <span className="hidden sm:inline">║</span>
-            </div>
-            <div className="text-blue-300 text-xs sm:text-sm mb-4 hidden sm:block">
-              ╚══════════════════════════════════════════════════════════╝
+
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full ${isSimulating ? 'bg-green-400 animate-pulse' : 'bg-red-400'
+                }`}></div>
+              <span className="text-xs sm:text-sm text-gray-300">
+                {isSimulating ? 'Running' : 'Stopped'}
+              </span>
             </div>
           </div>
 
-          {/* Steps */}
-          <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
-                <div className="w-8 sm:w-10 text-center">
-                  {completedSteps[index] ? (
-                    <span className="text-green-400 text-sm sm:text-base">✓</span>
-                  ) : index === currentStep ? (
-                    <span className="text-blue-400 animate-spin text-sm sm:text-base">⟳</span>
-                  ) : (
-                    <span className="text-slate-600 text-sm sm:text-base">○</span>
-                  )}
+          {/* Advanced Mode Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700/50 pt-3 sm:pt-4 space-y-3 sm:space-y-0">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6">
+              {/* Hacking Mode */}
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={hackingMode}
+                  onChange={(e) => setHackingMode(e.target.checked)}
+                  className="sr-only"
+                />
+                <div className={`w-8 sm:w-10 h-5 sm:h-6 rounded-full transition-all duration-300 ${hackingMode ? 'bg-red-500' : 'bg-gray-600'
+                  } relative`}>
+                  <div className={`w-3 sm:w-4 h-3 sm:h-4 bg-white rounded-full absolute top-1 transition-all duration-300 ${hackingMode ? 'left-4 sm:left-5' : 'left-1'
+                    }`}></div>
                 </div>
-                <div className="flex-1">
-                  {completedSteps[index] ? (
-                    <span className="text-green-400 text-xs sm:text-sm">{step.text}</span>
-                  ) : index === currentStep ? (
-                    <span className="text-blue-300 animate-pulse text-xs sm:text-sm">
-                      {step.text}
-                    </span>
-                  ) : (
-                    <span className="text-slate-500 text-xs sm:text-sm">{step.text}</span>
-                  )}
+                <span className={`text-xs sm:text-sm ${hackingMode ? 'text-red-400' : 'text-gray-300'
+                  }`}>Hacking Mode</span>
+              </label>
+
+              {/* Visual Effects */}
+              <button
+                onClick={() => setVisualEffects(prev => ({ ...prev, matrix: !prev.matrix }))}
+                className={`px-2 sm:px-3 py-1 rounded-lg text-xs transition-all ${visualEffects.matrix
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                  : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
+                  }`}
+              >
+                Matrix FX
+              </button>
+
+              <button
+                onClick={() => setVisualEffects(prev => ({ ...prev, hologram: !prev.hologram }))}
+                className={`px-2 sm:px-3 py-1 rounded-lg text-xs transition-all ${visualEffects.hologram
+                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                  : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
+                  }`}
+              >
+                Hologram
+              </button>
+            </div>
+
+            {/* AI Assistant Toggle */}
+            <button
+              onClick={() => setAiAssistant(prev => ({ ...prev, active: !prev.active }))}
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all w-full sm:w-auto ${aiAssistant.active
+                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
+                }`}
+            >
+              {aiAssistant.active ? '🤖 AI Active' : '🤖 Activate AI'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Enhanced Connection Lines */}
+      <div className="relative">
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+          {codingSteps.map((_, index) => {
+            if (index === codingSteps.length - 1) return null
+            const isActive = completedCards.includes(index) || index === activeCard
+            return (
+              <line
+                key={index}
+                x1={`${20 + (index % 3) * 33}%`}
+                y1={`${20 + Math.floor(index / 3) * 40}%`}
+                x2={`${20 + ((index + 1) % 3) * 33}%`}
+                y2={`${20 + Math.floor((index + 1) / 3) * 40}%`}
+                stroke={isActive ? '#3b82f6' : '#374151'}
+                strokeWidth="2"
+                strokeDasharray={isActive ? '0' : '5,5'}
+                className={isActive ? 'animate-pulse' : ''}
+              />
+            )
+          })}
+        </svg>
+
+        {/* Cards Grid */}
+        <div className={`relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full transition-all duration-300 ${visualEffects.glitch ? 'animate-pulse filter blur-[1px]' : ''
+          } ${visualEffects.hologram ? 'opacity-80' : ''
+          }`} style={{ zIndex: 2 }}>
+          {codingSteps.map((step, index) => {
+            const status = getCardStatus(index)
+            return (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{
+                  opacity: 1,
+                  scale: status === 'active' ? 1.05 : 1,
+                  y: status === 'active' ? -5 : 0
+                }}
+                transition={{ duration: 0.3 }}
+                className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 min-h-[280px] sm:min-h-[320px] w-full ${status === 'completed'
+                  ? 'border-green-500 bg-green-900/20'
+                  : status === 'active'
+                    ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/25'
+                    : 'border-gray-600 bg-gray-900/50'
+                  } ${hackingMode && status === 'active' ? 'border-red-500 bg-red-900/20 shadow-lg shadow-red-500/25' : ''
+                  } ${visualEffects.matrix && status === 'active' ? 'animate-bounce' : ''
+                  } ${soundEffects.typing && status === 'active' ? 'ring-2 ring-blue-400/50' : ''
+                  }`}
+              >
+                {/* Card Header */}
+                <div className={`p-3 sm:p-4 bg-gradient-to-r ${step.color} bg-opacity-10`}>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className={`p-1.5 sm:p-2 rounded-lg bg-gradient-to-r ${step.color} text-white flex-shrink-0`}>
+                      {step.icon}
+                    </div>
+                    <div className="flex-1 min-w-0 overflow-hidden">
+                      <h3 className="text-white font-semibold text-xs sm:text-sm truncate">{step.title}</h3>
+                      <p className="text-gray-300 text-xs leading-tight break-words">{step.description}</p>
+                    </div>
+                    {status === 'completed' && (
+                      <div className="ml-auto">
+                        <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs font-bold"></span>
+                        </div>
+                      </div>
+                    )}
+                    {status === 'active' && (
+                      <div className="ml-auto">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full animate-pulse"></div>
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+                {/* Code Preview */}
+                <div className="p-2 sm:p-3 flex-1 ">
+                  <div className="bg-gray-900 p-2 sm:p-3 font-mono text-xs  overflow-hidden">
+                    <div className={`h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 ${status === 'completed' ? 'text-green-400' :
+                      status === 'active' ? 'text-blue-400' : 'text-gray-500'
+                      }`}>
+                      {step.code.split('\n').map((line, lineIndex) => (
+                        <div key={lineIndex} className="leading-tight mb-1 text-xs overflow-hidden">
+                          {status === 'active' ? (
+                            <TypewriterText
+                              text={line}
+                              delay={lineIndex * 150}
+                              speed={25}
+                            />
+                          ) : (
+                            <span className="block whitespace-pre-wrap break-all">{line}</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    {status === 'active' && (
+                      <motion.div
+                        className="mt-1 flex items-center"
+                        animate={{ opacity: [1, 0, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
+                        <span className="bg-blue-400 text-black inline-block w-2 h-3 mr-1">█</span>
+                        <span className="text-blue-400 text-xs">Typing...</span>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Progress Indicator */}
+                <div className="absolute bottom-0 left-0 right-0 h-1">
+                  <div className={`h-full transition-all duration-500 ${status === 'completed' ? 'bg-green-500 w-full' :
+                    status === 'active' ? 'bg-blue-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
+                    }`}></div>
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Simulation Controls */}
+      <div className="text-center">
+        <Button
+          onClick={() => {
+            setActiveCard(0)
+            setCompletedCards([])
+            setIsSimulating(!isSimulating)
+          }}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+        >
+          {isSimulating ? 'Pause Simulation' : 'Start Simulation'}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+// Live Stats Section (Enhanced)
+function LiveStatsSection() {
+  const [stats, setStats] = useState({
+    tokensCreated: 1247,
+    posLocations: 42,
+    btoPrice: 2.47,
+    validatorsOnline: 156,
+    dailyTxVolume: 847000,
+    countriesOperating: 3
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        tokensCreated: prev.tokensCreated + Math.floor(Math.random() * 3),
+        posLocations: prev.posLocations + (Math.random() > 0.95 ? 1 : 0),
+        btoPrice: prev.btoPrice + (Math.random() - 0.5) * 0.1,
+        validatorsOnline: prev.validatorsOnline + Math.floor(Math.random() * 2 - 1),
+        dailyTxVolume: prev.dailyTxVolume + Math.floor(Math.random() * 1000),
+        countriesOperating: prev.countriesOperating
+      }))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [LIVE_STATS]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
+            <h3 className="text-blue-400 font-mono text-sm mb-2">Tokens Created</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.tokensCreated.toLocaleString()}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-6">
+            <h3 className="text-green-400 font-mono text-sm mb-2">Active POS Locations</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.posLocations}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-orange-500/20 rounded-lg p-6">
+            <h3 className="text-orange-400 font-mono text-sm mb-2">$BTO Price</h3>
+            <div className="text-3xl font-bold text-white font-mono">${stats.btoPrice.toFixed(2)}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-purple-500/20 rounded-lg p-6">
+            <h3 className="text-purple-400 font-mono text-sm mb-2">Validators Online</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.validatorsOnline}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-cyan-500/20 rounded-lg p-6">
+            <h3 className="text-cyan-400 font-mono text-sm mb-2">Daily TX Volume</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.dailyTxVolume.toLocaleString()}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-pink-500/20 rounded-lg p-6">
+            <h3 className="text-pink-400 font-mono text-sm mb-2">Countries Operating</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.countriesOperating}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// About Section Component (Updated for Bitora)
+function AboutSection() {
+  return (
+    <section id="about" className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[PROTOCOL_</span>
+            <span className="block sm:inline">INFRASTRUCTURE]</span>
+          </h2>
+          <p className="text-lg sm:text-xl text-slate-300 max-w-4xl mx-auto font-mono px-4 sm:px-0">
+            Built using Cosmos SDK with validator scoring, fast finality, and native staking. The gas token is $BTO.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Card className="bg-slate-800/50 border-blue-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Globe className="h-8 w-8 text-white" />
               </div>
-            ))}
+              <h3 className="text-lg font-semibold text-white mb-2 font-mono">Layer 1 Blockchain</h3>
+              <p className="text-slate-300 font-mono text-sm">Built using Cosmos SDK with validator scoring and fast finality</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/50 border-green-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 bg-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2 font-mono">Compliance Layer</h3>
+              <p className="text-slate-300 font-mono text-sm">Jurisdictional KYC, AML scoring, and real-time sanctions enforcement</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-800/50 border-purple-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 bg-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Code className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2 font-mono">Governance Framework</h3>
+              <p className="text-slate-300 font-mono text-sm">Two-tier governance model with quadratic voting and council veto protection</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Call to Action Section (Updated for Bitora)
+function CTASection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+          [PROTOCOL_ACTIVATION]
+        </h2>
+        <p className="text-base sm:text-xl text-slate-300 mb-6 sm:mb-8 font-mono px-2">
+          Build anything. Trade instantly. Operate legally. Pay globally.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 max-w-3xl mx-auto">
+          <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+            <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            Launch App
+          </Button>
+          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+            <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            Read Whitepaper
+          </Button>
+          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+            <Network className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            Join Ecosystem
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Footer Component (Updated for Bitora with better mobile responsivity and navigation)
+function Footer() {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  return (
+    <footer className="relative border-t border-slate-800 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div className="sm:col-span-2 md:col-span-1">
+            <div className="flex items-center space-x-2 mb-4 cursor-pointer group" onClick={scrollToTop}>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300">
+                <span className="text-white font-bold text-xs sm:text-sm font-mono">B</span>
+              </div>
+              <span className="text-white font-bold text-base sm:text-xl font-mono group-hover:text-blue-300 transition-colors duration-300">
+                <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
+                <span className="sm:hidden">[BITORA]</span>
+              </span>
+            </div>
+            <p className="text-slate-300 mb-4 font-mono text-sm sm:text-base">
+              The Infrastructure Layer for Crypto-Natives, Retail Builders, and Sovereign Systems.
+            </p>
+            <div className="flex space-x-4">
+              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+                <Twitter className="h-4 w-4" />
+              </Button>
+              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+                <Github className="h-4 w-4" />
+              </Button>
+              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+                <MessageCircle className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
 
-          {/* System Info */}
-          <div className="border-t border-blue-500/30 pt-4 sm:pt-6 text-xs text-blue-200 space-y-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
-              <div className="bg-slate-800/50 p-3 rounded-lg">
-                <div className="text-blue-300 font-semibold mb-1">NETWORK</div>
-                <div>Cosmos SDK</div>
-                <div className="text-blue-300 font-semibold mb-1 mt-2">CONSENSUS</div>
-                <div>Tendermint BFT</div>
+          <div>
+            <h3 className="text-white font-semibold mb-4 font-mono">Navigation</h3>
+            <ul className="space-y-2 text-slate-300">
+              <li>
+                <button
+                  onClick={() => scrollToSection('features')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Protocol Features
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('demo')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Live Demo
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('about')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Infrastructure
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('ecosystem')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Ecosystem
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-4 font-mono">Network</h3>
+            <ul className="space-y-2 text-slate-300">
+              <li><a href="https://twitter.com/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Twitter/X</a></li>
+              <li><a href="https://t.me/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Telegram</a></li>
+              <li><a href="https://discord.gg/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Discord</a></li>
+              <li><a href="https://linkedin.com/company/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">LinkedIn</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-4 font-mono">Resources</h3>
+            <ul className="space-y-2 text-slate-300">
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Whitepaper</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Documentation</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Run Validator</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Apply for Grants</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-slate-800 mt-8 pt-8 text-center">
+          <p className="text-slate-400 font-mono text-sm">
+            © 2024 Bitora Protocol. All rights reserved. | Built on the Bitora Layer 1 Chain
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+// Terminal Loading Screen Component
+function TerminalLoader({ onComplete }: { onComplete: () => void }) {
+  const [currentLine, setCurrentLine] = useState(0)
+  const [currentChar, setCurrentChar] = useState(0)
+  const [isComplete, setIsComplete] = useState(false)
+
+  const codeLines = [
+    "package main",
+    "import \"fmt\"",
+    "func main() {",
+    '  fmt.Println("Bitora Loading..."))',
+    "}"
+  ]
+
+  useEffect(() => {
+    if (isComplete) {
+      setTimeout(() => onComplete(), 100)
+      return
+    }
+
+    if (currentLine >= codeLines.length) {
+      setIsComplete(true)
+      return
+    }
+
+    const currentLineText = codeLines[currentLine]
+
+    if (currentChar >= currentLineText.length) {
+      setTimeout(() => {
+        setCurrentLine(prev => prev + 1)
+        setCurrentChar(0)
+      }, 120)
+      return
+    }
+
+    const timer = setTimeout(() => {
+      setCurrentChar(prev => prev + 1)
+    }, 30)
+
+    return () => clearTimeout(timer)
+  }, [currentLine, currentChar, isComplete, onComplete])
+
+  const renderCodeLine = (line: string) => {
+    if (line.includes('package') || line.includes('import') || line.includes('type') || line.includes('func')) {
+      return (
+        <span>
+          <span className="text-purple-400">
+            {line.match(/(package|import|type|func)/)?.[0]}
+          </span>
+          <span className="text-gray-100">
+            {line.replace(/(package|import|type|func)/, '')}
+          </span>
+        </span>
+      )
+    }
+    if (line.includes('string') || line.includes('int')) {
+      return (
+        <span className="text-blue-400">{line}</span>
+      )
+    }
+    if (line.includes('"')) {
+      return (
+        <span className="text-green-300">{line}</span>
+      )
+    }
+    return (
+      <span className="text-gray-100">{line}</span>
+    )
+  }
+
+  return (
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
+      {/* Matrix Background */}
+      <div className="absolute inset-0 bg-black overflow-hidden">
+        {/* Dense Matrix Background */}
+        <div className="absolute inset-0 opacity-60">
+          {Array.from({ length: 150 }).map((_, i) => {
+            const positions = [
+              { left: 5, top: 10 }, { left: 12, top: 25 }, { left: 18, top: 5 }, { left: 25, top: 40 }, { left: 32, top: 15 },
+              { left: 38, top: 30 }, { left: 45, top: 8 }, { left: 52, top: 35 }, { left: 58, top: 20 }, { left: 65, top: 45 },
+              { left: 72, top: 12 }, { left: 78, top: 38 }, { left: 85, top: 22 }, { left: 92, top: 48 }, { left: 8, top: 55 },
+              { left: 15, top: 70 }, { left: 22, top: 60 }, { left: 28, top: 75 }, { left: 35, top: 65 }, { left: 42, top: 80 },
+              { left: 48, top: 58 }, { left: 55, top: 85 }, { left: 62, top: 68 }, { left: 68, top: 90 }, { left: 75, top: 78 },
+              { left: 82, top: 95 }, { left: 88, top: 85 }, { left: 95, top: 92 }, { left: 3, top: 88 }, { left: 10, top: 95 },
+              { left: 17, top: 82 }, { left: 23, top: 98 }, { left: 30, top: 88 }, { left: 37, top: 95 }, { left: 43, top: 85 },
+              { left: 50, top: 92 }, { left: 57, top: 98 }, { left: 63, top: 88 }, { left: 70, top: 95 }, { left: 77, top: 85 },
+              { left: 83, top: 92 }, { left: 90, top: 98 }, { left: 97, top: 88 }, { left: 2, top: 45 }, { left: 9, top: 52 },
+              { left: 16, top: 48 }, { left: 23, top: 55 }, { left: 29, top: 42 }, { left: 36, top: 58 }, { left: 43, top: 45 }
+            ];
+            const pos = positions[i % positions.length];
+            return (
+              <div
+                key={i}
+                className="absolute text-blue-400 text-sm font-mono animate-pulse"
+                style={{
+                  left: `${pos.left}%`,
+                  top: `${pos.top}%`,
+                  animationDelay: `${(i % 8) * 0.1}s`,
+                  animationDuration: `${1.2 + (i % 2) * 0.6}s`,
+                  textShadow: '0 0 10px #3b82f6, 0 0 20px #1e40af, 0 0 30px #1e3a8a'
+                }}
+              >
+                {i % 3 === 0 ? '1' : i % 3 === 1 ? '0' : 'X'}
               </div>
-              <div className="bg-slate-800/50 p-3 rounded-lg">
-                <div className="text-blue-300 font-semibold mb-1">TOKEN</div>
-                <div>$BTO</div>
-                <div className="text-blue-300 font-semibold mb-1 mt-2">STATUS</div>
-                <div className={currentStep >= steps.length ? 'text-green-400' : 'text-yellow-400'}>
-                  {currentStep >= steps.length ? 'READY' : 'INITIALIZING'}
+            );
+          })}
+        </div>
+
+        {/* Fast Falling Matrix Effect */}
+        <div className="absolute inset-0 opacity-40">
+          {Array.from({ length: 60 }).map((_, i) => {
+            const leftPositions = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49, 52, 55, 58, 61, 64, 67, 70, 73, 76, 79, 82, 85, 88, 91, 94, 97, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80];
+            return (
+              <div
+                key={i}
+                className="absolute w-0.5 bg-gradient-to-b from-transparent via-blue-400 to-transparent animate-pulse"
+                style={{
+                  left: `${leftPositions[i]}%`,
+                  height: '150px',
+                  animationDelay: `${(i % 6) * 0.1}s`,
+                  animationDuration: `${1.2 + (i % 3) * 0.3}s`,
+                  boxShadow: '0 0 10px #3b82f6'
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Matrix Rain Effect */}
+        <div className="absolute inset-0 opacity-50">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-blue-300 text-sm font-mono font-bold"
+              style={{
+                left: `${(i * 2) % 100}%`,
+                top: '-20px',
+                animation: `matrixRain ${1.8 + (i % 3) * 0.6}s linear infinite`,
+                animationDelay: `${(i % 10) * 0.1}s`,
+                textShadow: '0 0 8px #3b82f6, 0 0 16px #1e40af'
+              }}
+            >
+              {['1', '0', 'A', 'B', 'C', 'X', 'Y', 'Z', '█', '▓', '▒', '░'][i % 12]}
+            </div>
+          ))}
+        </div>
+
+        {/* Additional Matrix Columns */}
+        <div className="absolute inset-0 opacity-30">
+          {Array.from({ length: 25 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute flex flex-col text-blue-400 text-xs font-mono"
+              style={{
+                left: `${i * 4}%`,
+                top: '0',
+                height: '100%',
+                animation: `matrixColumn ${3 + (i % 4) * 1.2}s linear infinite`,
+                animationDelay: `${(i % 8) * 0.3}s`
+              }}
+            >
+              {Array.from({ length: 20 }).map((_, j) => (
+                <div
+                  key={j}
+                  className="mb-2"
+                  style={{
+                    textShadow: '0 0 5px #3b82f6',
+                    opacity: (i + j) % 2 === 0 ? 1 : 0.3
+                  }}
+                >
+                  {['1', '0', '█'][j % 3]}
                 </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
+          @keyframes matrixRain {
+            0% { transform: translateY(-20px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+          }
+          @keyframes matrixColumn {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.5s ease-in-out;
+          }
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+          .slider::-webkit-slider-thumb {
+            appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+          }
+          .slider::-moz-range-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+          }
+        `}</style>
+
+      {/* Modern Terminal Window */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto">
+        <div className="bg-gray-900/95 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden">
+          {/* Terminal Header */}
+          <div className="flex items-center justify-between px-6 py-4 bg-gray-800/80 border-b border-gray-700/50">
+            <div className="flex items-center space-x-3">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full shadow-lg"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full shadow-lg"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg"></div>
+              </div>
+              <div className="text-gray-300 text-sm font-medium">bitora-protocol.go</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="px-3 py-1 bg-blue-600/20 text-blue-400 text-xs rounded-full border border-blue-500/30">
+                Go 1.21
+              </div>
+              <div className="px-3 py-1 bg-green-600/20 text-green-400 text-xs rounded-full border border-green-500/30">
+                Compiling...
               </div>
             </div>
+          </div>
+
+          {/* Code Editor Content */}
+          <div className="p-6 font-mono text-sm bg-gray-900/50 min-h-[400px] max-h-[500px] overflow-hidden">
+            {/* Line Numbers */}
+            <div className="flex">
+              <div className="text-gray-500 text-right pr-4 select-none min-w-[3rem]">
+                {codeLines.map((_, index) => (
+                  <div key={index} className={`leading-6 ${index <= currentLine ? 'opacity-100' : 'opacity-30'}`}>
+                    {index + 1}
+                  </div>
+                ))}
+              </div>
+
+              {/* Code Content */}
+              <div className="flex-1">
+                {codeLines.map((line, index) => (
+                  <div key={index} className="leading-6 min-h-[1.5rem]">
+                    {index < currentLine ? (
+                      <div className="flex items-center">
+                        {renderCodeLine(line)}
+                        <span className="ml-2 text-green-400 animate-pulse">[OK]</span>
+                      </div>
+                    ) : index === currentLine ? (
+                      <div className="flex items-center">
+                        {renderCodeLine(line.substring(0, currentChar))}
+                        <span className="bg-blue-400 text-black animate-pulse w-2 inline-block">█</span>
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {isComplete && (
+              <div className="mt-6 p-4 bg-green-900/30 border border-green-500/30 rounded-lg">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-green-400 font-medium">Compilation successful!</span>
+                </div>
+                <div className="text-gray-300 text-xs mt-1">
+                  → Launching Bitora Protocol Interface...
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Progress Bar */}
-          <div className="mt-4 sm:mt-6">
-            <div className="flex justify-between text-xs text-blue-300 mb-3">
-              <span className="font-semibold">INITIALIZATION PROGRESS</span>
-              <span className="bg-blue-500/20 px-2 py-1 rounded">{Math.round(progress)}%</span>
+          <div className="px-6 py-3 bg-gray-800/50 border-t border-gray-700/50">
+            <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+              <span>Building Bitora Protocol</span>
+              <span>{Math.min(Math.round((currentLine / codeLines.length) * 100), 100)}%</span>
             </div>
-            <div className="w-full bg-slate-800/70 rounded-full h-3 sm:h-4 overflow-hidden border border-blue-500/30">
-              <motion.div
-                className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 h-full rounded-full shadow-lg"
-                initial={{ width: "0%" }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-blue-400/70 mt-2">
-              <span>0%</span>
-              <span>50%</span>
-              <span>100%</span>
+            <div className="w-full bg-gray-700 rounded-full h-1.5">
+              <div
+                className="bg-gradient-to-r from-blue-500 to-green-500 h-1.5 rounded-full transition-all duration-300 ease-out"
+                style={{ width: `${Math.min((currentLine / codeLines.length) * 100, 100)}%` }}
+              ></div>
             </div>
           </div>
         </div>
@@ -253,1037 +2106,49 @@ function ModernLoader({ onComplete }: { onComplete: () => void }) {
   )
 }
 
-
-
-// AI Code Editor Component
-function AICodeEditor({ activeNode, setActiveNode }: any) {
-  const [codeContent, setCodeContent] = useState('')
-  const [isGenerating, setIsGenerating] = useState(true)
-  const [generatedCards, setGeneratedCards] = useState<any[]>([])
-  const [currentLine, setCurrentLine] = useState(0)
-  const [currentTemplate, setCurrentTemplate] = useState(0)
-  const [charIndex, setCharIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [mobileTab, setMobileTab] = useState<'code' | 'modules'>('code')
-
-  const codeTemplates = [
-    `// Bitora Protocol Core
-class BitoraProtocol {
-  constructor() {
-    this.network = 'cosmos-sdk'
-    this.consensus = 'tendermint'
-    this.token = 'BTO'
-    this.validators = new Set()
-    this.blocks = []
-  }
-  
-  async initialize() {
-    console.log('Bitora Protocol Initializing')
-    await this.connectValidators()
-    await this.syncBlockchain()
-    this.startConsensus()
-    return 'Protocol Ready'
-  }
-  
-  async processTransaction(tx) {
-    const validation = await this.validateTx(tx)
-    if (validation.valid) {
-      this.addToMempool(tx)
-      return tx.hash
-    }
-    throw new Error('Invalid transaction')
-  }
-}`,
-    `// Advanced Feature Engine
-class FeatureEngine {
-  constructor() {
-    this.tokenFactory = new TokenFactory()
-    this.posSystem = new POSSystem()
-    this.complianceLayer = new ComplianceLayer()
-  }
-  
-  async generateToken(config) {
-    const compliance = await this.validateCompliance(config)
-    const token = new Token({
-      name: config.name,
-      symbol: config.symbol,
-      supply: config.totalSupply,
-      compliance: compliance,
-      kyc: config.kycRequired,
-      mintable: config.mintable
-    })
-    
-    await this.deployContract(token)
-    return token
-  }
-  
-  async deployPOS(storeConfig) {
-    const pos = new POSSystem({
-      storeId: storeConfig.id,
-      location: storeConfig.location,
-      realtime: true,
-      compliance: 'built-in',
-      paymentMethods: ['BTO', 'USDC', 'ETH']
-    })
-    
-    await pos.initialize()
-    return pos
-  }
-}`,
-    `// Pizza Proof of Concept
-class PizzaProofOfConcept {
-  constructor() {
-    this.stores = new Map()
-    this.transactions = []
-    this.inventory = new InventoryManager()
-    this.analytics = new AnalyticsEngine()
-  }
-  
-  async processSale(saleData) {
-    const { amount, items, storeId, paymentMethod } = saleData
-    
-    // Process payment
-    const payment = await this.processPayment(amount, paymentMethod)
-    
-    // Update inventory
-    await this.inventory.updateStock(items)
-    
-    // Token economics
-    const burnAmount = amount * 0.01
-    const yieldAmount = amount * 0.02
-    
-    await this.burnTokens(burnAmount)
-    await this.distributeYield(yieldAmount)
-    
-    // Compliance reporting
-    await this.reportCompliance({
-      transactionId: payment.id,
-      amount: amount,
-      timestamp: Date.now(),
-      storeId: storeId
-    })
-    
-    return payment
-  }
-  
-  async openNewStore(location) {
-    const store = new PizzaStore({
-      location: location,
-      posSystem: await this.deployPOS(),
-      inventory: new InventoryManager(),
-      compliance: true
-    })
-    
-    this.stores.set(store.id, store)
-    return store
-  }
-}`,
-    `// Roadmap Execution Engine
-const roadmapEngine = {
-  phases: {
-    '2025_Q1': {
-      milestones: [
-        'mainnet_launch',
-        'bto_token_live',
-        'validator_network_active'
-      ],
-      status: 'in_progress',
-      completion: 75
-    },
-    '2025_Q2': {
-      milestones: [
-        'dex_integration',
-        'pizza_stores_anz',
-        'mobile_wallet_launch'
-      ],
-      status: 'planned',
-      completion: 0
-    },
-    '2026': {
-      milestones: [
-        'asia_pacific_expansion',
-        'national_stablecoins',
-        'audx_phpx_launch',
-        'enterprise_partnerships'
-      ],
-      status: 'planned',
-      completion: 0
-    },
-    '2027': {
-      milestones: [
-        'us_eu_compliance',
-        'treasury_deflation_protocol',
-        'global_adoption',
-        'institutional_integration'
-      ],
-      status: 'future',
-      completion: 0
-    }
-  },
-  
-  async executeMilestone(phase, milestone) {
-    console.log('Executing milestone:', milestone)
-    const result = await this.deployMilestone(milestone)
-    this.updateProgress(phase, milestone)
-    return result
-  }
-}`,
-    `// Ecosystem Management Platform
-class EcosystemManager {
-  constructor() {
-    this.developers = new DeveloperRegistry()
-    this.validators = new ValidatorNetwork()
-    this.dapps = new DAppRegistry()
-    this.grants = new GrantProgram()
-    this.governance = new GovernanceSystem()
-  }
-  
-  async onboardDeveloper(profile) {
-    const developer = await this.developers.register({
-      address: profile.walletAddress,
-      skills: profile.skills,
-      experience: profile.experience,
-      github: profile.github
-    })
-    
-    // Assign starter grant
-    const starterGrant = await this.grants.createGrant({
-      recipient: developer.id,
-      amount: 1000, // BTO
-      type: 'starter',
-      requirements: ['complete_tutorial', 'deploy_testnet']
-    })
-    
-    return { developer, grant: starterGrant }
-  }
-  
-  async launchDApp(dappConfig) {
-    const dapp = new DApp({
-      name: dappConfig.name,
-      category: dappConfig.category,
-      developer: dappConfig.developerId,
-      contract: dappConfig.contractAddress
-    })
-    
-    await this.dapps.register(dapp)
-    await this.governance.proposeListingVote(dapp)
-    
-    return dapp
-  }
-  
-  async distributeRewards() {
-    const validators = await this.validators.getActive()
-    const developers = await this.developers.getActive()
-    
-    for (const validator of validators) {
-      await this.distributeValidatorReward(validator)
-    }
-    
-    for (const developer of developers) {
-      await this.distributeDeveloperReward(developer)
-    }
-  }
-}`,
-    `// Smart Contract Factory
-class SmartContractFactory {
-  constructor() {
-    this.templates = new Map()
-    this.deployedContracts = new Map()
-    this.compiler = new SolidityCompiler()
-  }
-  
-  async createTokenContract(params) {
-    const template = this.templates.get('ERC20')
-    const customizedCode = template.customize({
-      name: params.name,
-      symbol: params.symbol,
-      decimals: params.decimals,
-      totalSupply: params.totalSupply,
-      mintable: params.mintable,
-      burnable: params.burnable
-    })
-    
-    const compiled = await this.compiler.compile(customizedCode)
-    const deployed = await this.deploy(compiled, params.network)
-    
-    this.deployedContracts.set(deployed.address, {
-      type: 'token',
-      params: params,
-      deployedAt: Date.now()
-    })
-    
-    return deployed
-  }
-  
-  async createNFTContract(params) {
-    const template = this.templates.get('ERC721')
-    const customizedCode = template.customize(params)
-    
-    const compiled = await this.compiler.compile(customizedCode)
-    const deployed = await this.deploy(compiled, params.network)
-    
-    return deployed
-  }
-}`,
-    `// DeFi Protocol Integration
-class DeFiProtocol {
-  constructor() {
-    this.liquidityPools = new Map()
-    this.stakingPools = new Map()
-    this.yieldFarms = new Map()
-    this.governance = new GovernanceToken()
-  }
-  
-  async createLiquidityPool(tokenA, tokenB, fee) {
-    const pool = new LiquidityPool({
-      tokenA: tokenA,
-      tokenB: tokenB,
-      fee: fee,
-      protocol: 'Bitora-AMM'
-    })
-    
-    await pool.initialize()
-    this.liquidityPools.set(pool.id, pool)
-    
-    return pool
-  }
-  
-  async stake(amount, duration) {
-    const stakingPool = this.stakingPools.get('BTO-STAKE')
-    const position = await stakingPool.stake({
-      amount: amount,
-      duration: duration,
-      user: this.getCurrentUser()
-    })
-    
-    return position
-  }
-  
-  async calculateYield(poolId, userAddress) {
-    const pool = this.yieldFarms.get(poolId)
-    const userPosition = await pool.getUserPosition(userAddress)
-    
-    const timeStaked = Date.now() - userPosition.startTime
-    const apr = pool.getCurrentAPR()
-    const yield = (userPosition.amount * apr * timeStaked) / (365 * 24 * 60 * 60 * 1000)
-    
-    return yield
-  }
-}`
-  ]
-
-  // Continuous code generation effect
-  useEffect(() => {
-    const generateCode = () => {
-      const currentCode = codeTemplates[currentTemplate]
-      
-      if (!isDeleting) {
-        // Typing effect
-        if (charIndex < currentCode.length) {
-          setCodeContent(currentCode.slice(0, charIndex + 1))
-          setCharIndex(prev => prev + 1)
-          setCurrentLine(currentCode.slice(0, charIndex + 1).split('\n').length - 1)
-        } else {
-          // Start deleting after a pause
-          setTimeout(() => setIsDeleting(true), 2000)
-        }
-      } else {
-        // Deleting effect
-        if (charIndex > 0) {
-          setCodeContent(currentCode.slice(0, charIndex - 1))
-          setCharIndex(prev => prev - 1)
-          setCurrentLine(currentCode.slice(0, charIndex - 1).split('\n').length - 1)
-        } else {
-          // Switch to next template
-          setIsDeleting(false)
-          setCurrentTemplate(prev => (prev + 1) % codeTemplates.length)
-          
-          // Generate card for completed code
-          const newCard = {
-            id: Date.now() + Math.random(),
-            title: getNodeTitle(currentTemplate),
-            code: currentCode,
-            timestamp: new Date().toLocaleTimeString()
-          }
-          setGeneratedCards(prev => {
-            const newCards = [newCard, ...prev]
-            return newCards.slice(0, 8) // Keep max 8 cards
-          })
-        }
-      }
-    }
-
-    const speed = isDeleting ? 30 : (Math.random() * 50 + 30) // Variable typing speed
-    const timer = setTimeout(generateCode, speed)
-    
-    return () => clearTimeout(timer)
-  }, [charIndex, isDeleting, currentTemplate])
-
-  // Generate card when activeNode changes
-  useEffect(() => {
-    if (activeNode !== null) {
-      const nodeCard = {
-        id: Date.now() + Math.random(),
-        title: getNodeTitle(activeNode),
-        code: codeTemplates[activeNode % codeTemplates.length],
-        timestamp: new Date().toLocaleTimeString()
-      }
-      setGeneratedCards(prev => {
-        // Check if card with same title already exists
-        const exists = prev.some(card => card.title === nodeCard.title)
-        if (!exists) {
-          const newCards = [nodeCard, ...prev]
-          return newCards.slice(0, 8)
-        }
-        return prev
-      })
-    }
-  }, [activeNode])
-
-  const getNodeTitle = (templateIndex: number) => {
-    const titles = [
-      'Protocol Core', 
-      'Feature Engine', 
-      'Pizza PoC', 
-      'Roadmap Engine', 
-      'Ecosystem Manager',
-      'Smart Contracts',
-      'DeFi Protocol'
-    ]
-    return titles[templateIndex] || 'Code Module'
-  }
-
-  return (
-    <div className="h-full bg-slate-900 text-green-400 font-mono text-sm overflow-hidden">
-      {/* Editor Header */}
-      <div className="bg-slate-800 border-b border-slate-700 p-3 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Terminal className="h-4 w-4 text-blue-400" />
-            <span className="text-blue-400">Bitora AI Agent</span>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          {isGenerating && (
-            <>
-              <Sparkles className="h-4 w-4 text-yellow-400 animate-pulse" />
-              <span className="text-yellow-400 text-xs">Generating...</span>
-            </>
-          )}
-          <Save className="h-4 w-4 text-slate-400" />
-        </div>
-      </div>
-
-      {/* Mobile Tabs */}
-      <div className="lg:hidden mb-4">
-        <div className="flex bg-slate-800 rounded-lg p-1">
-          <button
-            onClick={() => setMobileTab('code')}
-            className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${
-              mobileTab === 'code'
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Code Editor
-          </button>
-          <button
-            onClick={() => setMobileTab('modules')}
-            className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${
-              mobileTab === 'modules'
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Modules ({generatedCards.length})
-          </button>
-        </div>
-      </div>
-
-      <div className="flex flex-col lg:flex-row h-full min-h-0">
-        {/* Code Editor */}
-        <div className={`flex-1 p-2 sm:p-4 overflow-auto h-64 sm:h-80 lg:min-h-full bg-slate-900 ${
-          mobileTab === 'code' ? 'block' : 'hidden lg:block'
-        }`}>
-          <div className="flex h-full min-h-60 sm:min-h-76">
-            {/* Line Numbers */}
-            <div className="w-8 sm:w-10 bg-slate-800 border-r border-slate-700 text-slate-500 text-right pr-2 select-none flex-shrink-0 overflow-hidden">
-              {codeContent.split('\n').map((_, i) => (
-                <div key={i} className={`leading-5 sm:leading-6 text-xs sm:text-sm py-0.5 ${i === currentLine && isGenerating ? 'text-yellow-400' : ''}`}>
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-            
-            {/* Code Content */}
-            <div className="flex-1 overflow-auto p-2 sm:p-3">
-              <pre className="leading-5 sm:leading-6">
-                <code className="text-green-400 text-xs sm:text-sm block whitespace-pre-wrap break-words">
-                  {codeContent}
-                  {isGenerating && (
-                    <span className="bg-green-400 text-black animate-pulse">█</span>
-                  )}
-                </code>
-              </pre>
-            </div>
-          </div>
-        </div>
-
-        {/* Generated Cards Sidebar */}
-        <div className={`w-full lg:w-80 bg-slate-800 border-t lg:border-t-0 lg:border-l border-slate-700 p-2 sm:p-3 lg:p-4 overflow-y-auto lg:max-h-none flex-shrink-0 ${
-          mobileTab === 'modules' ? 'block' : 'hidden lg:block'
-        }`}>
-          <div className="flex items-center space-x-2 mb-2 sm:mb-3">
-            <Code className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
-            <span className="text-blue-400 font-semibold text-xs sm:text-sm">Generated Modules</span>
-            <span className="text-slate-400 text-xs ml-auto">{generatedCards.length}</span>
-          </div>
-          
-          <div className="relative space-y-3">
-            {/* Enhanced Connecting Lines */}
-            {generatedCards.length > 1 && (
-              <div className="absolute left-4 sm:left-6 top-0 bottom-0 z-0">
-                {/* Main glowing line */}
-                <div className="absolute w-1 h-full bg-gradient-to-b from-cyan-400/20 via-blue-500/40 via-purple-500/40 to-emerald-400/20 rounded-full" />
-                <div className="absolute w-0.5 h-full bg-gradient-to-b from-cyan-300 via-blue-400 via-purple-400 to-emerald-300 rounded-full left-0.25 shadow-lg shadow-blue-500/50" />
-                
-                {/* Animated energy pulses */}
-                <motion.div
-                  className="absolute w-3 h-8 bg-gradient-to-b from-cyan-400 to-transparent rounded-full -left-1 blur-sm"
-                  animate={{
-                    y: [0, 400],
-                    opacity: [0, 1, 1, 0]
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <motion.div
-                  className="absolute w-2 h-6 bg-gradient-to-b from-blue-400 to-transparent rounded-full -left-0.5 blur-sm"
-                  animate={{
-                    y: [0, 400],
-                    opacity: [0, 1, 1, 0]
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1.5
-                  }}
-                />
-                <motion.div
-                  className="absolute w-2.5 h-7 bg-gradient-to-b from-purple-400 to-transparent rounded-full -left-0.75 blur-sm"
-                  animate={{
-                    y: [0, 400],
-                    opacity: [0, 1, 1, 0]
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 3
-                  }}
-                />
-                
-                {/* Flowing particles */}
-                <motion.div
-                  className="absolute w-1.5 h-1.5 bg-cyan-300 rounded-full -left-0.25 shadow-lg shadow-cyan-300/80"
-                  animate={{
-                    y: [0, 400],
-                    opacity: [0, 1, 0],
-                    scale: [0.5, 1, 0.5]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                <motion.div
-                  className="absolute w-1 h-1 bg-blue-300 rounded-full left-0 shadow-md shadow-blue-300/60"
-                  animate={{
-                    y: [0, 400],
-                    opacity: [0, 1, 0],
-                    scale: [0.3, 1, 0.3]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: 1
-                  }}
-                />
-                <motion.div
-                  className="absolute w-1.5 h-1.5 bg-emerald-300 rounded-full -left-0.25 shadow-lg shadow-emerald-300/80"
-                  animate={{
-                    y: [0, 400],
-                    opacity: [0, 1, 0],
-                    scale: [0.5, 1, 0.5]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: 2
-                  }}
-                />
-              </div>
-            )}
-            
-            <AnimatePresence>
-              {generatedCards.map((card, index) => (
-                <div key={card.id} className="relative z-10">
-                  {/* Enhanced Connection Node */}
-                    {index < generatedCards.length && (
-                      <div className="absolute left-2.5 sm:left-4.5 top-4 sm:top-6 w-3 h-3 sm:w-4 sm:h-4 z-20">
-                       {/* Outer glow ring */}
-                       <motion.div
-                         className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur-sm"
-                         animate={{
-                           scale: [1, 1.8, 1],
-                           opacity: [0.3, 0.8, 0.3]
-                         }}
-                         transition={{
-                           duration: 2.5,
-                           repeat: Infinity,
-                           delay: index * 0.4
-                         }}
-                       />
-                       {/* Inner core */}
-                       <div className="absolute inset-1 bg-gradient-to-br from-cyan-300 to-blue-400 rounded-full shadow-lg shadow-blue-400/60" />
-                       {/* Center dot */}
-                       <div className="absolute inset-2 bg-white rounded-full" />
-                       {/* Pulse effect */}
-                       <motion.div
-                         className="absolute inset-0 border-2 border-cyan-300 rounded-full"
-                         animate={{
-                           scale: [1, 2, 1],
-                           opacity: [0.8, 0, 0.8]
-                         }}
-                         transition={{
-                           duration: 2,
-                           repeat: Infinity,
-                           delay: index * 0.3
-                         }}
-                       />
-                     </div>
-                   )}
-                  
-                  <motion.div
-                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                    className="ml-6 sm:ml-8 bg-slate-700 border border-slate-600 rounded-lg p-2 sm:p-3 cursor-pointer hover:bg-slate-600 hover:border-blue-500/50 transition-all duration-200 group relative"
-                    onClick={() => {
-                      // Map card title to correct activeNode
-                      const titleToNodeMap = {
-                        'Protocol Core': 0,
-                        'Feature Engine': 1, 
-                        'Pizza PoC': 2,
-                        'Roadmap Engine': 3,
-                        'Ecosystem Manager': 4,
-                        'Smart Contracts': 1, // Map to Features
-                        'DeFi Protocol': 1 // Map to Features
-                      }
-                      const targetNode = titleToNodeMap[card.title as keyof typeof titleToNodeMap] ?? 0
-                      setActiveNode(targetNode)
-                    }}
-                  >
-                    {/* Card Status Indicator */}
-                     <div className="absolute -left-1 sm:-left-2 top-2 sm:top-3 w-0.5 sm:w-1 h-6 sm:h-8 bg-gradient-to-b from-blue-400 to-green-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
-                    
-                    <div className="flex items-center justify-between mb-1 sm:mb-2">
-                       <span className="text-white font-medium text-xs sm:text-sm group-hover:text-blue-300 truncate">{card.title}</span>
-                       <span className="text-slate-400 text-xs ml-2 flex-shrink-0">{card.timestamp}</span>
-                     </div>
-                     <div className="text-green-400 text-xs font-mono bg-slate-800 p-1.5 sm:p-2 rounded overflow-hidden relative">
-                       <div className="truncate text-xs">{card.code?.split('\n')[0] || 'Loading...'}</div>
-                       <div className="text-slate-500 truncate text-xs hidden sm:block">{card.code?.split('\n')[1] || '...'}</div>
-                       <div className="absolute bottom-0 right-0 bg-gradient-to-l from-slate-800 to-transparent px-1 sm:px-2 text-slate-500 text-xs">...</div>
-                     </div>
-                    
-                    {/* Process Step Number */}
-                     <div className="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
-                       {index + 1}
-                     </div>
-                  </motion.div>
-                </div>
-              ))}
-            </AnimatePresence>
-          </div>
-          
-          {generatedCards.length === 0 && (
-            <div className="text-slate-500 text-center text-sm mt-8">
-              <Code className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p>Click navigation items to generate code modules</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// 3D Scene Component (Simplified)
-function Scene({ activeNode, setActiveNode }: any) {
-  return (
-    <div className="h-full">
-      <AICodeEditor activeNode={activeNode} setActiveNode={setActiveNode} />
-    </div>
-  )
-}
-
-export default function BitoraLanding() {
-  const [activeNode, setActiveNode] = useState<number | null>(0)
+export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [stats, setStats] = useState({
-    btoPrice: 0.4523,
-    validators: 147,
-    txVolume: 25847,
-    tokensCreated: 1267,
-    posLocations: 87,
-    marketCap: 45234567,
-    countries: 14,
-  })
-
-  // Loading sequence - remove the timer, let terminal control it
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setIsLoading(false), 6000)
-  //   return () => clearTimeout(timer)
-  // }, [])
 
   const handleLoadingComplete = () => {
     setIsLoading(false)
   }
 
-  // Animate stats
-  useEffect(() => {
-    if (!isLoading) {
-      const interval = setInterval(() => {
-        setStats((prev) => ({
-          ...prev,
-          btoPrice: +(Math.random() * 0.1 + 0.45).toFixed(4),
-          validators: Math.floor(Math.random() * 10 + 145),
-          txVolume: Math.floor(Math.random() * 1000 + 25000),
-          countries: Math.floor(Math.random() * 3 + 12),
-        }))
-      }, 3000)
-      return () => clearInterval(interval)
-    }
-  }, [isLoading])
-
-  const getNodeContent = (nodeId: number | null) => {
-    switch (nodeId) {
-      case 0:
-        return {
-          title: "Bitora Protocol",
-          subtitle: "Next-Generation Layer 1 Blockchain",
-          description:
-            "Bitora is a next-generation Layer 1 blockchain built for real-world usage, crypto-native systems, and regulated institutional operations. It enables token creation, real-time trading, retail payments, and fiat compliance—all on-chain.",
-          features: [
-            "Built using Cosmos SDK with validator scoring",
-            "Fast finality and native staking",
-            "Gas token is $BTO",
-            "Real-world integration ready",
-          ],
-        }
-      case 1:
-        return {
-          title: "Core Features",
-          subtitle: "Modular Infrastructure for Next-Gen Finance",
-          description:
-            "Comprehensive blockchain infrastructure designed for diverse use cases, from token creation to compliance.",
-          features: [
-            "Token Generation Engine with compliance templates",
-            "Real-World POS System for physical stores",
-            "Internal and External Exchange integration",
-            "Two-tier Governance with quadratic voting",
-            "Built-in Compliance Layer with KYC/AML",
-            "Cross-chain compatibility",
-          ],
-        }
-      case 2:
-        return {
-          title: "Pizza Proof-of-Concept",
-          subtitle: "Real-World Blockchain Implementation",
-          description:
-            "Pizza provides the ideal proof-of-use case, demonstrating high transaction volume economics and real-world utility.",
-          features: [
-            "High transaction volume, low margin economics",
-            "Origin of crypto payments (Bitcoin Pizza, 2010)",
-            "Each sale triggers token burns and yield distribution",
-            "Compliance reporting built-in",
-            "Pizza is the benchmark, not the business",
-          ],
-        }
-      case 3:
-        return {
-          title: "Development Roadmap",
-          subtitle: "Protocol Evolution Timeline",
-          description: "Strategic development phases leading to global blockchain adoption and regulatory compliance.",
-          features: [
-            "2025: Mainnet Live, $BTO Launch, DEX Active",
-            "2025: Pizza Stores in Australia/New Zealand",
-            "2026: Asia-Pacific Expansion",
-            "2026: National Stablecoins (AUDx, PHPx, etc.)",
-            "2027+: US and European Regulatory Integration",
-            "2027+: Treasury-backed deflation protocol",
-          ],
-        }
-      case 4:
-        return {
-          title: "Ecosystem & Community",
-          subtitle: "Built for Diverse Participants",
-          description:
-            "Comprehensive ecosystem supporting builders, traders, retailers, institutions, and governments.",
-          features: [
-            "Developer Documentation and Tools",
-            "Validator Network Participation",
-            "POS System Integration",
-            "Grant Programs for Builders",
-            "dApp Launch Platform",
-            "Governance Participation",
-          ],
-        }
-      default:
-        return {
-          title: "Welcome to Bitora",
-          subtitle: "Explore the 3D Interface",
-          description: "Click on the 3D nodes above to explore different aspects of the Bitora Protocol.",
-          features: ["Interactive 3D visualization", "Real-time blockchain data", "Comprehensive protocol overview"],
-        }
-    }
-  }
-
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-slate-900 relative overflow-hidden flex items-center justify-center">
-        <MatrixBackground />
-        <div className="text-center space-y-6 px-4">
-          <ModernLoader onComplete={handleLoadingComplete} />
-        </div>
-      </div>
-    )
+    return <TerminalLoader onComplete={handleLoadingComplete} />
   }
-
-  const nodeContent = getNodeContent(activeNode)
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
-      {/* Header */}
-      <header className="bg-slate-800/80 backdrop-blur-sm border-b border-slate-700 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Database className="h-8 w-8 text-blue-400" />
-              <div>
-                <div className="text-xl font-bold">Bitora Protocol</div>
-                <div className="text-xs text-slate-400 hidden sm:block">Layer 1 Blockchain Infrastructure</div>
-              </div>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-6">
-              <div className="flex flex-wrap items-center gap-2 text-sm">
-                {['Protocol', 'Features', 'Pizza', 'Roadmap', 'Ecosystem'].map((item, index) => (
-                  <button
-                    key={item}
-                    onClick={() => setActiveNode(index)}
-                    className={`px-3 py-1.5 rounded transition-colors flex-shrink-0 ${
-                      activeNode === index
-                        ? 'bg-blue-600 text-white'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-700'
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center space-x-4 text-sm border-l border-slate-600 pl-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span className="text-green-400">Live</span>
-                </div>
-                <span className="text-slate-400">BTO: ${stats.btoPrice}</span>
-              </div>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-400 hover:text-white"
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+    <div className="min-h-screen bg-black text-white">
+      <MatrixBackground />
+      <Navigation />
+      <HeroSection />
+      <WhatIsBitoraSection />
+      <FeaturesSection />
+      <WhyPizzaSection />
+      <RoadmapSection />
+      <TargetAudiencesSection />
+      <LiveStatsSection />
+      <EcosystemResourceCenter />
+      <NewsroomSection />
+      <WalletSection />
+      <BTXSection />
+      <section id="demo" className="relative py-12 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="text-center mb-8 sm:mb-16">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+              <span className="block sm:inline">[ROADMAP_</span>
+              <span className="block sm:inline">2025-2027]</span>
+            </h2>
+            <p className="text-sm sm:text-base lg:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4">
+              Watch our Bitora Protocol implementation in action.
+            </p>
           </div>
-
-          {/* Mobile Menu */}
-          <AnimatePresence>
-            {isMobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="lg:hidden mt-4 pt-4 border-t border-slate-700"
-              >
-                <div className="space-y-3">
-                  <div className="flex flex-wrap gap-2">
-                    {['Protocol', 'Features', 'Pizza', 'Roadmap', 'Ecosystem'].map((item, index) => (
-                      <button
-                        key={item}
-                        onClick={() => {
-                          setActiveNode(index)
-                          setIsMobileMenuOpen(false)
-                        }}
-                        className={`px-3 py-2 rounded text-sm transition-colors flex-shrink-0 ${
-                          activeNode === index
-                            ? 'bg-blue-600 text-white'
-                            : 'text-slate-400 hover:text-white hover:bg-slate-700'
-                        }`}
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between text-sm pt-2 border-t border-slate-700">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-green-400">Live</span>
-                    </div>
-                    <span className="text-slate-400">BTO: ${stats.btoPrice}</span>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <CodeDemo />
         </div>
-      </header>
-
-      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
-        {/* 3D Scene - Desktop Only */}
-        <div className="hidden lg:block lg:w-1/2 relative bg-slate-900 min-h-0 overflow-hidden">
-          <Scene activeNode={activeNode} setActiveNode={setActiveNode} />
-
-          {/* AI Agent Info */}
-          <div className="absolute bottom-4 left-4 bg-slate-800/90 backdrop-blur-sm border border-slate-600 rounded-lg p-3 text-xs">
-            <div className="flex items-center space-x-2 mb-2">
-              <Sparkles className="h-4 w-4 text-yellow-400" />
-              <span className="text-yellow-400 font-semibold">Bitora AI Agent</span>
-            </div>
-            <div className="space-y-1 text-slate-300">
-              <div>• Auto-generates protocol code</div>
-              <div className="hidden sm:block">• Real-time module creation</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile AI Code Editor */}
-        <div className="lg:hidden">
-          <AICodeEditor activeNode={activeNode} setActiveNode={setActiveNode} />
-        </div>
-
-        {/* Content Panel */}
-        <div className="w-full lg:w-1/2 p-4 lg:p-8 overflow-y-auto min-h-96 sm:min-h-[32rem] lg:min-h-0 max-h-screen">
-          <motion.div
-            key={activeNode}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
-            {/* Header */}
-            <div>
-              <h1 className="text-2xl lg:text-4xl font-bold text-white mb-2">{nodeContent.title}</h1>
-              <p className="text-lg text-blue-400 mb-4">{nodeContent.subtitle}</p>
-              <p className="text-slate-300 leading-relaxed">{nodeContent.description}</p>
-            </div>
-
-            {/* Features */}
-            <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Key Features</h3>
-              <div className="space-y-3">
-                {nodeContent.features.map((feature, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex items-start space-x-3"
-                  >
-                    <ChevronRight className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300">{feature}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-              {[
-                { label: "BTO Price", value: `$${stats.btoPrice}`, icon: <TrendingUp className="h-5 w-5" /> },
-                { label: "Validators", value: stats.validators, icon: <Network className="h-5 w-5" /> },
-                { label: "Daily TX", value: stats.txVolume.toLocaleString(), icon: <Zap className="h-5 w-5" /> },
-                { label: "Countries", value: stats.countries, icon: <Globe className="h-5 w-5" /> },
-              ].map((stat, i) => (
-                <Card key={i} className="bg-slate-800 border-slate-700">
-                  <CardContent className="p-4">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <div className="text-blue-400">{stat.icon}</div>
-                      <div className="text-xs text-slate-400 uppercase">{stat.label}</div>
-                    </div>
-                    <div className="text-lg font-bold text-white">{stat.value}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                <Play className="mr-2 h-5 w-5" />
-                Launch Protocol
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-slate-600 text-slate-300 hover:bg-slate-800 bg-transparent"
-              >
-                <FileText className="mr-2 h-5 w-5" />
-                Read Whitepaper
-              </Button>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center space-x-4 pt-4 border-t border-slate-700">
-              <span className="text-slate-400 text-sm">Connect:</span>
-              <div className="flex space-x-3">
-                {[
-                  { icon: <Github className="h-5 w-5" />, href: "#" },
-                  { icon: <Twitter className="h-5 w-5" />, href: "#" },
-                  { icon: <MessageCircle className="h-5 w-5" />, href: "#" },
-                ].map((social, i) => (
-                  <a
-                    key={i}
-                    href={social.href}
-                    className="text-slate-400 hover:text-blue-400 transition-colors p-2 hover:bg-slate-800 rounded"
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
+      </section>
+      <AboutSection />
+      <CTASection />
+      <Footer />
     </div>
   )
 }
