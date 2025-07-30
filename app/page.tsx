@@ -168,6 +168,68 @@ function Navigation() {
   )
 }
 
+// Live Stats Component
+function LiveStats() {
+  const [stats, setStats] = useState({
+    btoPrice: 0.00,
+    validators: 0,
+    txVolume: 0,
+    tokensCreated: 0,
+    posLocations: 0,
+    marketCap: 0,
+    countries: 0
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        btoPrice: 0.0847 + (Math.random() - 0.5) * 0.001,
+        validators: 2156 + Math.floor(Math.random() * 10),
+        txVolume: 12847 + Math.floor(Math.random() * 1000),
+        tokensCreated: 1247 + Math.floor(Math.random() * 5),
+        posLocations: 89 + Math.floor(Math.random() * 3),
+        marketCap: 84700000 + Math.floor(Math.random() * 100000),
+        countries: 12 + Math.floor(Math.random() * 2)
+      }))
+    }, 2000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-blue-400 font-mono">${stats.btoPrice.toFixed(4)}</div>
+        <div className="text-xs text-slate-300">BTO Price</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-green-400 font-mono">{stats.validators.toLocaleString()}</div>
+        <div className="text-xs text-slate-300">Validators</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-cyan-400 font-mono">{stats.txVolume.toLocaleString()}</div>
+        <div className="text-xs text-slate-300">TX Volume</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-purple-400 font-mono">{stats.tokensCreated.toLocaleString()}</div>
+        <div className="text-xs text-slate-300">Tokens Created</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-orange-400 font-mono">{stats.posLocations}</div>
+        <div className="text-xs text-slate-300">POS Locations</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-yellow-400 font-mono">${(stats.marketCap / 1000000).toFixed(1)}M</div>
+        <div className="text-xs text-slate-300">Market Cap</div>
+      </div>
+      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-pink-400 font-mono">{stats.countries}</div>
+        <div className="text-xs text-slate-300">Countries</div>
+      </div>
+    </div>
+  )
+}
+
 // Hero Section Component
 function HeroSection() {
   return (
@@ -178,22 +240,35 @@ function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6">
-            The Future of
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"> Blockchain</span>
+          <div className="mb-6">
+            <div className="text-sm text-blue-400 font-mono mb-2">[PROTOCOL INITIALIZATION COMPLETE]</div>
+            <div className="text-xs text-slate-400 font-mono">BITORA LAYER 1 BLOCKCHAIN // STATUS: ONLINE</div>
+          </div>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 font-mono">
+            The Infrastructure Layer for
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent block"> Crypto-Natives, Retail Builders,</span>
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent"> and Sovereign Systems</span>
           </h1>
-          <p className="text-xl sm:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto">
-            Bitora Protocol revolutionizes blockchain technology with advanced Golang implementation, 
-            quantum-resistant security, and seamless DeFi integration.
+          <p className="text-xl sm:text-2xl text-slate-300 mb-8 max-w-4xl mx-auto font-mono">
+            Build anything. Trade instantly. Operate legally. Pay globally.
+            <span className="block text-blue-400 mt-2">Powered by the $BTO token on the Bitora Layer 1 chain.</span>
           </p>
+          
+          {/* Live Stats Ticker */}
+          <LiveStats />
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
-              <Rocket className="mr-2 h-5 w-5" />
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-mono">
+              <Terminal className="mr-2 h-5 w-5" />
               Launch App
             </Button>
-            <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg">
-              <Play className="mr-2 h-5 w-5" />
-              Watch Demo
+            <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg font-mono">
+              <FileText className="mr-2 h-5 w-5" />
+              Read Whitepaper
+            </Button>
+            <Button size="lg" variant="outline" className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white px-8 py-4 text-lg font-mono">
+              <Network className="mr-2 h-5 w-5" />
+              Join Ecosystem
             </Button>
           </div>
         </motion.div>
@@ -223,38 +298,65 @@ function HeroSection() {
   )
 }
 
+// What is Bitora Section
+function WhatIsBitoraSection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-8 font-mono">
+            [WHAT_IS_BITORA]
+          </h2>
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8 max-w-4xl mx-auto">
+            <p className="text-xl text-slate-300 leading-relaxed font-mono">
+              Bitora is a next-generation Layer 1 blockchain built for real-world usage, crypto-native systems, 
+              and regulated institutional operations. It enables token creation, real-time trading, retail payments, 
+              and fiat compliance—all on-chain.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 // Features Section Component
 function FeaturesSection() {
   const features = [
     {
-      icon: <Shield className="h-8 w-8" />,
-      title: "Quantum-Resistant Security",
-      description: "Advanced cryptographic protocols protect against future quantum computing threats."
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Lightning Fast",
-      description: "Process over 10,000 transactions per second with sub-second finality."
-    },
-    {
       icon: <Code className="h-8 w-8" />,
-      title: "Golang Implementation",
-      description: "Built with Go for superior performance, reliability, and developer experience."
-    },
-    {
-      icon: <Network className="h-8 w-8" />,
-      title: "Interoperable",
-      description: "Seamlessly connect with other blockchains through advanced bridge technology."
+      title: "Token Generation Engine",
+      description: "No-code token creation with compliance-ready templates including vesting, DAOs, and stablecoin logic."
     },
     {
       icon: <Database className="h-8 w-8" />,
-      title: "Scalable Architecture",
-      description: "Horizontal scaling capabilities to handle enterprise-level workloads."
+      title: "Layer 1 Blockchain",
+      description: "Built using Cosmos SDK with validator scoring, fast finality, and native staking. The gas token is $BTO."
+    },
+    {
+      icon: <Terminal className="h-8 w-8" />,
+      title: "Real-World POS System",
+      description: "On-chain payments at physical stores using crypto or fiat, with built-in yield logic and loyalty token mechanics."
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8" />,
+      title: "Internal and External Exchanges",
+      description: "Native DEX (BTX) with fiat bridges and upcoming CEX listings."
     },
     {
       icon: <Users className="h-8 w-8" />,
-      title: "Developer Friendly",
-      description: "Comprehensive SDKs, documentation, and tools for rapid development."
+      title: "Governance Framework",
+      description: "Two-tier governance model with quadratic voting and council veto protection."
+    },
+    {
+      icon: <Shield className="h-8 w-8" />,
+      title: "Compliance Layer",
+      description: "Jurisdictional KYC, AML scoring, and real-time sanctions enforcement, built into the protocol."
     }
   ]
 
@@ -262,11 +364,11 @@ function FeaturesSection() {
     <section id="features" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-            Powerful Features
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [CORE_FEATURES]
           </h2>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Discover the cutting-edge capabilities that make Bitora the most advanced blockchain protocol.
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto font-mono">
+            Modular infrastructure components powering the next generation of financial systems.
           </p>
         </div>
 
@@ -300,69 +402,433 @@ function FeaturesSection() {
   )
 }
 
-// Technology Section Component
-function TechnologySection() {
+// Why Pizza First Section
+function WhyPizzaSection() {
   return (
-    <section id="technology" className="relative py-20 px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-            Built with Cutting-Edge Technology
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [WHY_PIZZA_FIRST]
           </h2>
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Our advanced Golang implementation ensures maximum performance and reliability.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-6">Why Golang?</h3>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-white">Superior Performance</h4>
-                  <p className="text-slate-300">Compiled language with garbage collection for optimal speed and memory management.</p>
+            <div className="bg-slate-800/50 border border-orange-500/20 rounded-lg p-8">
+              <h3 className="text-2xl font-bold text-orange-400 mb-6 font-mono">Pizza provides the ideal proof-of-use:</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-slate-300 font-mono">High transaction volume and low margin economics</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-slate-300 font-mono">Origin of crypto payments (Bitcoin Pizza, 2010)</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <div>
+                    <p className="text-slate-300 font-mono">Each pizza sale triggers token burns, yield distribution, and compliance reporting</p>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-white">Concurrent by Design</h4>
-                  <p className="text-slate-300">Built-in goroutines enable massive parallel processing capabilities.</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <CheckCircle className="h-6 w-6 text-green-400 mt-1 flex-shrink-0" />
-                <div>
-                  <h4 className="font-semibold text-white">Enterprise Ready</h4>
-                  <p className="text-slate-300">Proven reliability in production environments at scale.</p>
-                </div>
+              <div className="mt-8 p-4 bg-orange-900/20 border border-orange-500/30 rounded-lg">
+                <p className="text-orange-300 font-mono text-center font-bold">
+                  Pizza is not the business. It's the first benchmark.
+                </p>
               </div>
             </div>
           </div>
           
           <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-lg font-semibold text-white">Network Statistics</h4>
+              <h4 className="text-lg font-semibold text-white font-mono">Pizza Store Metrics</h4>
               <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
             </div>
             <div className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-slate-300">TPS</span>
-                <span className="text-blue-400 font-mono">12,847</span>
+                <span className="text-slate-300 font-mono">Daily Orders</span>
+                <span className="text-orange-400 font-mono">847</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-300">Block Time</span>
-                <span className="text-blue-400 font-mono">0.8s</span>
+                <span className="text-slate-300 font-mono">BTO Burned</span>
+                <span className="text-red-400 font-mono">1,247</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-300">Validators</span>
-                <span className="text-blue-400 font-mono">2,156</span>
+                <span className="text-slate-300 font-mono">Yield Distributed</span>
+                <span className="text-green-400 font-mono">$2,156</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-300">Network Uptime</span>
-                <span className="text-green-400 font-mono">99.97%</span>
+                <span className="text-slate-300 font-mono">Compliance Reports</span>
+                <span className="text-blue-400 font-mono">24/7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Roadmap Section
+function RoadmapSection() {
+  const roadmapItems = [
+    {
+      year: "2025",
+      items: [
+        "Bitora Mainnet Live",
+        "$BTO Launched",
+        "Internal DEX Active",
+        "Pizza Stores in AU/NZ"
+      ],
+      color: "blue"
+    },
+    {
+      year: "2026",
+      items: [
+        "Asia-Pacific Expansion",
+        "National Stablecoins (AUDx, PHPx, etc.)",
+        "Institutional Validator Onboarding"
+      ],
+      color: "cyan"
+    },
+    {
+      year: "2027+",
+      items: [
+        "U.S. and European Regulatory Integration",
+        "Full Retail Sector Expansion",
+        "Treasury-backed deflation protocol activated"
+      ],
+      color: "purple"
+    }
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [ROADMAP]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {roadmapItems.map((phase, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              className={`bg-slate-800/50 border border-${phase.color}-500/20 rounded-lg p-6`}
+            >
+              <h3 className={`text-2xl font-bold text-${phase.color}-400 mb-6 font-mono`}>
+                {phase.year}
+              </h3>
+              <div className="space-y-3">
+                {phase.items.map((item, itemIndex) => (
+                  <div key={itemIndex} className="flex items-start space-x-3">
+                    <div className={`w-2 h-2 bg-${phase.color}-400 rounded-full mt-2 flex-shrink-0`}></div>
+                    <p className="text-slate-300 font-mono text-sm">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Target Audiences Section
+function TargetAudiencesSection() {
+  const audiences = [
+    {
+      title: "Builders",
+      description: "Deploy tokens, DAOs, or payment tools",
+      icon: "🔧",
+      color: "blue"
+    },
+    {
+      title: "Traders",
+      description: "Swap assets via DEX/CEX, interact with fiat bridges",
+      icon: "📈",
+      color: "green"
+    },
+    {
+      title: "Retailers",
+      description: "Accept crypto legally, settle in fiat, deploy loyalty programs",
+      icon: "🏪",
+      color: "orange"
+    },
+    {
+      title: "Institutions",
+      description: "Issue regulated assets or stablecoins",
+      icon: "🏛️",
+      color: "purple"
+    },
+    {
+      title: "Governments",
+      description: "Tokenize grants, ID systems, and public revenue",
+      icon: "🏛️",
+      color: "cyan"
+    }
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [TARGET_AUDIENCES]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {audiences.map((audience, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`bg-slate-800/50 border border-${audience.color}-500/20 rounded-lg p-6 hover:border-${audience.color}-500/40 transition-colors`}
+            >
+              <div className="text-center">
+                <div className="text-4xl mb-4">{audience.icon}</div>
+                <h3 className={`text-xl font-bold text-${audience.color}-400 mb-3 font-mono`}>
+                  {audience.title}
+                </h3>
+                <p className="text-slate-300 font-mono text-sm">
+                  {audience.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Ecosystem Resource Center Section
+function EcosystemResourceCenter() {
+  const resources = [
+    { title: "Developer Documentation", icon: "📚", color: "blue" },
+    { title: "Run a Validator", icon: "⚡", color: "green" },
+    { title: "Use POS System", icon: "💳", color: "orange" },
+    { title: "Apply for Grants", icon: "💰", color: "purple" },
+    { title: "Launch dApps", icon: "🚀", color: "cyan" },
+    { title: "Join Governance", icon: "🗳️", color: "pink" }
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [ECOSYSTEM_RESOURCE_CENTER]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {resources.map((resource, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`bg-slate-800/50 border border-${resource.color}-500/20 rounded-lg p-6 hover:border-${resource.color}-500/40 transition-colors cursor-pointer group`}
+            >
+              <div className="text-center">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{resource.icon}</div>
+                <h3 className={`text-lg font-bold text-${resource.color}-400 font-mono group-hover:text-${resource.color}-300 transition-colors`}>
+                  {resource.title}
+                </h3>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Bitora Newsroom Section
+function NewsroomSection() {
+  const newsCategories = [
+    "Protocol Announcements",
+    "Governance and DAO Votes", 
+    "Wallet & POS Launches",
+    "Real-World Expansion Reports",
+    "Exchange Listings",
+    "Strategic Partnerships",
+    "Research & Economics"
+  ]
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [BITORA_NEWSROOM]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {newsCategories.map((category, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 hover:border-blue-500/40 transition-colors cursor-pointer"
+            >
+              <h3 className="text-blue-400 font-mono text-sm font-bold">
+                {category}
+              </h3>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-mono px-8 py-3 rounded-lg transition-colors">
+            View All Updates
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Bitora Wallet Section
+function WalletSection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [WALLET_FOR_REAL_WORLD_+_WEB3]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Purpose-built wallet with:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Non-custodial storage for $BTO and all TGE tokens</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Biometric login, PIN, and delegated recovery</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">On-chain loyalty tokens, coupons, and receipts</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-blue-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Integrated fiat balance display (via off-ramp APIs)</p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-mono px-8 py-3 rounded-lg transition-colors">
+                Download Wallet (Coming Soon)
+              </button>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <div className="text-6xl mb-4">📱</div>
+              <h4 className="text-xl font-bold text-blue-400 mb-4 font-mono">Mobile UI Mockup</h4>
+              <div className="bg-slate-900/50 rounded-lg p-4 font-mono text-sm">
+                <div className="text-green-400 mb-2">Balance: $2,847.32</div>
+                <div className="text-blue-400 mb-2">BTO: 15,247 tokens</div>
+                <div className="text-orange-400 mb-2">Loyalty Points: 847</div>
+                <div className="text-purple-400">Recent: Pizza Store #42</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// BTX Trading Engine Section
+function BTXSection() {
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [BTX_–_BITORA_TRADING_ENGINE]
+          </h2>
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto font-mono">
+            Trade Instantly with BTX
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Bitora's native decentralized exchange:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">No-gas token swaps</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">AMM-based architecture</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Fee distribution to treasury and stakers</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-green-400 rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-slate-300 font-mono">Jurisdiction-gated listings for compliance</p>
+              </div>
+            </div>
+            <div className="mt-8">
+              <button className="bg-green-600 hover:bg-green-700 text-white font-mono px-8 py-3 rounded-lg transition-colors">
+                Launch DEX
+              </button>
+            </div>
+          </div>
+          
+          <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <div className="text-6xl mb-4">⚡</div>
+              <h4 className="text-xl font-bold text-green-400 mb-4 font-mono">BTX Live Stats</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">24h Volume</span>
+                  <span className="text-green-400 font-mono">$2.4M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">Active Pairs</span>
+                  <span className="text-green-400 font-mono">47</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">Total Liquidity</span>
+                  <span className="text-green-400 font-mono">$12.8M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-300 font-mono">Avg Swap Time</span>
+                  <span className="text-green-400 font-mono">0.3s</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1044,104 +1510,145 @@ function CodeDemo() {
   )
 }
 
-// About Section Component
+// Live Stats Section (Enhanced)
+function LiveStatsSection() {
+  const [stats, setStats] = useState({
+    tokensCreated: 1247,
+    posLocations: 42,
+    btoPrice: 2.47,
+    validatorsOnline: 156,
+    dailyTxVolume: 847000,
+    countriesOperating: 3
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        tokensCreated: prev.tokensCreated + Math.floor(Math.random() * 3),
+        posLocations: prev.posLocations + (Math.random() > 0.95 ? 1 : 0),
+        btoPrice: prev.btoPrice + (Math.random() - 0.5) * 0.1,
+        validatorsOnline: prev.validatorsOnline + Math.floor(Math.random() * 2 - 1),
+        dailyTxVolume: prev.dailyTxVolume + Math.floor(Math.random() * 1000),
+        countriesOperating: prev.countriesOperating
+      }))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [LIVE_STATS]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
+            <h3 className="text-blue-400 font-mono text-sm mb-2">Tokens Created</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.tokensCreated.toLocaleString()}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-6">
+            <h3 className="text-green-400 font-mono text-sm mb-2">Active POS Locations</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.posLocations}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-orange-500/20 rounded-lg p-6">
+            <h3 className="text-orange-400 font-mono text-sm mb-2">$BTO Price</h3>
+            <div className="text-3xl font-bold text-white font-mono">${stats.btoPrice.toFixed(2)}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-purple-500/20 rounded-lg p-6">
+            <h3 className="text-purple-400 font-mono text-sm mb-2">Validators Online</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.validatorsOnline}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-cyan-500/20 rounded-lg p-6">
+            <h3 className="text-cyan-400 font-mono text-sm mb-2">Daily TX Volume</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.dailyTxVolume.toLocaleString()}</div>
+          </div>
+          <div className="bg-slate-800/50 border border-pink-500/20 rounded-lg p-6">
+            <h3 className="text-pink-400 font-mono text-sm mb-2">Countries Operating</h3>
+            <div className="text-3xl font-bold text-white font-mono">{stats.countriesOperating}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// About Section Component (Updated for Bitora)
 function AboutSection() {
   return (
     <section id="about" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-              About Bitora Protocol
-            </h2>
-            <p className="text-xl text-slate-300 mb-6">
-              Bitora represents the next evolution in blockchain technology, combining the power of Golang 
-              with innovative consensus mechanisms and quantum-resistant cryptography.
-            </p>
-            <p className="text-lg text-slate-300 mb-8">
-              Our mission is to create a blockchain infrastructure that can scale to meet the demands of 
-              global adoption while maintaining the highest standards of security and decentralization.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                <FileText className="mr-2 h-4 w-4" />
-                Read Whitepaper
-              </Button>
-              <Button variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white">
-                <Github className="mr-2 h-4 w-4" />
-                View on GitHub
-              </Button>
-            </div>
-          </div>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+            [PROTOCOL_INFRASTRUCTURE]
+          </h2>
+          <p className="text-xl text-slate-300 max-w-4xl mx-auto font-mono">
+            Built using Cosmos SDK with validator scoring, fast finality, and native staking. The gas token is $BTO.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Card className="bg-slate-800/50 border-blue-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Globe className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2 font-mono">Layer 1 Blockchain</h3>
+              <p className="text-slate-300 font-mono text-sm">Built using Cosmos SDK with validator scoring and fast finality</p>
+            </CardContent>
+          </Card>
           
-          <div className="space-y-6">
-            <Card className="bg-slate-800/50 border-blue-500/20">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <Globe className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">Global Network</h3>
-                    <p className="text-slate-300">Distributed across 50+ countries</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-slate-800/50 border-blue-500/20">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                    <Shield className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">Security First</h3>
-                    <p className="text-slate-300">Quantum-resistant from day one</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="bg-slate-800/50 border-blue-500/20">
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                    <Code className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">Open Source</h3>
-                    <p className="text-slate-300">Transparent and community-driven</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="bg-slate-800/50 border-green-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 bg-green-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2 font-mono">Compliance Layer</h3>
+              <p className="text-slate-300 font-mono text-sm">Jurisdictional KYC, AML scoring, and real-time sanctions enforcement</p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-slate-800/50 border-purple-500/20">
+            <CardContent className="p-6 text-center">
+              <div className="w-16 h-16 bg-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Code className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2 font-mono">Governance Framework</h3>
+              <p className="text-slate-300 font-mono text-sm">Two-tier governance model with quadratic voting and council veto protection</p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
   )
 }
 
-// Call to Action Section
+// Call to Action Section (Updated for Bitora)
 function CTASection() {
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-          Ready to Build the Future?
+        <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+          [PROTOCOL_ACTIVATION]
         </h2>
-        <p className="text-xl text-slate-300 mb-8">
-          Join thousands of developers building on the most advanced blockchain protocol.
+        <p className="text-xl text-slate-300 mb-8 font-mono">
+          Build anything. Trade instantly. Operate legally. Pay globally.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
-            <Rocket className="mr-2 h-5 w-5" />
-            Start Building
+          <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-mono">
+            <Terminal className="mr-2 h-5 w-5" />
+            Launch App
           </Button>
-          <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg">
-            <MessageCircle className="mr-2 h-5 w-5" />
-            Join Community
+          <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-4 text-lg font-mono">
+            <FileText className="mr-2 h-5 w-5" />
+            Read Whitepaper
+          </Button>
+          <Button size="lg" variant="outline" className="border-green-400 text-green-400 hover:bg-green-400 hover:text-white px-8 py-4 text-lg font-mono">
+            <Network className="mr-2 h-5 w-5" />
+            Join Ecosystem
           </Button>
         </div>
       </div>
@@ -1149,7 +1656,7 @@ function CTASection() {
   )
 }
 
-// Footer Component
+// Footer Component (Updated for Bitora)
 function Footer() {
   return (
     <footer className="relative border-t border-slate-800 py-12 px-4 sm:px-6 lg:px-8">
@@ -1158,12 +1665,12 @@ function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">B</span>
+                <span className="text-white font-bold text-sm font-mono">B</span>
               </div>
-              <span className="text-white font-bold text-xl">Bitora</span>
+              <span className="text-white font-bold text-xl font-mono">[BITORA_PROTOCOL]</span>
             </div>
-            <p className="text-slate-300 mb-4">
-              The future of blockchain technology, built with Golang for maximum performance and security.
+            <p className="text-slate-300 mb-4 font-mono">
+              The Infrastructure Layer for Crypto-Natives, Retail Builders, and Sovereign Systems.
             </p>
             <div className="flex space-x-4">
               <Button size="sm" variant="ghost" className="text-slate-400 hover:text-white">
@@ -1179,38 +1686,38 @@ function Footer() {
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4">Product</h3>
+            <h3 className="text-white font-semibold mb-4 font-mono">Protocol</h3>
             <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">API Reference</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">SDKs</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Whitepaper</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Terms & Compliance</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Governance Forum</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Ecosystem Partners</a></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
+            <h3 className="text-white font-semibold mb-4 font-mono">Network</h3>
             <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-white transition-colors">Whitepaper</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Support</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Twitter/X</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Telegram</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Discord</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">LinkedIn</a></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4">Company</h3>
+            <h3 className="text-white font-semibold mb-4 font-mono">Resources</h3>
             <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Contact & Media Kit</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Developer Documentation</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Run a Validator</a></li>
+              <li><a href="#" className="hover:text-white transition-colors font-mono">Apply for Grants</a></li>
             </ul>
           </div>
         </div>
         
         <div className="border-t border-slate-800 mt-8 pt-8 text-center">
-          <p className="text-slate-400">
+          <p className="text-slate-400 font-mono">
             © 2024 Bitora Protocol. All rights reserved.
           </p>
         </div>
@@ -1538,16 +2045,24 @@ export default function Home() {
       <MatrixBackground />
       <Navigation />
       <HeroSection />
+      <WhatIsBitoraSection />
       <FeaturesSection />
-      <TechnologySection />
+      <WhyPizzaSection />
+      <RoadmapSection />
+      <TargetAudiencesSection />
+      <LiveStatsSection />
+      <EcosystemResourceCenter />
+      <NewsroomSection />
+      <WalletSection />
+      <BTXSection />
       <section id="demo" className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="relative z-10 max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-              Live Coding Demo
+            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
+              [LIVE_CODING_DEMO]
             </h2>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-              Watch our Golang implementation in action.
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto font-mono">
+              Watch our Bitora Protocol implementation in action.
             </p>
           </div>
           <CodeDemo />
