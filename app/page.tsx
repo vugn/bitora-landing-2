@@ -113,58 +113,117 @@ function MatrixBackground() {
   )
 }
 
-// Navigation Component (Updated for Bitora)
+// Navigation Component (Updated for Bitora with enhanced design)
 function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+      setIsMenuOpen(false)
+    }
+  }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-b border-blue-500/20">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+      ? 'bg-slate-900/98 backdrop-blur-2xl border-b border-blue-500/30 shadow-lg shadow-blue-500/10'
+      : 'bg-slate-900/95 backdrop-blur-xl border-b border-blue-500/20'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm font-mono">B</span>
+          {/* Enhanced Logo */}
+          <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <div className="relative">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 via-cyan-400 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-110">
+                <span className="text-white font-bold text-sm font-mono">B</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse"></div>
             </div>
-            <span className="text-white font-bold text-lg sm:text-xl font-mono">[BITORA]</span>
+            <span className="text-white font-bold text-lg sm:text-xl font-mono group-hover:text-blue-300 transition-colors duration-300">
+              <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
+              <span className="sm:hidden">[BITORA]</span>
+            </span>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <a href="#features" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Protocol</a>
-            <a href="#demo" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Live Demo</a>
-            <a href="#about" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Infrastructure</a>
-            <a href="#ecosystem" className="text-slate-300 hover:text-white transition-colors font-mono text-sm">Ecosystem</a>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-sm px-4 py-2">
-              <Terminal className="mr-1 h-4 w-4" />
-              Launch App
-            </Button>
+          {/* Enhanced Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
+            {[
+              { id: 'features', label: 'Protocol', icon: '' },
+              { id: 'demo', label: 'Live Demo', icon: '' },
+              { id: 'about', label: 'Infrastructure', icon: '' },
+              { id: 'ecosystem', label: 'Ecosystem', icon: '' }
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className="relative px-3 py-2 text-slate-300 hover:text-white transition-all duration-300 font-mono text-sm group overflow-hidden rounded-lg"
+              >
+                <span className="relative z-10 flex items-center space-x-1">
+                  <span className="hidden lg:inline text-xs">{item.icon}</span>
+                  <span>{item.label}</span>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+              </button>
+            ))}
+            <div className="ml-4">
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-mono text-sm px-4 py-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
+                <Terminal className="mr-1 h-4 w-4" />
+                <span className="hidden lg:inline">Launch App</span>
+                <span className="lg:hidden">Launch</span>
+              </Button>
+            </div>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Enhanced Mobile Menu Button */}
           <button
-            className="md:hidden text-white p-2"
+            className="md:hidden text-white p-2 rounded-lg hover:bg-slate-800/50 transition-colors duration-300"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <div className="relative w-5 h-5">
+              <span className={`absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-1.5'}`}></span>
+              <span className={`absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`absolute block w-5 h-0.5 bg-current transform transition-all duration-300 ${isMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-1.5'}`}></span>
+            </div>
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-slate-700">
-            <div className="flex flex-col space-y-3">
-              <a href="#features" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Protocol</a>
-              <a href="#demo" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Live Demo</a>
-              <a href="#about" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Infrastructure</a>
-              <a href="#ecosystem" className="text-slate-300 hover:text-white transition-colors font-mono text-sm py-2">Ecosystem</a>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full font-mono mt-2">
+        {/* Enhanced Mobile Navigation */}
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-96 py-4' : 'max-h-0'}`}>
+          <div className="border-t border-slate-700/50">
+            <div className="flex flex-col space-y-1 pt-4">
+              {[
+                { id: 'features', label: 'Protocol', icon: '' },
+                { id: 'demo', label: 'Live Demo', icon: '' },
+                { id: 'about', label: 'Infrastructure', icon: '' },
+                { id: 'ecosystem', label: 'Ecosystem', icon: '' }
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-800/30 transition-all duration-300 font-mono text-sm py-3 px-2 rounded-lg"
+                >
+                  <span className="text-xs">{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white w-full font-mono mt-3">
                 <Terminal className="mr-2 h-4 w-4" />
                 Launch App
               </Button>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </nav>
   )
@@ -290,7 +349,7 @@ function HeroSection() {
 // What is Bitora Section
 function WhatIsBitoraSection() {
   return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+    <section id="ecosystem" className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -541,31 +600,31 @@ function TargetAudiencesSection() {
     {
       title: "Builders",
       description: "Deploy tokens, DAOs, or payment tools",
-      icon: "🔧",
+      icon: "",
       color: "blue"
     },
     {
       title: "Traders",
       description: "Swap assets via DEX/CEX, interact with fiat bridges",
-      icon: "📈",
+      icon: "",
       color: "green"
     },
     {
       title: "Retailers",
       description: "Accept crypto legally, settle in fiat, deploy loyalty programs",
-      icon: "🏪",
+      icon: "",
       color: "orange"
     },
     {
       title: "Institutions",
       description: "Issue regulated assets or stablecoins",
-      icon: "🏛️",
+      icon: "",
       color: "purple"
     },
     {
       title: "Governments",
       description: "Tokenize grants, ID systems, and public revenue",
-      icon: "🏛️",
+      icon: "",
       color: "cyan"
     }
   ]
@@ -609,12 +668,12 @@ function TargetAudiencesSection() {
 // Ecosystem Resource Center Section
 function EcosystemResourceCenter() {
   const resources = [
-    { title: "Developer Documentation", icon: "📚", color: "blue" },
-    { title: "Run a Validator", icon: "⚡", color: "green" },
-    { title: "Use POS System", icon: "💳", color: "orange" },
-    { title: "Apply for Grants", icon: "💰", color: "purple" },
-    { title: "Launch dApps", icon: "🚀", color: "cyan" },
-    { title: "Join Governance", icon: "🗳️", color: "pink" }
+    { title: "Developer Documentation", icon: "", color: "blue" },
+    { title: "Run a Validator", icon: "", color: "green" },
+    { title: "Use POS System", icon: "", color: "orange" },
+    { title: "Apply for Grants", icon: "", color: "purple" },
+    { title: "Launch dApps", icon: "", color: "cyan" },
+    { title: "Join Governance", icon: "", color: "pink" }
   ]
 
   return (
@@ -742,7 +801,7 @@ function WalletSection() {
 
           <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8">
             <div className="text-center">
-              <div className="text-6xl mb-4">📱</div>
+              <div className="text-6xl mb-4"></div>
               <h4 className="text-xl font-bold text-blue-400 mb-4 font-mono">Mobile UI Mockup</h4>
               <div className="bg-slate-900/50 rounded-lg p-4 font-mono text-sm">
                 <div className="text-green-400 mb-2">Balance: $2,847.32</div>
@@ -803,7 +862,7 @@ function BTXSection() {
 
           <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-8">
             <div className="text-center">
-              <div className="text-6xl mb-4">⚡</div>
+              <div className="text-6xl mb-4"></div>
               <h4 className="text-xl font-bold text-green-400 mb-4 font-mono">BTX Live Stats</h4>
               <div className="space-y-3">
                 <div className="flex justify-between">
@@ -988,7 +1047,7 @@ function CodeDemo() {
           return nextCard
         } else {
           setCompletedCards(completed => [...completed, prev])
-          setTerminalLogs(logs => [...logs, `[${new Date().toLocaleTimeString()}] 🚀 Bitora Protocol fully deployed!`])
+          setTerminalLogs(logs => [...logs, `[${new Date().toLocaleTimeString()}] Bitora Protocol fully deployed!`])
           setIsSimulating(false)
 
           // Reset after completion
@@ -1318,8 +1377,8 @@ function CodeDemo() {
               <button
                 onClick={() => setVisualEffects(prev => ({ ...prev, matrix: !prev.matrix }))}
                 className={`px-2 sm:px-3 py-1 rounded-lg text-xs transition-all ${visualEffects.matrix
-                    ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                    : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                  : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
                   }`}
               >
                 Matrix FX
@@ -1328,8 +1387,8 @@ function CodeDemo() {
               <button
                 onClick={() => setVisualEffects(prev => ({ ...prev, hologram: !prev.hologram }))}
                 className={`px-2 sm:px-3 py-1 rounded-lg text-xs transition-all ${visualEffects.hologram
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                    : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
+                  ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                  : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
                   }`}
               >
                 Hologram
@@ -1340,8 +1399,8 @@ function CodeDemo() {
             <button
               onClick={() => setAiAssistant(prev => ({ ...prev, active: !prev.active }))}
               className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all w-full sm:w-auto ${aiAssistant.active
-                  ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                  : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
+                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
                 }`}
             >
               {aiAssistant.active ? '🤖 AI Active' : '🤖 Activate AI'}
@@ -1389,10 +1448,10 @@ function CodeDemo() {
                 }}
                 transition={{ duration: 0.3 }}
                 className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 min-h-[280px] sm:min-h-[320px] w-full ${status === 'completed'
-                    ? 'border-green-500 bg-green-900/20'
-                    : status === 'active'
-                      ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/25'
-                      : 'border-gray-600 bg-gray-900/50'
+                  ? 'border-green-500 bg-green-900/20'
+                  : status === 'active'
+                    ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/25'
+                    : 'border-gray-600 bg-gray-900/50'
                   } ${hackingMode && status === 'active' ? 'border-red-500 bg-red-900/20 shadow-lg shadow-red-500/25' : ''
                   } ${visualEffects.matrix && status === 'active' ? 'animate-bounce' : ''
                   } ${soundEffects.typing && status === 'active' ? 'ring-2 ring-blue-400/50' : ''
@@ -1411,7 +1470,7 @@ function CodeDemo() {
                     {status === 'completed' && (
                       <div className="ml-auto">
                         <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">✓</span>
+                          <span className="text-white text-xs font-bold"></span>
                         </div>
                       </div>
                     )}
@@ -1424,10 +1483,10 @@ function CodeDemo() {
                 </div>
 
                 {/* Code Preview */}
-                <div className="p-2 sm:p-3 flex-1">
-                  <div className="bg-gray-900 rounded-lg p-2 sm:p-3 font-mono text-xs h-28 sm:h-32 overflow-hidden">
+                <div className="p-2 sm:p-3 flex-1 ">
+                  <div className="bg-gray-900 p-2 sm:p-3 font-mono text-xs  overflow-hidden">
                     <div className={`h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 ${status === 'completed' ? 'text-green-400' :
-                        status === 'active' ? 'text-blue-400' : 'text-gray-500'
+                      status === 'active' ? 'text-blue-400' : 'text-gray-500'
                       }`}>
                       {step.code.split('\n').map((line, lineIndex) => (
                         <div key={lineIndex} className="leading-tight mb-1 text-xs overflow-hidden">
@@ -1459,7 +1518,7 @@ function CodeDemo() {
                 {/* Progress Indicator */}
                 <div className="absolute bottom-0 left-0 right-0 h-1">
                   <div className={`h-full transition-all duration-500 ${status === 'completed' ? 'bg-green-500 w-full' :
-                      status === 'active' ? 'bg-blue-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
+                    status === 'active' ? 'bg-blue-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
                     }`}></div>
                 </div>
               </motion.div>
@@ -1632,18 +1691,29 @@ function CTASection() {
   )
 }
 
-// Footer Component (Updated for Bitora with better mobile responsivity)
+// Footer Component (Updated for Bitora with better mobile responsivity and navigation)
 function Footer() {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <footer className="relative border-t border-slate-800 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="sm:col-span-2 md:col-span-1">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+            <div className="flex items-center space-x-2 mb-4 cursor-pointer group" onClick={scrollToTop}>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300">
                 <span className="text-white font-bold text-xs sm:text-sm font-mono">B</span>
               </div>
-              <span className="text-white font-bold text-base sm:text-xl font-mono">
+              <span className="text-white font-bold text-base sm:text-xl font-mono group-hover:text-blue-300 transition-colors duration-300">
                 <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
                 <span className="sm:hidden">[BITORA]</span>
               </span>
@@ -1652,52 +1722,80 @@ function Footer() {
               The Infrastructure Layer for Crypto-Natives, Retail Builders, and Sovereign Systems.
             </p>
             <div className="flex space-x-4">
-              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-white">
+              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
                 <Twitter className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-white">
+              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
                 <Github className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-white">
+              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
                 <MessageCircle className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 font-mono">Protocol</h3>
+            <h3 className="text-white font-semibold mb-4 font-mono">Navigation</h3>
             <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Whitepaper</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Terms & Compliance</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Governance Forum</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Ecosystem Partners</a></li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('features')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Protocol Features
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('demo')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Live Demo
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('about')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Infrastructure
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('ecosystem')}
+                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                >
+                  Ecosystem
+                </button>
+              </li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-semibold mb-4 font-mono">Network</h3>
             <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Twitter/X</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Telegram</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Discord</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">LinkedIn</a></li>
+              <li><a href="https://twitter.com/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Twitter/X</a></li>
+              <li><a href="https://t.me/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Telegram</a></li>
+              <li><a href="https://discord.gg/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Discord</a></li>
+              <li><a href="https://linkedin.com/company/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">LinkedIn</a></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-semibold mb-4 font-mono">Resources</h3>
             <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Contact & Media Kit</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Developer Documentation</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Run a Validator</a></li>
-              <li><a href="#" className="hover:text-white transition-colors font-mono">Apply for Grants</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Whitepaper</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Documentation</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Run Validator</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Apply for Grants</a></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-slate-800 mt-8 pt-8 text-center">
-          <p className="text-slate-400 font-mono">
-            © 2024 Bitora Protocol. All rights reserved.
+          <p className="text-slate-400 font-mono text-sm">
+            © 2024 Bitora Protocol. All rights reserved. | Built on the Bitora Layer 1 Chain
           </p>
         </div>
       </div>
