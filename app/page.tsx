@@ -144,10 +144,9 @@ function Navigation() {
           {/* Enhanced Logo */}
           <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="relative">
-              <div className="w-8 h-8 bg-gradient-to-br from-gray-400 via-white to-gray-500 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-white/40 transition-all duration-300 group-hover:scale-110">
-                <span className="text-black font-bold text-sm font-mono">B</span>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-white/40 transition-all duration-300 group-hover:scale-110">
+                <img src="/logo/vectorlogo.svg" alt="Bitora" className="w-8 h-8" />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-400 to-white rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse"></div>
             </div>
             <span className="text-white font-bold text-lg sm:text-xl font-mono group-hover:text-white transition-colors duration-300">
               <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
@@ -163,7 +162,8 @@ function Navigation() {
               { id: 'dev-portal', label: 'Developers' },
               { id: 'wallet-neural', label: 'Wallet' },
               { id: 'neural-ecosystem', label: 'Ecosystem' },
-              { id: 'exchange-neural', label: 'Exchange' }
+              { id: 'exchange-neural', label: 'Exchange' },
+              { id: 'roadmap', label: 'Roadmap' }
             ].map((item) => (
               <button
                 key={item.id}
@@ -180,8 +180,8 @@ function Navigation() {
             <div className="ml-4">
               <Button className="bg-green-600 hover:bg-green-700 text-white font-mono text-sm px-4 py-2 shadow-lg transition-all duration-300 hover:scale-105">
                 <Terminal className="mr-1 h-4 w-4" />
-                <span className="hidden lg:inline">Launch App</span>
-                <span className="lg:hidden">Launch</span>
+                <span className="hidden lg:inline">Launch Wallet</span>
+                <span className="lg:hidden">Wallet</span>
               </Button>
             </div>
           </div>
@@ -209,7 +209,8 @@ function Navigation() {
                 { id: 'dev-portal', label: 'Developers' },
                 { id: 'wallet-neural', label: 'Wallet' },
                 { id: 'neural-ecosystem', label: 'Ecosystem' },
-                { id: 'exchange-neural', label: 'Exchange' }
+                { id: 'exchange-neural', label: 'Exchange' },
+                { id: 'roadmap', label: 'Roadmap' }
               ].map((item) => (
                 <button
                   key={item.id}
@@ -221,7 +222,7 @@ function Navigation() {
               ))}
               <Button className="bg-green-600 hover:bg-green-700 text-white w-full font-mono mt-3">
                 <Terminal className="mr-2 h-4 w-4" />
-                Launch App
+                Launch Wallet
               </Button>
             </div>
           </div>
@@ -309,17 +310,17 @@ function HeroSection() {
               <span className="sm:hidden">[PROTOCOL ONLINE]</span>
             </div>
             <div className="text-xs text-slate-400 font-mono">
-              <span className="hidden sm:inline">BITORA LAYER 1 BLOCKCHAIN // STATUS: ONLINE</span>
-              <span className="sm:hidden">BITORA L1 // ONLINE</span>
+              <span className="hidden sm:inline">BITORA LAYER 1 BLOCKCHAIN // STATUS: <span className="text-green-400">ONLINE</span></span>
+              <span className="sm:hidden">BITORA L1 // <span className="text-green-400">ONLINE</span></span>
             </div>
           </div>
           <h1 className="text-2xl sm:text-4xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
-            <span className="block sm:inline">The Infrastructure Layer for</span>
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent block mt-2 sm:mt-0"> Crypto-Natives, Retail Builders,</span>
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent block"> and Sovereign Systems</span>
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">BITORA</span>
           </h1>
           <p className="text-base sm:text-xl lg:text-2xl text-slate-300 mb-6 sm:mb-8 max-w-4xl mx-auto font-mono leading-relaxed px-2">
-            <span className="block sm:inline">Build anything. Trade instantly. Operate legally. Pay globally.</span>
+            <span className="block text-white mb-2">They run on hype. We run commerce</span>
+            <span className="block text-white mb-4">Next-gen chain. Real-world ready.</span>
+            <span className="block sm:inline">Build anything. Trade instantly. Pay globally.</span>
             <span className="block text-blue-400 mt-2">Powered by the $BTO token on the Bitora Layer 1 chain.</span>
           </p>
 
@@ -329,7 +330,7 @@ function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
             <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
               <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Launch App
+              Launch Wallet
             </Button>
             <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
               <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
@@ -350,68 +351,231 @@ function HeroSection() {
 
 
 // Roadmap Section
+// Roadmap Section
 function RoadmapSection() {
-  const roadmapItems = [
+  const [expandedPhase, setExpandedPhase] = useState<number | null>(null)
+
+  const roadmapPhases = [
     {
-      year: "2025",
-      items: [
-        "Bitora Mainnet Live",
-        "$BTO Launched",
-        "Internal DEX Active",
-        "Pizza Stores in AU/NZ"
-      ],
-      color: "blue"
+      id: 0,
+      title: "Phase 0 – Foundational Protocol Architecture",
+      status: "completed",
+      period: "Completed October–December 2023",
+      overview: "This phase defined Bitora's sovereign blockchain structure using the Cosmos SDK with CometBFT consensus. We opted for a modular design that enables permissioned smart contracts, deterministic token classification, and retail-grade transactional finality.",
+      keyOutputs: [
+        "Constraint-driven protocol scope",
+        "Isolation of execution layers (tokenization, settlement, compliance)",
+        "Governance structure defined as on-chain weighted quorum-based voting",
+        "Bridgeless architecture to preserve economic closure"
+      ]
     },
     {
-      year: "2026",
-      items: [
-        "Asia-Pacific Expansion",
-        "National Stablecoins (AUDx, PHPx, etc.)",
-        "Institutional Validator Onboarding"
-      ],
-      color: "cyan"
+      id: 1,
+      title: "Phase 1 – Core Blockchain Development",
+      status: "completed",
+      period: "Completed January 2024 – July 2025",
+      overview: "We implemented the first production-grade build of the Bitora chain. The system includes deterministic fee logic, permissioned token creation, validator-enforced liquidity bonding, and native rug-pull detection heuristics.",
+      keyOutputs: [
+        "Token classification engine (Main, Utility, Meme)",
+        "Smart contract sandbox with identity-binding",
+        "Flat gas execution for standard deployments, complexity-based for advanced contracts",
+        "Automated detection subsystem for malicious token behavior (freeze hooks, anomaly triggers)",
+        "Governance-integrated validator queue"
+      ]
     },
     {
-      year: "2027+",
-      items: [
-        "U.S. and European Regulatory Integration",
-        "Full Retail Sector Expansion",
-        "Treasury-backed deflation protocol activated"
-      ],
-      color: "purple"
+      id: 2,
+      title: "Phase 2 – Legal & Compliance Engine",
+      status: "in-progress",
+      period: "Started August 2025 – Target Completion: November 2025",
+      overview: "Bitora's compliance engine embeds legal determinism at the protocol level—every contract and token must pass through a cryptographically enforced regulatory filter. We are currently integrating a compliance middleware layer that interlocks with on-chain identity and metadata registries.",
+      keyOutputs: [
+        "KYC/AML-bound token deployment permissions (via hash-locked identity maps)",
+        "Jurisdictional labeling logic embedded in smart contract headers",
+        "Validator-layer enforcement filters for jurisdictional noncompliance",
+        "Legal schema metadata for all assets created within the chain",
+        "Completion of jurisdictional attestation APIs",
+        "Rollout of smart contract templates with embedded legal constraint types"
+      ]
+    },
+    {
+      id: 3,
+      title: "Phase 3 – Controlled Token Onboarding Window",
+      status: "scheduled",
+      period: "Scheduled: December 2025 – February 2026",
+      overview: "This phase initiates the first permissioned public onboarding of assets into the Bitora ecosystem. Tokens must undergo compliance evaluation, identity verification, and classification audits before deployment.",
+      keyOutputs: [
+        "Token issuers must be identity-bound",
+        "Smart contracts classified and fingerprinted on-chain",
+        "Liquidity bonding thresholds enforced by protocol (non-custodial staking)",
+        "All tokens include immutable links to origin credentials and legal docs",
+        "Freeze at source enabled on any deviation from contract behavior"
+      ]
+    },
+    {
+      id: 4,
+      title: "Phase 4 – Native Exchange Infrastructure",
+      status: "scheduled",
+      period: "Scheduled: March – May 2026",
+      overview: "The Bitora Exchange (DEX) will function as a native asset liquidity engine, exclusively for tokens deployed within the Bitora chain. No external assets permitted.",
+      keyOutputs: [
+        "AMM-orderbook hybrid model based on token volume tier",
+        "Full token registry enforcement (Main/Utility/Meme segmentation)",
+        "Protocol-owned liquidity (POL) pools with epoch-based slippage governors",
+        "Fair matching guarantees + validator-signed execution proofs",
+        "On-chain swap settlements, wrapped fees, and settlement auditing"
+      ]
+    },
+    {
+      id: 5,
+      title: "Phase 5 – Point-of-Sale (POS) Protocol Integration",
+      status: "scheduled",
+      period: "Scheduled: June – August 2026",
+      overview: "The Bitora POS protocol transforms smart contracts into physical transaction endpoints. POS terminals communicate directly with Bitora smart contracts, enabling frictionless consumer-to-retail payments with cryptographic traceability.",
+      keyOutputs: [
+        "NFC+QR POS terminals (firmware-signed, protocol-native)",
+        "Smart contract template for product pricing + transaction fee + merchant credit",
+        "Fee split: validator reward pool + infrastructure incentive",
+        "Retailer node license bonded via terminal registration",
+        "Merchant dashboard smart contract deployment + sync logic"
+      ]
+    },
+    {
+      id: 6,
+      title: "Phase 6 – On-Chain Physical Retail Pilot (1 Store)",
+      status: "scheduled",
+      period: "Scheduled: September – November 2026",
+      overview: "Bitora's real-world economic thesis will be validated through a single fully-on-chain retail store. This serves as a demonstrator of deterministic, legally bound commercial execution—orders, payroll, loyalty, and profits governed entirely on-chain.",
+      keyOutputs: [
+        "Store operates as a Bitora node (light client)",
+        "All customer transactions processed via protocol-native POS",
+        "Smart contract governs: supply chain, sales reporting, staff pay, revenue splits",
+        "Auditable by ecosystem; no off-chain dependencies",
+        "Real-time sales + operations explorer node"
+      ]
+    },
+    {
+      id: 7,
+      title: "Phase 7 – National Multi-Store Retail Rollout (100 Stores)",
+      status: "scheduled",
+      period: "Scheduled: January – December 2027",
+      overview: "This phase scales the single-store model to 100+ retail units nationwide. Each store acts as a validator-integrated retail node, with identity-bound licenses, profit-sharing contracts, and community-based oversight.",
+      keyOutputs: [
+        "Onboarding through compliance gateway",
+        "Franchise licensing uses staked operational contracts",
+        "Store earnings auto-split: ecosystem reinjection + operator share",
+        "Validator indexers log transactions, workforce activity, and royalties",
+        "Stores vote on operational protocol upgrades via stake-weighted governance"
+      ]
     }
   ]
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'text-green-400'
+      case 'in-progress': return 'text-orange-400'
+      case 'scheduled': return 'text-red-400'
+      default: return 'text-gray-400'
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed': return 'checkmark'
+      case 'in-progress': return 'clock'
+      case 'scheduled': return 'circle'
+      default: return 'circle'
+    }
+  }
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="relative z-10 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
-            [ROADMAP]
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 font-mono leading-tight">
+            BITORA MASTER ROADMAP
           </h2>
+          <p className="text-lg text-slate-300 max-w-4xl mx-auto font-mono italic border-l-2 border-blue-400 pl-4 mb-8">
+            "Every system must be verifiable, every actor must be accountable, and every transaction must be auditable."
+            <br />
+            <span className="text-blue-400">— Bitora Systems Manifesto</span>
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {roadmapItems.map((phase, index) => (
+        <div className="space-y-6">
+          {roadmapPhases.map((phase, index) => (
             <motion.div
-              key={index}
+              key={phase.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className={`bg-slate-800/50 border border-${phase.color}-500/20 rounded-lg p-6`}
+              className="bg-slate-800/50 border border-gray-500/30 rounded-lg overflow-hidden"
             >
-              <h3 className={`text-2xl font-bold text-${phase.color}-400 mb-6 font-mono`}>
-                {phase.year}
-              </h3>
-              <div className="space-y-3">
-                {phase.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="flex items-start space-x-3">
-                    <div className={`w-2 h-2 bg-${phase.color}-400 rounded-full mt-2 flex-shrink-0`}></div>
-                    <p className="text-slate-300 font-mono text-sm">{item}</p>
+              {/* Phase Header */}
+              <button
+                onClick={() => setExpandedPhase(expandedPhase === phase.id ? null : phase.id)}
+                className="w-full p-6 text-left hover:bg-slate-700/30 transition-colors duration-300"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <span className={`text-2xl font-mono ${getStatusColor(phase.status)}`}>
+                      {phase.status === 'completed' && <CheckCircle className="h-6 w-6" />}
+                      {phase.status === 'in-progress' && <div className="w-6 h-6 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>}
+                      {phase.status === 'scheduled' && <div className="w-6 h-6 border-2 border-red-400 rounded-full"></div>}
+                    </span>
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-bold text-white font-mono">
+                        {phase.title}
+                      </h3>
+                      <p className={`text-sm font-mono ${getStatusColor(phase.status)}`}>
+                        {phase.period}
+                      </p>
+                    </div>
                   </div>
-                ))}
-              </div>
+                  <div className="text-gray-400">
+                    {expandedPhase === phase.id ? '−' : '+'}
+                  </div>
+                </div>
+              </button>
+
+              {/* Expanded Content */}
+              <AnimatePresence>
+                {expandedPhase === phase.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="border-t border-gray-600/30"
+                  >
+                    <div className="p-6 space-y-4">
+                      <div>
+                        <h4 className="text-white font-semibold font-mono mb-2">Overview:</h4>
+                        <p className="text-gray-300 font-mono text-sm leading-relaxed">
+                          {phase.overview}
+                        </p>
+                      </div>
+
+                      <div>
+                        <h4 className="text-white font-semibold font-mono mb-3">
+                          {phase.status === 'completed' ? 'Key Outputs:' :
+                            phase.status === 'in-progress' ? 'Core Components Being Integrated:' :
+                              'Protocol Enforcement Rules:'}
+                        </h4>
+                        <ul className="space-y-2">
+                          {phase.keyOutputs.map((output, idx) => (
+                            <li key={idx} className="flex items-start space-x-2">
+                              <span className="text-blue-400 mt-1 text-sm">•</span>
+                              <span className="text-gray-300 font-mono text-sm">{output}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>
@@ -1537,8 +1701,8 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="sm:col-span-2 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4 cursor-pointer group" onClick={scrollToTop}>
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-gray-400 to-white rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-white/25 transition-all duration-300">
-                <span className="text-black font-bold text-xs sm:text-sm font-mono">B</span>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-white/25 transition-all duration-300">
+                <img src="/logo/vectorlogo.svg" alt="Bitora" className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
               <span className="text-white font-bold text-base sm:text-xl font-mono group-hover:text-white transition-colors duration-300">
                 <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
@@ -1620,18 +1784,18 @@ function Footer() {
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('support-neural')}
+                  onClick={() => scrollToSection('roadmap')}
                   className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
                 >
-                  Support Network
+                  Roadmap
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('pizza-neural')}
+                  onClick={() => scrollToSection('support-neural')}
                   className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
                 >
-                  Store Analytics
+                  Support Network
                 </button>
               </li>
             </ul>
@@ -1653,10 +1817,10 @@ function Footer() {
             © 2024 Bitora Protocol. All rights reserved.
           </p>
           <div className="flex space-x-6 text-white font-mono text-sm">
-            <a href="https://twitter.com/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Twitter</a>
-            <a href="https://t.me/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
-            <a href="https://discord.gg/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Discord</a>
-            <a href="https://linkedin.com/company/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+            <a href="https://t.me/BTOoffical" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
+            <a href="https://discord.gg/CUMSxXpD" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Discord</a>
+            <a href="https://medium.com/@charanfarhat" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Medium</a>
+            <a href="https://www.reddit.com/u/Competitive-Data-703/s/laQUzhlDfY" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Reddit</a>
           </div>
         </div>
       </div>
@@ -2508,6 +2672,9 @@ export default function Home() {
       <WalletNeuralSection />
       <NeuralEcosystemSection />
       <ExchangeNeuralSection />
+      <div id="roadmap">
+        <RoadmapSection />
+      </div>
       <SupportNeuralSection />
       <PizzaNeuralExperienceSection />
       <AboutSection />
