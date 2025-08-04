@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "BITORA",
   title: "BITORA",
   description: "Next-gen chain. Real-world ready.",
-  url: "https://bitora.com",
+  url: "https://bitoraprotocol.com",
 
   // Hero Section
   hero: {
@@ -91,23 +91,23 @@ export const siteConfig = {
   },
 
   // Footer
-  footer: {
-    copyright: "© 2024 Bitora Protocol. All rights reserved.",
+footer: {
+    copyright: `© ${new Date().getFullYear()} Bitora Protocol. All rights reserved.`,
     sections: {
-      platform: [
-        { id: "code-genesis", label: "Code Genesis" },
-        { id: "retail-pos", label: "Retail POS System" },
-        { id: "dev-portal", label: "Developer Portal" },
-        { id: "wallet-neural", label: "Wallet Interface" },
-      ],
-      services: [
-        { id: "neural-ecosystem", label: "Ecosystem" },
-        { id: "exchange-neural", label: "Exchange Hub" },
-        { id: "roadmap", label: "Roadmap" },
-        { id: "support-neural", label: "Support Network" },
-      ],
+        platform: [
+            { id: "code-genesis", label: "Code Genesis" },
+            { id: "retail-pos", label: "Retail POS System" },
+            { id: "dev-portal", label: "Developer Portal" },
+            { id: "wallet-neural", label: "Wallet Interface" },
+        ],
+        services: [
+            { id: "neural-ecosystem", label: "Ecosystem" },
+            { id: "exchange-neural", label: "Exchange Hub" },
+            { id: "roadmap", label: "Roadmap" },
+            { id: "support-neural", label: "Support Network" },
+        ],
     },
-  },
+},
 
   // API Endpoints (for future integration)
   api: {

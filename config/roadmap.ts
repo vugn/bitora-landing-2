@@ -7,9 +7,9 @@ export const roadmapData = {
   phases: [
     {
       id: 0,
-      title: "Phase 0 – Foundational Protocol Architecture",
+      title: "Phase 0 - Foundational Protocol Architecture",
       status: "completed" as const,
-      period: "Completed October–December 2023",
+      period: "Completed October-December 2023",
       overview:
         "This phase defined Bitora's sovereign blockchain structure using the Cosmos SDK with CometBFT consensus. We opted for a modular design that enables permissioned smart contracts, deterministic token classification, and retail-grade transactional finality.",
       keyOutputs: [
@@ -21,9 +21,9 @@ export const roadmapData = {
     },
     {
       id: 1,
-      title: "Phase 1 – Core Blockchain Development",
+      title: "Phase 1 - Core Blockchain Development",
       status: "completed" as const,
-      period: "Completed January 2024 – July 2025",
+      period: "Completed January 2024 - July 2025",
       overview:
         "We implemented the first production-grade build of the Bitora chain. The system includes deterministic fee logic, permissioned token creation, validator-enforced liquidity bonding, and native rug-pull detection heuristics.",
       keyOutputs: [
@@ -36,9 +36,9 @@ export const roadmapData = {
     },
     {
       id: 2,
-      title: "Phase 2 – Legal & Compliance Engine",
+      title: "Phase 2 - Legal & Compliance Engine",
       status: "in-progress" as const,
-      period: "Started August 2025 – Target Completion: November 2025",
+      period: "Started August 2025 - Target Completion: November 2025",
       overview:
         "Bitora's compliance engine embeds legal determinism at the protocol level—every contract and token must pass through a cryptographically enforced regulatory filter. We are currently integrating a compliance middleware layer that interlocks with on-chain identity and metadata registries.",
       keyOutputs: [
@@ -52,9 +52,9 @@ export const roadmapData = {
     },
     {
       id: 3,
-      title: "Phase 3 – Controlled Token Onboarding Window",
+      title: "Phase 3 - Controlled Token Onboarding Window",
       status: "scheduled" as const,
-      period: "Scheduled: December 2025 – February 2026",
+      period: "Scheduled: December 2025 - February 2026",
       overview:
         "This phase initiates the first permissioned public onboarding of assets into the Bitora ecosystem. Tokens must undergo compliance evaluation, identity verification, and classification audits before deployment.",
       keyOutputs: [
@@ -67,9 +67,9 @@ export const roadmapData = {
     },
     {
       id: 4,
-      title: "Phase 4 – Native Exchange Infrastructure",
+      title: "Phase 4 - Native Exchange Infrastructure",
       status: "scheduled" as const,
-      period: "Scheduled: March – May 2026",
+      period: "Scheduled: March - May 2026",
       overview:
         "The Bitora Exchange (DEX) will function as a native asset liquidity engine, exclusively for tokens deployed within the Bitora chain. No external assets permitted.",
       keyOutputs: [
@@ -82,9 +82,9 @@ export const roadmapData = {
     },
     {
       id: 5,
-      title: "Phase 5 – Point-of-Sale (POS) Protocol Integration",
+      title: "Phase 5 - Point-of-Sale (POS) Protocol Integration",
       status: "scheduled" as const,
-      period: "Scheduled: June – August 2026",
+      period: "Scheduled: June - August 2026",
       overview:
         "The Bitora POS protocol transforms smart contracts into physical transaction endpoints. POS terminals communicate directly with Bitora smart contracts, enabling frictionless consumer-to-retail payments with cryptographic traceability.",
       keyOutputs: [
@@ -97,9 +97,9 @@ export const roadmapData = {
     },
     {
       id: 6,
-      title: "Phase 6 – On-Chain Physical Retail Pilot (1 Store)",
+      title: "Phase 6 - On-Chain Physical Retail Pilot (1 Store)",
       status: "scheduled" as const,
-      period: "Scheduled: September – November 2026",
+      period: "Scheduled: September - November 2026",
       overview:
         "Bitora's real-world economic thesis will be validated through a single fully-on-chain retail store. This serves as a demonstrator of deterministic, legally bound commercial execution—orders, payroll, loyalty, and profits governed entirely on-chain.",
       keyOutputs: [
@@ -112,9 +112,9 @@ export const roadmapData = {
     },
     {
       id: 7,
-      title: "Phase 7 – National Multi-Store Retail Rollout (100 Stores)",
+      title: "Phase 7 - National Multi-Store Retail Rollout (100 Stores)",
       status: "scheduled" as const,
-      period: "Scheduled: January – December 2027",
+      period: "Scheduled: January - December 2027",
       overview:
         "This phase scales the single-store model to 100+ retail units nationwide. Each store acts as a validator-integrated retail node, with identity-bound licenses, profit-sharing contracts, and community-based oversight.",
       keyOutputs: [
