@@ -14,8 +14,21 @@ import {
   ExchangeNeuralSection
 } from '@/components/sections/other-sections'
 import { Footer } from '@/components/sections/footer'
-import { TerminalLoader } from '@/components/loading/terminal-loader'
 import { useStats, useRoadmap } from '@/hooks/use-api-data'
+
+// Loading component
+function TerminalLoader({ onComplete }: { onComplete: () => void }) {
+  // Simulate loading - replace with actual loading logic
+  setTimeout(onComplete, 2000)
+
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="text-green-400 font-mono">
+        Loading BITORA Protocol...
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
