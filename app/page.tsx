@@ -304,7 +304,7 @@ function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="mb-4 sm:mb-6">
+          <div className="mb-4 sm:mb-6 mt-10">
             <div className="text-xs sm:text-sm text-blue-400 font-mono mb-1 sm:mb-2">
               <span className="hidden sm:inline">[PROTOCOL INITIALIZATION COMPLETE]</span>
               <span className="sm:hidden">[PROTOCOL ONLINE]</span>
@@ -314,7 +314,7 @@ function HeroSection() {
               <span className="sm:hidden">BITORA L1 // <span className="text-green-400">ONLINE</span></span>
             </div>
           </div>
-          <h1 className="text-2xl sm:text-4xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">BITORA</span>
           </h1>
           <p className="text-base sm:text-xl lg:text-2xl text-slate-300 mb-6 sm:mb-8 max-w-4xl mx-auto font-mono leading-relaxed px-2">
@@ -2667,14 +2667,14 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <CodeGenesisSection />
+      <div id="roadmap">
+        <RoadmapSection />
+      </div>
       <RetailPointSystemSection />
       <DeveloperPortalSection />
       <WalletNeuralSection />
       <NeuralEcosystemSection />
       <ExchangeNeuralSection />
-      <div id="roadmap">
-        <RoadmapSection />
-      </div>
       <SupportNeuralSection />
       <PizzaNeuralExperienceSection />
       <AboutSection />
