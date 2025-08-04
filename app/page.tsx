@@ -136,20 +136,20 @@ function Navigation() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-      ? 'bg-slate-900/98 backdrop-blur-2xl border-b border-blue-500/30 shadow-lg shadow-blue-500/10'
-      : 'bg-slate-900/95 backdrop-blur-xl border-b border-blue-500/20'
+      ? 'bg-slate-900/98 backdrop-blur-2xl border-b border-gray-500/30 shadow-lg'
+      : 'bg-slate-900/95 backdrop-blur-xl border-b border-gray-500/20'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Enhanced Logo */}
           <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="relative">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-400 via-cyan-400 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-110">
-                <span className="text-white font-bold text-sm font-mono">B</span>
+              <div className="w-8 h-8 bg-gradient-to-br from-gray-400 via-white to-gray-500 rounded-lg flex items-center justify-center shadow-lg group-hover:shadow-white/40 transition-all duration-300 group-hover:scale-110">
+                <span className="text-black font-bold text-sm font-mono">B</span>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-400 to-white rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse"></div>
             </div>
-            <span className="text-white font-bold text-lg sm:text-xl font-mono group-hover:text-blue-300 transition-colors duration-300">
+            <span className="text-white font-bold text-lg sm:text-xl font-mono group-hover:text-white transition-colors duration-300">
               <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
               <span className="sm:hidden">[BITORA]</span>
             </span>
@@ -158,26 +158,27 @@ function Navigation() {
           {/* Enhanced Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
             {[
-              { id: 'features', label: 'Protocol', icon: '' },
-              { id: 'demo', label: 'Live Demo', icon: '' },
-              { id: 'about', label: 'Infrastructure', icon: '' },
-              { id: 'ecosystem', label: 'Ecosystem', icon: '' }
+              { id: 'code-genesis', label: 'Code Genesis' },
+              { id: 'retail-pos', label: 'Retail POS' },
+              { id: 'dev-portal', label: 'Developers' },
+              { id: 'wallet-neural', label: 'Wallet' },
+              { id: 'neural-ecosystem', label: 'Ecosystem' },
+              { id: 'exchange-neural', label: 'Exchange' }
             ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="relative px-3 py-2 text-slate-300 hover:text-white transition-all duration-300 font-mono text-sm group overflow-hidden rounded-lg"
+                className="relative px-3 py-2 text-white hover:text-white transition-all duration-300 font-mono text-sm group overflow-hidden rounded-lg"
               >
-                <span className="relative z-10 flex items-center space-x-1">
-                  <span className="hidden lg:inline text-xs">{item.icon}</span>
-                  <span>{item.label}</span>
+                <span className="relative z-10">
+                  {item.label}
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 group-hover:w-full transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-gray-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"></div>
               </button>
             ))}
             <div className="ml-4">
-              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-mono text-sm px-4 py-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-105">
+              <Button className="bg-green-600 hover:bg-green-700 text-white font-mono text-sm px-4 py-2 shadow-lg transition-all duration-300 hover:scale-105">
                 <Terminal className="mr-1 h-4 w-4" />
                 <span className="hidden lg:inline">Launch App</span>
                 <span className="lg:hidden">Launch</span>
@@ -203,21 +204,22 @@ function Navigation() {
           <div className="border-t border-slate-700/50">
             <div className="flex flex-col space-y-1 pt-4">
               {[
-                { id: 'features', label: 'Protocol', icon: '' },
-                { id: 'demo', label: 'Live Demo', icon: '' },
-                { id: 'about', label: 'Infrastructure', icon: '' },
-                { id: 'ecosystem', label: 'Ecosystem', icon: '' }
+                { id: 'code-genesis', label: 'Code Genesis' },
+                { id: 'retail-pos', label: 'Retail POS' },
+                { id: 'dev-portal', label: 'Developers' },
+                { id: 'wallet-neural', label: 'Wallet' },
+                { id: 'neural-ecosystem', label: 'Ecosystem' },
+                { id: 'exchange-neural', label: 'Exchange' }
               ].map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-800/30 transition-all duration-300 font-mono text-sm py-3 px-2 rounded-lg"
+                  className="flex items-center text-white hover:text-white hover:bg-slate-800/30 transition-all duration-300 font-mono text-sm py-3 px-2 rounded-lg text-left"
                 >
-                  <span className="text-xs">{item.icon}</span>
                   <span>{item.label}</span>
                 </button>
               ))}
-              <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white w-full font-mono mt-3">
+              <Button className="bg-green-600 hover:bg-green-700 text-white w-full font-mono mt-3">
                 <Terminal className="mr-2 h-4 w-4" />
                 Launch App
               </Button>
@@ -1236,38 +1238,26 @@ function CodeDemo() {
                 : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
                 }`}
             >
-              {aiAssistant.active ? '🤖 AI Active' : '🤖 Activate AI'}
+              {aiAssistant.active ? 'AI Active' : 'Activate AI'}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Connection Lines */}
+      {/* Clean Card Layout */}
       <div className="relative">
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-          {codingSteps.map((_, index) => {
-            if (index === codingSteps.length - 1) return null
-            const isActive = completedCards.includes(index) || index === activeCard
-            return (
-              <line
-                key={index}
-                x1={`${20 + (index % 3) * 33}%`}
-                y1={`${20 + Math.floor(index / 3) * 40}%`}
-                x2={`${20 + ((index + 1) % 3) * 33}%`}
-                y2={`${20 + Math.floor((index + 1) / 3) * 40}%`}
-                stroke={isActive ? '#3b82f6' : '#374151'}
-                strokeWidth="2"
-                strokeDasharray={isActive ? '0' : '5,5'}
-                className={isActive ? 'animate-pulse' : ''}
-              />
-            )
-          })}
-        </svg>
+        {/* Background Grid Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0)`,
+            backgroundSize: '20px 20px'
+          }}></div>
+        </div>
 
         {/* Cards Grid */}
         <div className={`relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full transition-all duration-300 ${visualEffects.glitch ? 'animate-pulse filter blur-[1px]' : ''
           } ${visualEffects.hologram ? 'opacity-80' : ''
-          }`} style={{ zIndex: 2 }}>
+          }`}>
           {codingSteps.map((step, index) => {
             const status = getCardStatus(index)
             return (
@@ -1276,17 +1266,24 @@ function CodeDemo() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
                   opacity: 1,
-                  scale: status === 'active' ? 1.05 : 1,
-                  y: status === 'active' ? -5 : 0
+                  scale: status === 'active' ? 1.02 : 1,
+                  y: status === 'active' ? -2 : 0
                 }}
                 transition={{ duration: 0.3 }}
-                className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 min-h-[280px] sm:min-h-[320px] w-full ${status === 'completed'
-                  ? 'border-green-500 bg-gray-900/50'
+                className={`relative overflow-hidden rounded-xl border transition-all duration-300 min-h-[280px] sm:min-h-[320px] w-full ${status === 'completed'
+                  ? 'border-green-500/50 bg-gray-900/50 shadow-lg shadow-green-500/10'
                   : status === 'active'
-                    ? 'border-red-500 bg-gray-900/50'
-                    : 'border-gray-600 bg-gray-900/50'
+                    ? 'border-red-500/50 bg-gray-900/50 shadow-lg shadow-red-500/10'
+                    : 'border-gray-600/30 bg-gray-900/50'
                   }`}
               >
+                {/* Progress indicator */}
+                <div className={`absolute top-0 left-0 h-1 transition-all duration-1000 ${status === 'completed'
+                  ? 'w-full bg-green-500'
+                  : status === 'active'
+                    ? 'w-1/2 bg-red-500 animate-pulse'
+                    : 'w-0 bg-gray-500'
+                  }`}></div>
                 {/* Card Header */}
                 <div className="p-3 sm:p-4 bg-gray-800/50">
                   <div className="flex items-center space-x-2 sm:space-x-3">
@@ -1540,93 +1537,127 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="sm:col-span-2 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4 cursor-pointer group" onClick={scrollToTop}>
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300">
-                <span className="text-white font-bold text-xs sm:text-sm font-mono">B</span>
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-gray-400 to-white rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-white/25 transition-all duration-300">
+                <span className="text-black font-bold text-xs sm:text-sm font-mono">B</span>
               </div>
-              <span className="text-white font-bold text-base sm:text-xl font-mono group-hover:text-blue-300 transition-colors duration-300">
+              <span className="text-white font-bold text-base sm:text-xl font-mono group-hover:text-white transition-colors duration-300">
                 <span className="hidden sm:inline">[BITORA_PROTOCOL]</span>
                 <span className="sm:hidden">[BITORA]</span>
               </span>
             </div>
-            <p className="text-slate-300 mb-4 font-mono text-sm sm:text-base">
-              The Infrastructure Layer for Crypto-Natives, Retail Builders, and Sovereign Systems.
+            <p className="text-white mb-4 font-mono text-sm sm:text-base">
+              Blockchain infrastructure powering retail point-of-sale systems and decentralized commerce.
             </p>
             <div className="flex space-x-4">
-              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+              <Button size="sm" variant="ghost" className="text-white hover:text-white hover:bg-gray-500/10 transition-all duration-300">
                 <Twitter className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+              <Button size="sm" variant="ghost" className="text-white hover:text-white hover:bg-gray-500/10 transition-all duration-300">
                 <Github className="h-4 w-4" />
               </Button>
-              <Button size="sm" variant="ghost" className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+              <Button size="sm" variant="ghost" className="text-white hover:text-white hover:bg-gray-500/10 transition-all duration-300">
                 <MessageCircle className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 font-mono">Navigation</h3>
-            <ul className="space-y-2 text-slate-300">
+            <h3 className="text-white font-semibold mb-4 font-mono">Platform</h3>
+            <ul className="space-y-2 text-white">
               <li>
                 <button
-                  onClick={() => scrollToSection('features')}
-                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                  onClick={() => scrollToSection('code-genesis')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
                 >
-                  Protocol Features
+                  Code Genesis
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('demo')}
-                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                  onClick={() => scrollToSection('retail-pos')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
                 >
-                  Live Demo
+                  Retail POS System
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('about')}
-                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                  onClick={() => scrollToSection('dev-portal')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
                 >
-                  Infrastructure
+                  Developer Portal
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => scrollToSection('ecosystem')}
-                  className="hover:text-blue-400 transition-colors font-mono text-left w-full text-sm hover:translate-x-1 transition-transform duration-300"
+                  onClick={() => scrollToSection('wallet-neural')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
                 >
-                  Ecosystem
+                  Wallet Interface
                 </button>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-4 font-mono">Network</h3>
-            <ul className="space-y-2 text-slate-300">
-              <li><a href="https://twitter.com/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Twitter/X</a></li>
-              <li><a href="https://t.me/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Telegram</a></li>
-              <li><a href="https://discord.gg/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Discord</a></li>
-              <li><a href="https://linkedin.com/company/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">LinkedIn</a></li>
+            <h3 className="text-white font-semibold mb-4 font-mono">Services</h3>
+            <ul className="space-y-2 text-white">
+              <li>
+                <button
+                  onClick={() => scrollToSection('neural-ecosystem')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
+                >
+                  Ecosystem
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('exchange-neural')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
+                >
+                  Exchange Hub
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('support-neural')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
+                >
+                  Support Network
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => scrollToSection('pizza-neural')}
+                  className="hover:text-white transition-all font-mono text-left w-full text-sm hover:translate-x-1 duration-300"
+                >
+                  Store Analytics
+                </button>
+              </li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-white font-semibold mb-4 font-mono">Resources</h3>
-            <ul className="space-y-2 text-slate-300">
-              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Whitepaper</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Documentation</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Run Validator</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-colors font-mono text-sm hover:translate-x-1 transition-transform duration-300 block">Apply for Grants</a></li>
+            <ul className="space-y-2 text-white">
+              <li><a href="#" className="hover:text-white transition-all font-mono text-sm hover:translate-x-1 duration-300 block">Whitepaper</a></li>
+              <li><a href="#" className="hover:text-white transition-all font-mono text-sm hover:translate-x-1 duration-300 block">Documentation</a></li>
+              <li><a href="#" className="hover:text-white transition-all font-mono text-sm hover:translate-x-1 duration-300 block">Run Validator</a></li>
+              <li><a href="#" className="hover:text-white transition-all font-mono text-sm hover:translate-x-1 duration-300 block">API Reference</a></li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-8 pt-8 text-center">
-          <p className="text-slate-400 font-mono text-sm">
-            © 2024 Bitora Protocol. All rights reserved. | Built on the Bitora Layer 1 Chain
+        <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
+          <p className="text-white font-mono text-sm mb-4 sm:mb-0">
+            © 2024 Bitora Protocol. All rights reserved.
           </p>
+          <div className="flex space-x-6 text-white font-mono text-sm">
+            <a href="https://twitter.com/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Twitter</a>
+            <a href="https://t.me/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
+            <a href="https://discord.gg/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Discord</a>
+            <a href="https://linkedin.com/company/bitora" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+          </div>
         </div>
       </div>
     </footer>
