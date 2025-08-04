@@ -11,8 +11,11 @@ import {
   DeveloperPortalSection,
   WalletNeuralSection,
   NeuralEcosystemSection,
-  ExchangeNeuralSection
+  ExchangeNeuralSection,
+  SupportNeuralSection,
+  PizzaNeuralExperienceSection
 } from '@/components/sections/other-sections'
+import { AboutSection, CTASection } from '@/components/sections/additional-sections'
 import { Footer } from '@/components/sections/footer'
 import { TerminalLoader } from '@/components/loading/terminal-loader'
 import { useStats, useRoadmap } from '@/hooks/use-api-data'
@@ -100,6 +103,14 @@ export default function Home() {
       <WalletNeuralSection />
       <NeuralEcosystemSection />
       <ExchangeNeuralSection />
+      <SupportNeuralSection />
+      <PizzaNeuralExperienceSection />
+
+      {/* About Section */}
+      <AboutSection onActionClick={handleButtonClick} />
+
+      {/* Call to Action Section */}
+      <CTASection onActionClick={handleButtonClick} />
 
       {/* Footer */}
       <Footer onSectionClick={handleSectionClick} />

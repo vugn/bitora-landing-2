@@ -1666,7 +1666,7 @@ function CTASection() {
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 max-w-3xl mx-auto">
           <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
             <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            Launch App
+            Launch Wallet
           </Button>
           <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-white text-white hover:bg-white hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
             <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
