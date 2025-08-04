@@ -259,33 +259,33 @@ function LiveStats() {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-blue-400 font-mono">${stats.btoPrice.toFixed(4)}</div>
-        <div className="text-xs text-slate-300">BTO Price</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">${stats.btoPrice.toFixed(4)}</div>
+        <div className="text-xs text-white">BTO Price</div>
       </div>
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-green-400 font-mono">{stats.validators.toLocaleString()}</div>
-        <div className="text-xs text-slate-300">Validators</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">{stats.validators.toLocaleString()}</div>
+        <div className="text-xs text-white">Validators</div>
       </div>
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-cyan-400 font-mono">{stats.txVolume.toLocaleString()}</div>
-        <div className="text-xs text-slate-300">TX Volume</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">{stats.txVolume.toLocaleString()}</div>
+        <div className="text-xs text-white">TX Volume</div>
       </div>
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-purple-400 font-mono">{stats.tokensCreated.toLocaleString()}</div>
-        <div className="text-xs text-slate-300">Tokens Created</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">{stats.tokensCreated.toLocaleString()}</div>
+        <div className="text-xs text-white">Tokens Created</div>
       </div>
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-orange-400 font-mono">{stats.posLocations}</div>
-        <div className="text-xs text-slate-300">POS Locations</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">{stats.posLocations}</div>
+        <div className="text-xs text-white">POS Locations</div>
       </div>
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-yellow-400 font-mono">${(stats.marketCap / 1000000).toFixed(1)}M</div>
-        <div className="text-xs text-slate-300">Market Cap</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">${(stats.marketCap / 1000000).toFixed(1)}M</div>
+        <div className="text-xs text-white">Market Cap</div>
       </div>
-      <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-4 text-center">
-        <div className="text-2xl font-bold text-pink-400 font-mono">{stats.countries}</div>
-        <div className="text-xs text-slate-300">Countries</div>
+      <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 text-center">
+        <div className="text-2xl font-bold text-white font-mono">{stats.countries}</div>
+        <div className="text-xs text-white">Countries</div>
       </div>
     </div>
   )
@@ -346,182 +346,6 @@ function HeroSection() {
   )
 }
 
-// What is Bitora Section
-function WhatIsBitoraSection() {
-  return (
-    <section id="ecosystem" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="relative z-10 max-w-7xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-8 font-mono leading-tight">
-            [WHAT_IS_BITORA]
-          </h2>
-          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-8 max-w-4xl mx-auto">
-            <p className="text-base sm:text-xl text-slate-300 leading-relaxed font-mono px-4">
-              Bitora is a next-generation Layer 1 blockchain built for real-world usage, crypto-native systems,
-              and regulated institutional operations. It enables token creation, real-time trading, retail payments,
-              and fiat compliance—all on-chain.
-            </p>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-// Features Section Component
-function FeaturesSection() {
-  const features = [
-    {
-      icon: <Code className="h-8 w-8" />,
-      title: "Token Generation Engine",
-      description: "No-code token creation with compliance-ready templates including vesting, DAOs, and stablecoin logic."
-    },
-    {
-      icon: <Database className="h-8 w-8" />,
-      title: "Layer 1 Blockchain",
-      description: "Built using Cosmos SDK with validator scoring, fast finality, and native staking. The gas token is $BTO."
-    },
-    {
-      icon: <Terminal className="h-8 w-8" />,
-      title: "Real-World POS System",
-      description: "On-chain payments at physical stores using crypto or fiat, with built-in yield logic and loyalty token mechanics."
-    },
-    {
-      icon: <TrendingUp className="h-8 w-8" />,
-      title: "Internal and External Exchanges",
-      description: "Native DEX (BTX) with fiat bridges and upcoming CEX listings."
-    },
-    {
-      icon: <Users className="h-8 w-8" />,
-      title: "Governance Framework",
-      description: "Two-tier governance model with quadratic voting and council veto protection."
-    },
-    {
-      icon: <Shield className="h-8 w-8" />,
-      title: "Compliance Layer",
-      description: "Jurisdictional KYC, AML scoring, and real-time sanctions enforcement, built into the protocol."
-    }
-  ]
-
-  return (
-    <section id="features" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
-            [CORE_FEATURES]
-          </h2>
-          <p className="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4">
-            Modular infrastructure components powering the next generation of financial systems.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <Card className="bg-slate-800/50 border-blue-500/20 hover:border-blue-400/40 transition-all duration-300 h-full">
-                <CardContent className="p-6">
-                  <div className="text-blue-400 mb-4">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-300">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Why Pizza First Section
-function WhyPizzaSection() {
-  return (
-    <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6 font-mono">
-            [WHY_PIZZA_FIRST]
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="bg-slate-800/50 border border-orange-500/20 rounded-lg p-8">
-              <h3 className="text-2xl font-bold text-orange-400 mb-6 font-mono">Pizza provides the ideal proof-of-use:</h3>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
-                  <div>
-                    <p className="text-slate-300 font-mono">High transaction volume and low margin economics</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
-                  <div>
-                    <p className="text-slate-300 font-mono">Origin of crypto payments (Bitcoin Pizza, 2010)</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
-                  <div>
-                    <p className="text-slate-300 font-mono">Each pizza sale triggers token burns, yield distribution, and compliance reporting</p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 p-4 bg-orange-900/20 border border-orange-500/30 rounded-lg">
-                <p className="text-orange-300 font-mono text-center font-bold">
-                  Pizza is not the business. It's the first benchmark.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-lg font-semibold text-white font-mono">Pizza Store Metrics</h4>
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-            </div>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-slate-300 font-mono">Daily Orders</span>
-                <span className="text-orange-400 font-mono">847</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-300 font-mono">BTO Burned</span>
-                <span className="text-red-400 font-mono">1,247</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-300 font-mono">Yield Distributed</span>
-                <span className="text-green-400 font-mono">$2,156</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-300 font-mono">Compliance Reports</span>
-                <span className="text-blue-400 font-mono">24/7</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 // Roadmap Section
 function RoadmapSection() {
@@ -982,7 +806,7 @@ function CodeDemo() {
       description: "Setting up Bitora Protocol core",
       code: `package main\n\nimport "github.com/bitora/protocol/core"\n\nfunc main() {\n    protocol := core.NewProtocol()\n}`,
       icon: <Database className="h-6 w-6" />,
-      color: "from-blue-500 to-blue-600",
+      color: "from-gray-700 to-gray-800",
       status: "pending"
     },
     {
@@ -991,7 +815,7 @@ function CodeDemo() {
       description: "Implementing quantum-resistant consensus",
       code: `consensus := consensus.NewQuantumPoS()\nprotocol.SetConsensus(consensus)\n\n// Quantum-resistant validation\nconsensus.EnableQuantumSecurity()`,
       icon: <Shield className="h-6 w-6" />,
-      color: "from-green-500 to-green-600",
+      color: "from-gray-700 to-gray-800",
       status: "pending"
     },
     {
@@ -1000,7 +824,7 @@ function CodeDemo() {
       description: "Establishing P2P network connections",
       code: `network := network.NewP2PNetwork()\nprotocol.SetNetwork(network)\n\n// Connect to peers\nnetwork.ConnectToPeers()`,
       icon: <Network className="h-6 w-6" />,
-      color: "from-purple-500 to-purple-600",
+      color: "from-gray-700 to-gray-800",
       status: "pending"
     },
     {
@@ -1009,16 +833,25 @@ function CodeDemo() {
       description: "Deploying smart contract engine",
       code: `contracts := contracts.NewEngine()\nprotocol.SetContractEngine(contracts)\n\n// Deploy sample contract\ncontract := contracts.Deploy(sampleContract)`,
       icon: <Code className="h-6 w-6" />,
-      color: "from-orange-500 to-orange-600",
+      color: "from-gray-700 to-gray-800",
       status: "pending"
     },
     {
       id: 5,
+      title: "Neural Interface",
+      description: "Activating neural connection protocols",
+      code: `neural := neural.NewInterface()\nprotocol.SetNeuralLayer(neural)\n\n// Initialize neural pathways\nneural.ActivatePathways()`,
+      icon: <Sparkles className="h-6 w-6" />,
+      color: "from-gray-700 to-gray-800",
+      status: "pending"
+    },
+    {
+      id: 6,
       title: "Launch Network",
       description: "Starting the blockchain network",
       code: `// Start the protocol\nprotocol.Start()\n\nfmt.Println("Bitora Protocol is running!")\nfmt.Println("Network ready for transactions")`,
       icon: <Rocket className="h-6 w-6" />,
-      color: "from-cyan-500 to-cyan-600",
+      color: "from-gray-700 to-gray-800",
       status: "pending"
     }
   ]
@@ -1166,47 +999,47 @@ function CodeDemo() {
   return (
     <div className="space-y-8">
       {/* Advanced Control Panel */}
-      <div className="bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-blue-500/30 p-4 sm:p-6 mb-8 overflow-hidden">
+      <div className="bg-gray-900/80 backdrop-blur-sm rounded-2xl border border-gray-500/30 p-4 sm:p-6 mb-8 overflow-hidden">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
           {/* System Metrics */}
           <div className="space-y-2 sm:space-y-3">
-            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">System Metrics</h4>
+            <h4 className="text-white font-semibold text-xs sm:text-sm">System Metrics</h4>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="text-gray-300">CPU</span>
-                <span className="text-green-400">{systemMetrics.cpu.toFixed(1)}%</span>
+                <span className="text-white">{systemMetrics.cpu.toFixed(1)}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-green-500 to-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.cpu}%` }}></div>
+                <div className="bg-gray-400 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.cpu}%` }}></div>
               </div>
 
               <div className="flex justify-between text-xs">
                 <span className="text-gray-300">Memory</span>
-                <span className="text-blue-400">{systemMetrics.memory.toFixed(1)}%</span>
+                <span className="text-white">{systemMetrics.memory.toFixed(1)}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.memory}%` }}></div>
+                <div className="bg-gray-400 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.memory}%` }}></div>
               </div>
 
               <div className="flex justify-between text-xs">
                 <span className="text-gray-300">Network</span>
-                <span className="text-purple-400">{systemMetrics.network.toFixed(1)}%</span>
+                <span className="text-white">{systemMetrics.network.toFixed(1)}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.network}%` }}></div>
+                <div className="bg-gray-400 h-1.5 rounded-full transition-all duration-500" style={{ width: `${systemMetrics.network}%` }}></div>
               </div>
             </div>
           </div>
 
           {/* Network Visualization */}
           <div className="space-y-2 sm:space-y-3">
-            <h4 className="text-blue-400 font-semibold text-xs sm:text-sm">Network Topology</h4>
+            <h4 className="text-white font-semibold text-xs sm:text-sm">Network Topology</h4>
             <div className="relative h-20 sm:h-24 bg-gray-800/50 rounded-lg overflow-hidden">
               {/* Particle Background */}
               {particleSystem.map(particle => (
                 <div
                   key={particle.id}
-                  className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60"
+                  className="absolute w-1 h-1 bg-white rounded-full opacity-60"
                   style={{
                     left: `${particle.x}%`,
                     top: `${particle.y}%`,
@@ -1219,7 +1052,7 @@ function CodeDemo() {
               {networkNodes.map(node => (
                 <div
                   key={node.id}
-                  className={`absolute w-2 h-2 rounded-full transition-all duration-300 ${node.active ? 'bg-green-400 shadow-lg shadow-green-400/50 scale-125' : 'bg-gray-500'
+                  className={`absolute w-2 h-2 rounded-full transition-all duration-300 ${node.active ? 'bg-green-400 scale-125' : 'bg-gray-500'
                     }`}
                   style={{
                     left: `${node.x}%`,
@@ -1448,19 +1281,16 @@ function CodeDemo() {
                 }}
                 transition={{ duration: 0.3 }}
                 className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 min-h-[280px] sm:min-h-[320px] w-full ${status === 'completed'
-                  ? 'border-green-500 bg-green-900/20'
+                  ? 'border-green-500 bg-gray-900/50'
                   : status === 'active'
-                    ? 'border-blue-500 bg-blue-900/20 shadow-lg shadow-blue-500/25'
+                    ? 'border-red-500 bg-gray-900/50'
                     : 'border-gray-600 bg-gray-900/50'
-                  } ${hackingMode && status === 'active' ? 'border-red-500 bg-red-900/20 shadow-lg shadow-red-500/25' : ''
-                  } ${visualEffects.matrix && status === 'active' ? 'animate-bounce' : ''
-                  } ${soundEffects.typing && status === 'active' ? 'ring-2 ring-blue-400/50' : ''
                   }`}
               >
                 {/* Card Header */}
-                <div className={`p-3 sm:p-4 bg-gradient-to-r ${step.color} bg-opacity-10`}>
+                <div className="p-3 sm:p-4 bg-gray-800/50">
                   <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className={`p-1.5 sm:p-2 rounded-lg bg-gradient-to-r ${step.color} text-white flex-shrink-0`}>
+                    <div className="p-1.5 sm:p-2 rounded-lg bg-gray-700 text-white flex-shrink-0">
                       {step.icon}
                     </div>
                     <div className="flex-1 min-w-0 overflow-hidden">
@@ -1470,13 +1300,13 @@ function CodeDemo() {
                     {status === 'completed' && (
                       <div className="ml-auto">
                         <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs font-bold"></span>
+                          <span className="text-white text-xs font-bold">✓</span>
                         </div>
                       </div>
                     )}
                     {status === 'active' && (
                       <div className="ml-auto">
-                        <div className="w-6 h-6 bg-blue-500 rounded-full animate-pulse"></div>
+                        <div className="w-6 h-6 bg-red-500 rounded-full animate-pulse"></div>
                       </div>
                     )}
                   </div>
@@ -1486,7 +1316,7 @@ function CodeDemo() {
                 <div className="p-2 sm:p-3 flex-1 ">
                   <div className="bg-gray-900 p-2 sm:p-3 font-mono text-xs  overflow-hidden">
                     <div className={`h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 ${status === 'completed' ? 'text-green-400' :
-                      status === 'active' ? 'text-blue-400' : 'text-gray-500'
+                      status === 'active' ? 'text-white' : 'text-gray-500'
                       }`}>
                       {step.code.split('\n').map((line, lineIndex) => (
                         <div key={lineIndex} className="leading-tight mb-1 text-xs overflow-hidden">
@@ -1508,8 +1338,8 @@ function CodeDemo() {
                         animate={{ opacity: [1, 0, 1] }}
                         transition={{ duration: 1, repeat: Infinity }}
                       >
-                        <span className="bg-blue-400 text-black inline-block w-2 h-3 mr-1">█</span>
-                        <span className="text-blue-400 text-xs">Typing...</span>
+                        <span className="bg-red-500 text-white inline-block w-2 h-3 mr-1">█</span>
+                        <span className="text-white text-xs">Typing...</span>
                       </motion.div>
                     )}
                   </div>
@@ -1518,7 +1348,7 @@ function CodeDemo() {
                 {/* Progress Indicator */}
                 <div className="absolute bottom-0 left-0 right-0 h-1">
                   <div className={`h-full transition-all duration-500 ${status === 'completed' ? 'bg-green-500 w-full' :
-                    status === 'active' ? 'bg-blue-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
+                    status === 'active' ? 'bg-red-500 w-3/4 animate-pulse' : 'bg-gray-600 w-0'
                     }`}></div>
                 </div>
               </motion.div>
@@ -1535,7 +1365,7 @@ function CodeDemo() {
             setCompletedCards([])
             setIsSimulating(!isSimulating)
           }}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2"
+          className={`${isSimulating ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white px-6 py-2`}
         >
           {isSimulating ? 'Pause Simulation' : 'Start Simulation'}
         </Button>
@@ -1580,28 +1410,28 @@ function LiveStatsSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-slate-800/50 border border-blue-500/20 rounded-lg p-6">
-            <h3 className="text-blue-400 font-mono text-sm mb-2">Tokens Created</h3>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-white font-mono text-sm mb-2">Tokens Created</h3>
             <div className="text-3xl font-bold text-white font-mono">{stats.tokensCreated.toLocaleString()}</div>
           </div>
-          <div className="bg-slate-800/50 border border-green-500/20 rounded-lg p-6">
-            <h3 className="text-green-400 font-mono text-sm mb-2">Active POS Locations</h3>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-white font-mono text-sm mb-2">Active POS Locations</h3>
             <div className="text-3xl font-bold text-white font-mono">{stats.posLocations}</div>
           </div>
-          <div className="bg-slate-800/50 border border-orange-500/20 rounded-lg p-6">
-            <h3 className="text-orange-400 font-mono text-sm mb-2">$BTO Price</h3>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-white font-mono text-sm mb-2">$BTO Price</h3>
             <div className="text-3xl font-bold text-white font-mono">${stats.btoPrice.toFixed(2)}</div>
           </div>
-          <div className="bg-slate-800/50 border border-purple-500/20 rounded-lg p-6">
-            <h3 className="text-purple-400 font-mono text-sm mb-2">Validators Online</h3>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-white font-mono text-sm mb-2">Validators Online</h3>
             <div className="text-3xl font-bold text-white font-mono">{stats.validatorsOnline}</div>
           </div>
-          <div className="bg-slate-800/50 border border-cyan-500/20 rounded-lg p-6">
-            <h3 className="text-cyan-400 font-mono text-sm mb-2">Daily TX Volume</h3>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-white font-mono text-sm mb-2">Daily TX Volume</h3>
             <div className="text-3xl font-bold text-white font-mono">{stats.dailyTxVolume.toLocaleString()}</div>
           </div>
-          <div className="bg-slate-800/50 border border-pink-500/20 rounded-lg p-6">
-            <h3 className="text-pink-400 font-mono text-sm mb-2">Countries Operating</h3>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-white font-mono text-sm mb-2">Countries Operating</h3>
             <div className="text-3xl font-bold text-white font-mono">{stats.countriesOperating}</div>
           </div>
         </div>
@@ -1673,15 +1503,15 @@ function CTASection() {
           Build anything. Trade instantly. Operate legally. Pay globally.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 max-w-3xl mx-auto">
-          <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+          <Button size="lg" className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white border-0 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
             <Terminal className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Launch App
           </Button>
-          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-white text-white hover:bg-white hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
             <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Read Whitepaper
           </Button>
-          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
+          <Button size="lg" className="w-full sm:w-auto bg-slate-800/80 border-2 border-white text-white hover:bg-white hover:text-slate-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-mono shadow-lg hover:shadow-xl transition-all">
             <Network className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Join Ecosystem
           </Button>
@@ -2106,6 +1936,525 @@ function TerminalLoader({ onComplete }: { onComplete: () => void }) {
   )
 }
 
+// Code Genesis Section (Moved to first)
+function CodeGenesisSection() {
+  return (
+    <section id="code-genesis" className="relative py-12 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-8 sm:mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            <span className="block sm:inline">[CODE_GENESIS_</span>
+            <span className="block sm:inline">PROTOCOL]</span>
+          </h2>
+          <p className="text-sm sm:text-base lg:text-xl text-white max-w-3xl mx-auto font-mono px-4">
+            Infrastructure powering autonomous payment systems
+          </p>
+        </div>
+        <CodeDemo />
+      </div>
+    </section>
+  )
+}
+
+// Retail Point System Section
+function RetailPointSystemSection() {
+  return (
+    <section id="retail-pos" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [RETAIL_POINT_SYSTEM]
+          </h2>
+          <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto font-mono px-4 sm:px-0">
+            Autonomous transaction processing for physical commerce layers
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">POS Architecture:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Quantum-resistant payment protocols</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Real-time compliance matrix verification</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Biometric authentication layer</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Autonomous inventory synchronization</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <h4 className="text-xl font-bold text-white mb-4 font-mono">Live Terminal Stats</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Active Terminals</span>
+                  <span className="text-white font-mono">247</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Transaction/Sec</span>
+                  <span className="text-white font-mono">1,847</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">System Uptime</span>
+                  <span className="text-white font-mono">99.97%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Compliance Score</span>
+                  <span className="text-white font-mono">A++</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Developer Portal Section
+function DeveloperPortalSection() {
+  return (
+    <section id="dev-portal" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [DEVELOPER_PORTAL_ACCESS]
+          </h2>
+          <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto font-mono px-4 sm:px-0">
+            Direct interface to Bitora infrastructure layers
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-white mb-4 font-mono">Development SDK</h3>
+            <div className="space-y-2">
+              <div className="text-white font-mono text-sm">• Direct memory allocation</div>
+              <div className="text-white font-mono text-sm">• Quantum state management</div>
+              <div className="text-white font-mono text-sm">• Protocol optimization</div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-white mb-4 font-mono">API Matrix</h3>
+            <div className="space-y-2">
+              <div className="text-white font-mono text-sm">• Real-time data streams</div>
+              <div className="text-white font-mono text-sm">• Autonomous smart contracts</div>
+              <div className="text-white font-mono text-sm">• Cross-chain bridges</div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-white mb-4 font-mono">Documentation</h3>
+            <div className="space-y-2">
+              <div className="text-white font-mono text-sm">• Protocol specifications</div>
+              <div className="text-white font-mono text-sm">• Integration blueprints</div>
+              <div className="text-white font-mono text-sm">• Debugging tools</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Wallet Interface Section
+function WalletNeuralSection() {
+  return (
+    <section id="wallet-neural" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [WALLET_INTERFACE]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Wallet capabilities:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Quantum-encrypted private keys</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Biometric authentication</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Multi-dimensional asset storage</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Autonomous transaction routing</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <h4 className="text-xl font-bold text-white mb-4 font-mono">Wallet Interface</h4>
+              <div className="bg-slate-900/50 rounded-lg p-4 font-mono text-sm">
+                <div className="text-white mb-2">Balance: $12,847.32</div>
+                <div className="text-white mb-2">BTO: 45,247 tokens</div>
+                <div className="text-white mb-2">Security Score: 247/255</div>
+                <div className="text-white">Status: SYNCHRONIZED</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Ecosystem Section
+function NeuralEcosystemSection() {
+  return (
+    <section id="neural-ecosystem" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [ECOSYSTEM_MATRIX]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 hover:border-gray-400/40 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white font-mono group-hover:text-gray-300 transition-colors">
+                Validator Network
+              </h3>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 hover:border-gray-400/40 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white font-mono group-hover:text-gray-300 transition-colors">
+                Governance Pathways
+              </h3>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 hover:border-gray-400/40 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white font-mono group-hover:text-gray-300 transition-colors">
+                Grant Allocation
+              </h3>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 hover:border-gray-400/40 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white font-mono group-hover:text-gray-300 transition-colors">
+                dApp Deployment
+              </h3>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 hover:border-gray-400/40 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white font-mono group-hover:text-gray-300 transition-colors">
+                Liquidity Pools
+              </h3>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 hover:border-gray-400/40 transition-colors cursor-pointer group">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-white font-mono group-hover:text-gray-300 transition-colors">
+                Documentation Hub
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Exchange Hub Section
+function ExchangeNeuralSection() {
+  return (
+    <section id="exchange-neural" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [EXCHANGE_HUB]
+          </h2>
+          <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto font-mono px-4 sm:px-0">
+            Trading algorithms with pattern recognition
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Trading matrix:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Quantum-speed order execution</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Liquidity optimization</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Cross-dimensional asset bridging</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Autonomous MEV protection</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <h4 className="text-xl font-bold text-white mb-4 font-mono">Exchange Stats</h4>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">24h Volume</span>
+                  <span className="text-white font-mono">$24.7M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Trading Pairs</span>
+                  <span className="text-white font-mono">247</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Liquidity TVL</span>
+                  <span className="text-white font-mono">$128.4M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Execution Speed</span>
+                  <span className="text-white font-mono">0.03ms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Support Network Section
+function SupportNeuralSection() {
+  return (
+    <section id="support-neural" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [SUPPORT_NETWORK]
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 hover:border-gray-400/40 transition-colors cursor-pointer">
+            <h3 className="text-white font-mono text-sm font-bold">
+              Documentation Matrix
+            </h3>
+          </div>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 hover:border-gray-400/40 transition-colors cursor-pointer">
+            <h3 className="text-white font-mono text-sm font-bold">
+              Developer Support
+            </h3>
+          </div>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 hover:border-gray-400/40 transition-colors cursor-pointer">
+            <h3 className="text-white font-mono text-sm font-bold">
+              Bug Reporting
+            </h3>
+          </div>
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-4 hover:border-gray-400/40 transition-colors cursor-pointer">
+            <h3 className="text-white font-mono text-sm font-bold">
+              24/7 Assistance
+            </h3>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// Pizza Store Statistics Section
+function PizzaNeuralExperienceSection() {
+  const [stats, setStats] = useState({
+    pizzaStores: 247,
+    dailyOrders: 12847,
+    pizzasCreated: 248570,
+    avgOrderValue: 24.7,
+    btoProcessed: 84750,
+    countries: 12,
+    totalRevenue: 2847000,
+    posTerminals: 389
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        pizzaStores: prev.pizzaStores + (Math.random() > 0.95 ? 1 : 0),
+        dailyOrders: prev.dailyOrders + Math.floor(Math.random() * 50),
+        pizzasCreated: prev.pizzasCreated + Math.floor(Math.random() * 100),
+        avgOrderValue: prev.avgOrderValue + (Math.random() - 0.5) * 0.5,
+        btoProcessed: prev.btoProcessed + Math.floor(Math.random() * 100),
+        countries: prev.countries + (Math.random() > 0.99 ? 1 : 0),
+        totalRevenue: prev.totalRevenue + Math.floor(Math.random() * 1000),
+        posTerminals: prev.posTerminals + (Math.random() > 0.97 ? 1 : 0)
+      }))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <section id="pizza-neural" className="relative py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+      <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
+            [PIZZA_STORE_NETWORK]
+          </h2>
+          <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto font-mono px-4 sm:px-0">
+            Global pizza stores powered by Bitora POS infrastructure
+          </p>
+          <div className="mt-4 p-4 bg-green-900/20 border border-green-500/30 rounded-lg max-w-md mx-auto">
+            <p className="text-green-400 font-mono text-sm font-bold">
+              *LIVE NETWORK STATUS: OPERATIONAL
+            </p>
+          </div>
+        </div>
+
+        {/* Pizza Store Statistics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">{stats.pizzaStores}</div>
+            <div className="text-sm text-white font-mono">Active Pizza Stores</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">{stats.dailyOrders.toLocaleString()}</div>
+            <div className="text-sm text-white font-mono">Daily Orders</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">{stats.pizzasCreated.toLocaleString()}</div>
+            <div className="text-sm text-white font-mono">Total Pizzas Created</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">${stats.avgOrderValue.toFixed(2)}</div>
+            <div className="text-sm text-white font-mono">Avg Order Value</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">{stats.btoProcessed.toLocaleString()}</div>
+            <div className="text-sm text-white font-mono">BTO Processed</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">{stats.countries}</div>
+            <div className="text-sm text-white font-mono">Countries</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">${(stats.totalRevenue / 1000000).toFixed(1)}M</div>
+            <div className="text-sm text-white font-mono">Total Revenue</div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-white font-mono mb-2">{stats.posTerminals}</div>
+            <div className="text-sm text-white font-mono">POS Terminals</div>
+          </div>
+        </div>
+
+        {/* Pizza Store Network Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-6 font-mono">Network Performance:</h3>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">99.97% POS system uptime</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Average transaction time: 2.3 seconds</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Multi-currency support enabled</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-white rounded-full mt-3 flex-shrink-0"></div>
+                <p className="text-white font-mono">Real-time inventory synchronization</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/50 border border-gray-500/20 rounded-lg p-8">
+            <div className="text-center">
+              <h4 className="text-xl font-bold text-white mb-4 font-mono">Network Status</h4>
+              <div className="bg-slate-900/50 rounded-lg p-4 space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">System Status</span>
+                  <span className="text-green-400 font-mono">OPERATIONAL</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Network Load</span>
+                  <span className="text-white font-mono">72%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Response Time</span>
+                  <span className="text-white font-mono">2.3ms</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Active Connections</span>
+                  <span className="text-white font-mono">{stats.posTerminals}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-white font-mono">Success Rate</span>
+                  <span className="text-green-400 font-mono">99.97%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Future Expansion Info */}
+        <div className="mt-12 p-6 bg-slate-800/50 border border-red-500/20 rounded-lg text-center">
+          <h4 className="text-lg font-bold text-red-400 mb-3 font-mono">EXPANSION ROADMAP</h4>
+          <p className="text-white font-mono text-sm mb-4">
+            Pizza store network expansion planned for 2025-2029
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="text-white font-mono">
+              <span className="text-red-400">2025:</span> 500+ stores
+            </div>
+            <div className="text-white font-mono">
+              <span className="text-red-400">2027:</span> 2,000+ stores
+            </div>
+            <div className="text-white font-mono">
+              <span className="text-red-400">2029:</span> 10,000+ stores
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
 
@@ -2122,30 +2471,14 @@ export default function Home() {
       <MatrixBackground />
       <Navigation />
       <HeroSection />
-      <WhatIsBitoraSection />
-      <FeaturesSection />
-      <WhyPizzaSection />
-      <RoadmapSection />
-      <TargetAudiencesSection />
-      <LiveStatsSection />
-      <EcosystemResourceCenter />
-      <NewsroomSection />
-      <WalletSection />
-      <BTXSection />
-      <section id="demo" className="relative py-12 sm:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-mono leading-tight">
-              <span className="block sm:inline">[ROADMAP_</span>
-              <span className="block sm:inline">2025-2027]</span>
-            </h2>
-            <p className="text-sm sm:text-base lg:text-xl text-slate-300 max-w-3xl mx-auto font-mono px-4">
-              Watch our Bitora Protocol implementation in action.
-            </p>
-          </div>
-          <CodeDemo />
-        </div>
-      </section>
+      <CodeGenesisSection />
+      <RetailPointSystemSection />
+      <DeveloperPortalSection />
+      <WalletNeuralSection />
+      <NeuralEcosystemSection />
+      <ExchangeNeuralSection />
+      <SupportNeuralSection />
+      <PizzaNeuralExperienceSection />
       <AboutSection />
       <CTASection />
       <Footer />
